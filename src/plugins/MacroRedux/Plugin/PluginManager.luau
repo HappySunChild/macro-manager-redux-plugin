@@ -1,9 +1,11 @@
-local Studio = settings():GetService("Studio")
+local Studio = settings():GetService "Studio"
 
-local pluginFolder = script.Parent.Parent
-local Icons = require(pluginFolder.Icons)
+local PluginFolder = script.Parent.Parent
+local Fusion = require(PluginFolder.Packages.Fusion)
+local Icons = require(PluginFolder.Packages.Icons)
+local Widget = require(PluginFolder.Components.Widget)
 
-local PLUGIN_VERSION = "1.7.0e"
+local PLUGIN_VERSION = PluginFolder.Version.Value
 
 local Manager = {}
 Manager.Active = false
@@ -13,7 +15,7 @@ Manager.Widget = nil :: DockWidgetPluginGui?
 Manager.ButtonWidget = nil :: PluginToolbarButton?
 Manager.ButtonRefresh = nil :: PluginToolbarButton?
 
-function Manager:Startup(plugin: Plugin)
+function Manager:Initialize(plugin: Plugin)
 	Manager:SetupWidget(plugin)
 	Manager:SetupToolbar(plugin)
 
@@ -29,20 +31,17 @@ function Manager:Startup(plugin: Plugin)
 end
 
 function Manager:SetupWidget(plugin: Plugin)
-	local widget = plugin:CreateDockWidgetPluginGui(
-		"MacrosWidget",
-		DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Left, true)
-	)
-	widget.Name = `Macros {PLUGIN_VERSION}`
-	widget.Title = `Macros {PLUGIN_VERSION}`
-	widget.Enabled = false
-	widget.ZIndexBehavior = Enum.ZIndexBehavior.Global
+	local scope = Fusion:scoped { Widget = Widget }
+	local widget = scope:Widget {
+		Plugin = plugin,
+		Title = `Macros {PLUGIN_VERSION}`,
+	}
 
 	widget:BindToClose(function()
 		Manager:Deactivate()
 	end)
 
-	-- TODO: Populate widget with gui stufffffff!
+	Manager.Widget = widget
 end
 
 function Manager:SetupToolbar(plugin: Plugin)
@@ -89,6 +88,7 @@ function Manager:Activate()
 
 	Manager.Active = true
 	Manager.ButtonWidget:SetActive(true)
+	Manager.Widget.Enabled = true
 end
 
 function Manager:Deactivate()
@@ -98,6 +98,7 @@ function Manager:Deactivate()
 
 	Manager.Active = false
 	Manager.ButtonWidget:SetActive(false)
+	Manager.Widget.Enabled = false
 end
 
 function Manager:OnThemeChange(currentTheme: StudioTheme)
