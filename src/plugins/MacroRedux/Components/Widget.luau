@@ -27,7 +27,7 @@ local function Widget(
 		[Children] = {
 			Background = scope:New "Frame" {
 				Size = UDim2.fromScale(1, 1),
-				BackgroundColor3 = Theme.Background,
+				BackgroundColor3 = Theme.colors.Background,
 			},
 		},
 	}

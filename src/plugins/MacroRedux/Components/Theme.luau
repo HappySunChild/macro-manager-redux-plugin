@@ -1,26 +1,32 @@
 local Studio = settings():GetService "Studio"
 
 local PluginFolder = script.Parent.Parent
-
 local Fusion = require(PluginFolder.Packages.Fusion)
+local PluginScope = require(PluginFolder.Packages.PluginScope)
 local map, peek = Fusion.map, Fusion.peek
 
-local scope = Fusion:scoped()
-
-local currentTheme = scope:Value(Studio.Theme)
+local currentTheme = PluginScope:Value(Studio.Theme)
 
 local function DynamicColor(
 	styleGuideColor: Enum.StudioStyleGuideColor,
 	modifier: Enum.StudioStyleGuideModifier?
 )
 	return map(currentTheme, function(theme: StudioTheme)
+		if not theme then
+			return Color3.new(1, 0, 1)
+		end
+
 		return theme:GetColor(styleGuideColor, modifier)
 	end)
 end
 
 local Theme = {
-	Background = DynamicColor(Enum.StudioStyleGuideColor.MainBackground),
-	Text = DynamicColor(Enum.StudioStyleGuideColor.MainText),
+	current = currentTheme,
+
+	colors = {
+		Background = DynamicColor(Enum.StudioStyleGuideColor.MainBackground),
+		Text = DynamicColor(Enum.StudioStyleGuideColor.MainText),
+	},
 }
 
 function Theme:SetTheme(newTheme: StudioTheme)
@@ -30,9 +36,5 @@ end
 function Theme:GetTheme(): StudioTheme
 	return peek(currentTheme)
 end
-
-Studio.ThemeChanged:Connect(function(newTheme: StudioTheme)
-	Theme:SetTheme(newTheme)
-end)
 
 return Theme

@@ -3,10 +3,11 @@ local Studio = settings():GetService "Studio"
 local PluginFolder = script.Parent.Parent
 local Packages = PluginFolder.Packages
 
-local Fusion = require(Packages.Fusion)
 local Icons = require(Packages.Icons)
 local MacroManager = require(Packages.MacroManager)
+local PluginScope = require(Packages.PluginScope)
 
+local Theme = require(PluginFolder.Components.Theme)
 local Widget = require(PluginFolder.Components.Widget)
 
 local PLUGIN_VERSION = PluginFolder.Version.Value
@@ -35,7 +36,7 @@ function Manager:Initialize(plugin: Plugin)
 end
 
 function Manager:SetupWidget(plugin: Plugin)
-	local scope = Fusion:scoped { Widget = Widget }
+	local scope = PluginScope:deriveScope { Widget = Widget }
 	local widget = scope:Widget {
 		Plugin = plugin,
 		Title = `Macros {PLUGIN_VERSION}`,
@@ -69,7 +70,7 @@ function Manager:SetupToolbar(plugin: Plugin)
 
 	local buttonRefresh = toolbar:CreateButton(
 		"RefreshMacros",
-		`Refresh macros in ServerStorage/{MacroManager.ContainerName}/Macros folder.`,
+		`Refresh macros in \`{MacroManager.ContainerName}.Macros\` folder.`,
 		Icons.RefreshButtonDark,
 		"Refresh Macros"
 	)
@@ -113,6 +114,8 @@ function Manager:OnThemeChange(currentTheme: StudioTheme)
 	Manager.ButtonRefresh.Icon = if isDark
 		then Icons.RefreshButtonDark
 		else Icons.RefreshButtonLight
+
+	Theme:SetTheme(currentTheme)
 end
 
 function Manager:OnClose()
