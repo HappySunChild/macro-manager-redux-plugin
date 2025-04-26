@@ -1,3 +1,4 @@
+--!strict
 local package = script.Parent.Parent.Parent
 
 local External = require(package.External)
@@ -39,7 +40,7 @@ local function Disassembly<S, IK, IV, OK, OV>(
 		Types.Scope<S>,
 		initialKey: IK,
 		initialValue: IV
-	) -> Disassembly.SubObject<S, IK, IV, OK, OV>
+	) -> ForTypes.SubObject<S, IK, IV, OK, OV>
 ): ForTypes.Disassembly<S, IK, IV, OK, OV>
 	local newDisassembly = setmetatable({
 		scope = scope,
@@ -51,7 +52,7 @@ local function Disassembly<S, IK, IV, OK, OV>(
 		_input = input,
 		_constructor = constructor,
 		_objects = {},
-	}, METATABLE)
+	}, METATABLE) :: Self<S, IK, IV, OK, OV>
 
 	table.insert(scope, {
 		destructor(newDisassembly),
@@ -59,9 +60,9 @@ local function Disassembly<S, IK, IV, OK, OV>(
 			for object in newDisassembly._objects do
 				if object.scope ~= nil then
 					doCleanup(object.scope)
-
-					object.scope = nil
 				end
+
+				object.scope = nil -- i really don't understand
 			end
 		end,
 	})
@@ -72,7 +73,7 @@ end
 function class.populate<S, IK, IV, OK, OV>(
 	self: Self<S, IK, IV, OK, OV>,
 	use: Types.Use,
-	output: { [OK]: OV }
+	output: { [OK]: OV? }
 )
 	local minArrayIndex = math.huge
 	local maxArrayIndex = -math.huge
@@ -91,7 +92,19 @@ function class.populate<S, IK, IV, OK, OV>(
 
 		output[outputKey] = outputValue
 
-		if typeof(outputKey) == "number" then
+		-- TypeError: Type 'nil' could not be converted into 'number'
+		-- why did I have to explicity say that outputKey shouldn't be nil to make this type error go away?
+		-- even with this completely unnecessary check it still gets resolved as 'never'.
+		-- i'm already checking this at line 85, which skips over this if it is nil.
+
+		-- i would really like to know why the type solver believes that this specific variable is still nil, even after multiple checks
+		-- and then it has the AUDACITY to give me a 'never'...
+
+		-- when i replaced the continue with a break/return it worked fine, and no type error was shown.
+		-- now i don't mean to put down the Luau engineers, most of the time the type solver is amazing,
+		-- but simple problems like these actually make me want to throw my monitor out the window
+
+		if type(outputKey) == "number" and outputKey ~= nil then
 			minArrayIndex = math.min(minArrayIndex, outputKey)
 			maxArrayIndex = math.max(maxArrayIndex, outputKey)
 		end
@@ -121,14 +134,15 @@ function class._evaluate<S, IK, IV, OK, OV>(self: Self<S, IK, IV, OK, OV>)
 		depend(self, self._input)
 	end
 
-	local pendingPairs = table.clone(peek(self._input))
+	local pendingPairs = table.clone(peek(self._input)) :: { [any]: any }
 	local newObjects = {}
 
 	for object in self._objects do
 		local reused = false
 
-		local oldInputKey = object.inputKey
-		local oldInputValue = object.inputValue
+		-- casting these to unknown because the type solver doesn't know how to handle generics, apparently.
+		local oldInputKey = object.inputKey :: unknown
+		local oldInputValue = object.inputValue :: unknown
 
 		local newInputKey
 
@@ -168,8 +182,9 @@ function class._evaluate<S, IK, IV, OK, OV>(self: Self<S, IK, IV, OK, OV>)
 		else
 			if object.scope ~= nil then
 				doCleanup(object.scope)
-				object.scope = nil
 			end
+
+			object.scope = nil
 		end
 	end
 

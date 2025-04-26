@@ -35,7 +35,7 @@ local function Table<K, V>(scope: Types.Scope, initialValue: { [K]: V }): Types.
 	return newTable
 end
 
-function class.setKey<V>(self: Self<V>, key: any, newValue: any)
+function class.setKey<K, V>(self: Self<K, V>, key: any, newValue: any)
 	local list = self._internalValue
 	local oldValue = list[key]
 
@@ -48,13 +48,13 @@ function class.setKey<V>(self: Self<V>, key: any, newValue: any)
 	return list
 end
 
-function class.getKey<V>(self: Self<V>, key: any)
+function class.getKey<K, V>(self: Self<K, V>, key: any)
 	local list = peek(self)
 
 	return list[key]
 end
 
-function class.remove<V>(self: Self<V>, index: number)
+function class.remove<K, V>(self: Self<K, V>, index: number)
 	local list = self._internalValue
 
 	local removedValue = table.remove(list, index)
@@ -64,7 +64,7 @@ function class.remove<V>(self: Self<V>, index: number)
 	return removedValue
 end
 
-function class.insert<V>(self: Self<V>, index: number, value: any)
+function class.insert<K, V>(self: Self<K, V>, index: number, value: any)
 	local list = self._internalValue
 
 	table.insert(list, index, value)

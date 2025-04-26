@@ -9,7 +9,7 @@ local Removal: Types.SpecialKey = table.freeze {
 	kind = "key",
 	stage = "observer",
 
-	apply = function(scope: Types.Scope, applyTo: Instance, task: Types.Task)
+	apply = function(scope: Types.Scope, applyTo: Instance, task: Types.CleanupTask)
 		table.insert(
 			scope,
 			applyTo.AncestryChanged:Connect(function(_, parent)

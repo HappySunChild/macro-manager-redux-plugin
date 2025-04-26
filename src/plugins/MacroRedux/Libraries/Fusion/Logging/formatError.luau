@@ -4,8 +4,10 @@ local Types = require(package.Types)
 
 local messages = require(package.Logging.messages)
 
+export type MessageId = string | string | keyof<typeof(messages)>
+
 local function formatError(
-	messageId: string,
+	messageId: MessageId,
 	errorOrTrace: Types.Error | string | nil,
 	...: unknown
 )

@@ -8,7 +8,10 @@ local evaluate = require(package.Graph.evaluate)
 
 local xkindof = require(package.Utility.xkindof)
 
-local function collectObservers(target: Types.GraphObject, outputTable)
+local function collectObservers(
+	target: Types.GraphObject,
+	outputTable: { Types.Observer }
+)
 	if target._observers ~= nil then
 		for _, observer in target._observers do
 			table.insert(outputTable, observer)
@@ -73,6 +76,8 @@ local function change(target: Types.GraphObject)
 	end)
 
 	for _, eagerUser: Types.GraphObject in eagerList do
+		-- this feels a little gross, making a special case just for observers.
+		-- but it works *okayyyy*
 		if xkindof(eagerUser) == "observer" then
 			eagerUser.callback()
 

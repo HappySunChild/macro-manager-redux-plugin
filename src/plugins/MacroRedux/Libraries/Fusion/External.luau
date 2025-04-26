@@ -74,11 +74,19 @@ function External.doTaskDeffered(resume: (...unknown) -> (), ...: unknown)
 	end
 end
 
-function External.logError(messageId: string, err: Types.Error?, ...: unknown): never
+function External.logError(
+	messageId: formatError.MessageId,
+	err: Types.Error?,
+	...: unknown
+): never
 	error(formatError(messageId, err, ...), 0)
 end
 
-function External.logErrorNonFatal(messageId: string, err: Types.Error?, ...: unknown)
+function External.logErrorNonFatal(
+	messageId: formatError.MessageId,
+	err: Types.Error?,
+	...: unknown
+)
 	local message = formatError(messageId, err, ...)
 
 	if activeProvider then
@@ -88,7 +96,7 @@ function External.logErrorNonFatal(messageId: string, err: Types.Error?, ...: un
 	end
 end
 
-function External.logWarn(messageId: string, ...: unknown)
+function External.logWarn(messageId: formatError.MessageId, ...: unknown)
 	local message = formatError(messageId, debug.traceback(nil, 2), ...)
 
 	if activeProvider then

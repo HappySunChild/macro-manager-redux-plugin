@@ -59,8 +59,8 @@ local function SubObject<S, IK, IV, OK, OV>(
 			return { key = outputKey, value = outputValue }
 		end
 
-		local error: Types.Error = outputKey
-		External.logErrorNonFatal("callbackError", error)
+		local err: Types.Error = outputKey
+		External.logErrorNonFatal("callbackError", err)
 
 		doCleanup(scope)
 		table.clear(scope)
@@ -73,8 +73,13 @@ end
 
 local function ForPairs<S, IK, IV, OK, OV>(
 	scope: Types.Scope<S>,
-	inputTable: Types.UsedAs<{ [KI]: V }>,
-	processor: (Types.Use, Types.Scope<S>, KI) -> KO
+	inputTable: Types.UsedAs<{ [IK]: IV }>,
+	processor: (
+		Types.Use,
+		Types.Scope<S>,
+		IK,
+		IV
+	) -> (OK, OV)
 ): Types.For<OK, OV>
 	return For(scope, inputTable, function(scope, initialKey, initialValue)
 		return SubObject(scope, initialKey, initialValue, processor)

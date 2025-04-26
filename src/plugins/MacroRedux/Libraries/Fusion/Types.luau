@@ -1,25 +1,5 @@
 --!strict
 
-type Disconnect = () -> ()
-
-export type Properties = { [SpecialKey | string]: any }
-
-export type Task =
-	Instance
-	| RBXScriptConnection
-	| () -> ()
-	| { destroy: (any) -> () }
-	| { Destroy: (any) -> () }
-	| { Task }
-export type Scope<T = unknown> = { Task } & T
-
-export type Child = Instance | ((Instance) -> Instance?) | { Child } | UsedAs<Child>
-export type UsedAs<V> = StateObject<V> | V
-export type Use = <V>(target: StateObject<V>) -> V
-
-export type MoverStepper<V> = (elapsed: number) -> (boolean, V)
-export type AnimatedMover<V> = (start: V, goal: V) -> MoverStepper<V>
-
 export type Error = {
 	type: "Error",
 	raw: string,
@@ -27,15 +7,20 @@ export type Error = {
 	trace: string,
 }
 
--- Objects
+export type CleanupTask = Instance | RBXScriptConnection | () -> () | { CleanupTask }
+export type Child = Instance | ((Instance) -> Instance?) | { Child } | UsedAs<Child>
 
-type Observer = {
-	type: "Observer",
-	kind: "observer",
+export type Validity = "busy" | "invalid" | "valid"
+export type Timeliness = "lazy" | "eager"
 
-	createdAt: number,
-	callback: () -> (),
-}
+export type Properties = { [SpecialKey | string]: any }
+
+export type Scope<T = unknown> = T & { CleanupTask? }
+
+export type UsedAs<V> = StateObject<V> | V
+export type Use = <V>(target: StateObject<V>) -> V
+
+type Disconnect = () -> ()
 
 export type ScopedObject = {
 	scope: Scope<unknown>,
@@ -46,8 +31,8 @@ export type GraphObject = ScopedObject & {
 	kind: string?,
 
 	createdAt: number?,
-	validity: string?,
-	timeliness: "lazy" | "eager",
+	validity: Validity?,
+	timeliness: Timeliness,
 
 	_lastChange: number?,
 	_users: { [GraphObject]: true },
@@ -57,21 +42,17 @@ export type GraphObject = ScopedObject & {
 	_evaluate: (GraphObject) -> boolean,
 }
 
--- State
-
-export type StateObject<V> = GraphObject & {
+export type StateObject<V> = {
 	_internalValue: V,
 
 	kind: "state",
 	type: string,
-}
+} & GraphObject
 
-export type Computed<V> = StateObject<V> & {
-	type: "Computed",
-}
-
-export type Value<V> = StateObject<V> & {
+-- A state object whose value can be set by the user at any time.
+export type Value<V> = {
 	type: "Value",
+	timeliness: "lazy",
 
 	set: (Value<V>, newValue: V) -> V,
 	update: (Value<V>, predicate: (V) -> V) -> V,
@@ -81,27 +62,82 @@ export type Value<V> = StateObject<V> & {
 		instance: Instance,
 		property: string
 	) -> Disconnect,
-}
+} & StateObject<V>
 
-export type Eventual<V> = StateObject<V> & {
-	type: "Eventual",
-}
+type ValueConstructor = <V>(scope: Scope<unknown>, initialValue: V?) -> Value<V>
 
-export type Table<K, V> = StateObject<{ [K]: V }> & {
+-- A state object that's similar to Value, but specifically for tables. It contains methods for modifying and reading specific keys.
+export type Table<K, V> = {
 	type: "Table",
+	timeliness: "lazy",
 
 	setKey: (Table<K, V>, key: K, value: V) -> V,
 	getKey: (Table<K, V>, key: K) -> V,
 
 	insert: (Table<K, V>, index: number, value: V) -> V,
 	remove: (Table<K, V>, index: number) -> V,
-}
+} & StateObject<{ [K]: V }>
 
-export type For<OK, OV> = StateObject<{ [OK]: OV }> & {
+type TableConstructor = <K, V>(
+	scope: Scope<unknown>,
+	initialValue: { [K]: V }
+) -> Table<K, V>
+
+-- A state object whose value is derived from other objects using a callback.
+export type Computed<V> = {
+	type: "Computed",
+	timeliness: "eager",
+} & StateObject<V>
+
+type ComputedConstructor = <V, S>(
+	scope: Scope<S>,
+	processor: (Use, S) -> V
+) -> Computed<V>
+
+-- A state object which maps over keys and/or values in another table.
+export type For<OK, OV> = {
 	type: "For",
-}
+	timeliness: "lazy",
+} & StateObject<{ [OK]: OV }>
 
--- Animation
+type ForPairsConstructor = <S, IK, IV, OK, OV>(
+	scope: Scope<S>,
+	input: UsedAs<{ [IK]: IV }>,
+	processor: (Use, S, key: IK, value: IV) -> (OK, OV)
+) -> For<OK, OV>
+
+type ForKeysConstructor = <S, IK, IV, OK>(
+	scope: Scope<S>,
+	input: UsedAs<{ [IK]: IV }>,
+	processor: (Use, S, key: IK) -> OK
+) -> For<OK, IV>
+
+type ForValuesConstructor = <S, IK, IV, OV>(
+	scope: Scope<S>,
+	input: UsedAs<{ [IK]: IV }>,
+	processor: (S, value: IV) -> OV
+) -> For<IK, OV>
+
+-- A state object that's similar to Computed, but is asynchronous.
+export type Eventual<V> = {
+	type: "Eventual",
+	timeliness: "lazy",
+} & StateObject<V>
+
+type EventualConstructor = <V>(
+	scope: Scope<unknown>,
+	processor: (Use, become: (V) -> ()) -> (),
+	default: V?
+) -> Eventual<V>
+
+-- An object which can listen for updates on another state object.
+export type Observer = {
+	type: "Observer",
+	kind: "observer",
+
+	createdAt: number,
+	callback: () -> (),
+}
 
 export type Timer = StateObject<number> & {
 	type: "Timer",
@@ -111,11 +147,38 @@ export type Timer = StateObject<number> & {
 	reset: (Timer) -> (),
 }
 
-export type Animated<V> = StateObject<V> & {
-	type: "Animated",
-}
+export type MoverStepper<V> = (elapsed: number) -> (boolean, V)
+export type AnimatedMover<V> = (start: V, goal: V) -> MoverStepper<V>
 
--- Extra
+-- A state object whose value can be animated with a AnimatedMover callback.
+export type Animated<V> = {
+	type: "Animated",
+} & StateObject<V>
+
+type AnimatedConstructor = <V>(
+	scope: Scope<unknown>,
+	goal: UsedAs<V>,
+	mover: AnimatedMover<V>
+) -> Animated<V>
+
+type TweenConstructor = <V>(
+	scope: Scope<unknown>,
+	goal: UsedAs<V>,
+	info: UsedAs<TweenInfo>
+) -> Animated<V>
+
+type SpringConstructor = <V>(
+	scope: Scope<unknown>,
+	goal: UsedAs<V>,
+	speed: UsedAs<number>,
+	damping: UsedAs<number>
+) -> Animated<V>
+
+type DelayConstructor = <V>(
+	scope: Scope<unknown>,
+	goal: UsedAs<V>,
+	amount: UsedAs<number>
+) -> Animated<V>
 
 export type SpecialKey<T = string> = {
 	type: T,
@@ -137,93 +200,72 @@ export type ExternalProvider = {
 }
 
 export type Fusion = {
-	scoped: <B, M>(base: B, methods: M?) -> Scope<B> & M,
-	deriveScope: <T, M>(existing: T, methods: M?) -> T & M,
-	innerScope: <T, M>(existing: T, methods: M?) -> T & M,
-	doCleanup: (Task) -> (),
+	read scoped: <B, M>(base: B, methods: M?) -> Scope<B> & M,
+	read deriveScope: <T, M>(existing: T, methods: M?) -> T & M,
+	read innerScope: <T, M>(existing: T, methods: M?) -> T & M,
+	read doCleanup: (CleanupTask) -> (),
 
-	peek: <V>(value: UsedAs<V> | V) -> V,
-	observe: <V>(
+	read setProvider: (newProvider: ExternalProvider?) -> ExternalProvider?,
+
+	read peek: <V>(value: UsedAs<V> | V) -> V,
+	read observe: <V>(
 		value: StateObject<V>,
 		callback: () -> (),
 		immediate: boolean?
 	) -> Disconnect,
-	map: <V>(value: StateObject<V>, callback: (V) -> any?) -> Computed<V>,
+	read map: <V, O>(value: StateObject<V>, callback: (V) -> O) -> Computed<O>,
 
-	Eventual: <S, V>(
-		scope: Scope<S>,
-		processor: (use: Use, become: (V) -> ()) -> (),
-		default: V
-	) -> Eventual<V>,
-	Computed: <S, V>(
-		scope: Scope<S>,
-		processor: (use: Use, scope: Scope<S>) -> V
-	) -> Computed<V>,
-	Value: <V>(scope: Scope, initialValue: V) -> Value<V>,
-	Table: <K, V>(scope: Scope, initialValue: { [K]: V }) -> Table<K, V>,
+	read Eventual: EventualConstructor,
+	read Computed: ComputedConstructor,
+	read Value: ValueConstructor,
+	read Table: TableConstructor,
 
-	ForPairs: <S, IK, IV, OK, OV>(
-		scope: Scope<S>,
-		inputTable: UsedAs<{ [IK]: IV }>,
-		processor: (use: Use, scope: Scope<S>, key: IK, value: IV) -> (OK, OV)
-	) -> For<OK, OV>,
-	ForKeys: <S, IK, IV, OK>(
-		scope: Scope<S>,
-		inputTable: UsedAs<{ [IK]: IV }>,
-		processor: (use: Use, scope: Scope<S>, key: IK) -> OK
-	) -> For<OK, IV>,
-	ForValues: <S, IK, IV, OV>(
-		scope: Scope<S>,
-		inputTable: UsedAs<{ [IK]: IV }>,
-		processor: (use: Use, scope: Scope<S>, value: IV) -> OV
-	) -> For<IK, OV>,
+	read ForPairs: ForPairsConstructor,
+	read ForKeys: ForKeysConstructor,
+	read ForValues: ForValuesConstructor,
 
-	Timer: (scope: Scope) -> Timer,
-	Animated: <V>(scope: Scope, goal: UsedAs<V>, mover: AnimatedMover<V>) -> Animated<V>,
-	Tween: <V>(scope: Scope, goal: UsedAs<V>, info: UsedAs<TweenInfo>) -> Animated<V>,
-	Spring: <V>(
-		scope: Scope,
-		goal: UsedAs<V>,
-		speed: UsedAs<number>,
-		damping: UsedAs<number>
-	) -> Animated<V>,
-	Delay: <V>(scope: Scope, goal: UsedAs<V>, delay: UsedAs<number>) -> Animated<V>,
+	read Timer: (scope: Scope) -> Timer,
+
+	read Animated: AnimatedConstructor,
+	read Tween: TweenConstructor,
+	read Spring: SpringConstructor,
+	read Delay: DelayConstructor,
 
 	New: (
 		scope: Scope,
 		classNameOrTemplate: Instance | string
 	) -> (props: Properties) -> Instance,
-	Child: (
+	read Hydrate: (scope: Scope, instance: Instance) -> (props: Properties) -> Instance,
+	read Child: (
 		scope: Scope,
 		name: string
 	) -> (props: Properties) -> (parent: Instance) -> Instance?,
-	ChildOfClass: (
+	read ChildOfClass: (
 		scope: Scope,
 		className: string
 	) -> (props: Properties) -> (parent: Instance) -> Instance?,
-	Descendant: (
+	read Descendant: (
 		scope: Scope,
 		name: string
 	) -> (props: Properties) -> (parent: Instance) -> Instance?,
-	DescendantOfClass: (
+	read DescendantOfClass: (
 		scope: Scope,
 		className: string
 	) -> (props: Properties) -> (parent: Instance) -> Instance?,
 
-	Children: SpecialKey<"Children">,
-	Startup: SpecialKey<"Startup">,
-	Removal: SpecialKey<"Removal">,
-	Ref: SpecialKey<"Ref">,
-	Apply: SpecialKey<"Apply">,
-	Attribute: (attribute: string) -> SpecialKey<"Attribute">,
-	AttributeChange: (attribute: string) -> SpecialKey<"AttributeChange">,
-	AttributeOut: (attribute: string) -> SpecialKey<"AttributeOut">,
-	Tag: (tag: string) -> SpecialKey<"Tag">,
-	Out: (property: string) -> SpecialKey<"Out">,
-	OnChange: (property: string) -> SpecialKey<"OnChange">,
-	OnEvent: (event: string) -> SpecialKey<"OnEvent">,
-
-	setProvider: (newProvider: ExternalProvider?) -> ExternalProvider?,
+	-- Keys
+	read Children: SpecialKey<"Children">,
+	read Startup: SpecialKey<"Startup">,
+	read Removal: SpecialKey<"Removal">,
+	read Ref: SpecialKey<"Ref">,
+	read Apply: SpecialKey<"Apply">,
+	read Attribute: (attribute: string) -> SpecialKey<"Attribute">,
+	read AttributeChange: (attribute: string) -> SpecialKey<"AttributeChange">,
+	read AttributeOut: (attribute: string) -> SpecialKey<"AttributeOut">,
+	read Tag: (tag: string) -> SpecialKey<"Tag">,
+	read Out: (property: string) -> SpecialKey<"Out">,
+	read OnChange: (property: string) -> SpecialKey<"OnChange">,
+	read OnEvent: (event: string) -> SpecialKey<"OnEvent">,
 }
 
 return nil

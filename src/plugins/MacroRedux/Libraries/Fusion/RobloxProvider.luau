@@ -1,5 +1,5 @@
-local HttpService = game:GetService 'HttpService'
-local RunService = game:GetService 'RunService'
+local HttpService = game:GetService "HttpService"
+local RunService = game:GetService "RunService"
 
 local package = script.Parent
 
@@ -24,7 +24,7 @@ local schedulerDisconnect
 
 function RobloxProvider.startScheduler()
 	if RunService:IsClient() then
-		local id = 'FusionUpdateStep_' .. HttpService:GenerateGUID(false)
+		local id = "FusionUpdateStep_" .. HttpService:GenerateGUID(false)
 
 		RunService:BindToRenderStep(
 			id,

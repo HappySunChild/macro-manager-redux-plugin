@@ -92,11 +92,12 @@ function class._evaluate<V>(self: Self<V>)
 			-- i just realized how unsafe it is to call `change` on a object in a seperate thread.
 			-- this will lead to some very weird and confusing errors that will be impossible to debug.
 			-- maybe i could add a parameter to `change` that allows you to skip the busy checks, but that already
-			-- sounds like a very very bad idea and will probably lead to pain and suffering later on.
+			-- sounds like a very, very bad idea and will probably lead to pain and suffering later on.
 			change(self)
 		end
 
 		-- "re-depend" on used objects after becoming something.
+		-- because calling `evaluate` (and by extension `change`) on an object causes all of its dependencies to be invalidated
 		for _, target in used do
 			depend(self, target)
 		end
