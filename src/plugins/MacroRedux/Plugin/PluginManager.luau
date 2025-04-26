@@ -1,8 +1,12 @@
 local Studio = settings():GetService "Studio"
 
 local PluginFolder = script.Parent.Parent
-local Fusion = require(PluginFolder.Packages.Fusion)
-local Icons = require(PluginFolder.Packages.Icons)
+local Packages = PluginFolder.Packages
+
+local Fusion = require(Packages.Fusion)
+local Icons = require(Packages.Icons)
+local MacroManager = require(Packages.MacroManager)
+
 local Widget = require(PluginFolder.Components.Widget)
 
 local PLUGIN_VERSION = PluginFolder.Version.Value
@@ -65,16 +69,18 @@ function Manager:SetupToolbar(plugin: Plugin)
 
 	local buttonRefresh = toolbar:CreateButton(
 		"RefreshMacros",
-		"Refreshes macros in MACROS_STORAGE folder",
+		`Refresh macros in ServerStorage/{MacroManager.ContainerName}/Macros folder.`,
 		Icons.RefreshButtonDark,
 		"Refresh Macros"
 	)
 	buttonRefresh:SetActive(false)
-	buttonRefresh.Enabled = false
+	buttonRefresh.Enabled = true
 	buttonRefresh.ClickableWhenViewportHidden = true
 	buttonRefresh.Click:Connect(function()
 		buttonRefresh:SetActive(true)
 		buttonRefresh:SetActive(false)
+
+		MacroManager:RefreshMacros()
 	end)
 
 	Manager.ButtonWidget = buttonWidget
