@@ -1,16 +1,15 @@
 local Studio = settings():GetService "Studio"
 
-local PluginFolder = script.Parent.Parent
-local Packages = PluginFolder.Packages
+local PluginContainer = script.Parent.Parent
 
-local Icons = require(Packages.Icons)
-local MacroManager = require(Packages.MacroManager)
-local PluginScope = require(Packages.PluginScope)
+local Icons = require(PluginContainer.Plugin.Icons)
+local MacroManager = require(PluginContainer.Plugin.MacroManager)
+local PluginScope = require(PluginContainer.Plugin.Scope)
 
-local Theme = require(PluginFolder.Components.Theme)
-local Widget = require(PluginFolder.Components.Widget)
+local Theme = require(PluginContainer.Components.Theme)
+local Widget = require(PluginContainer.Components.Widget)
 
-local PLUGIN_VERSION = PluginFolder.Version.Value
+local PLUGIN_VERSION = PluginContainer.Version.Value
 
 local Manager = {}
 Manager.Active = false
@@ -33,6 +32,9 @@ function Manager:Initialize(plugin: Plugin)
 	end)
 
 	Manager:OnThemeChange(Studio.Theme)
+
+	MacroManager:SetupContainer()
+	MacroManager:LoadMacrosFromContainer()
 end
 
 function Manager:SetupWidget(plugin: Plugin)
@@ -120,6 +122,8 @@ end
 
 function Manager:OnClose()
 	Manager:Deactivate()
+
+	PluginScope:doCleanup()
 end
 
 return Manager
