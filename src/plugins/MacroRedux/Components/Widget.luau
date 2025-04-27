@@ -1,9 +1,12 @@
-local PluginFolder = script.Parent.Parent
+local PluginContainer = script.Parent.Parent
 
-local Fusion = require(PluginFolder.Packages.Fusion)
+local MacroManager = require(PluginContainer.Plugin.MacroManager)
+
+local Fusion = require(PluginContainer.Packages.Fusion)
 local Children = Fusion.Children
 
-local Theme = require(PluginFolder.Components.Theme)
+local MacroContainer = require(PluginContainer.Components.MacroContainer)
+-- local Theme = require(PluginFolder.Components.Theme)
 
 local function Widget(
 	scope: Fusion.Scope,
@@ -23,11 +26,12 @@ local function Widget(
 	widget.Enabled = false
 	widget.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
-	return scope:Hydrate(widget) {
+	local inner = scope:innerScope { MacroContainer = MacroContainer }
+
+	return inner:Hydrate(widget) {
 		[Children] = {
-			Background = scope:New "Frame" {
-				Size = UDim2.fromScale(1, 1),
-				BackgroundColor3 = Theme.colors.Background,
+			Container = inner:MacroContainer {
+				Macros = MacroManager.ActiveMacros,
 			},
 		},
 	}
