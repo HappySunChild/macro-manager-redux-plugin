@@ -2,6 +2,7 @@ local Studio = settings():GetService "Studio"
 
 local PluginContainer = script.Parent.Parent
 
+local ContainerManager = require(PluginContainer.Plugin.ContainerManager)
 local Icons = require(PluginContainer.Plugin.Icons)
 local MacroManager = require(PluginContainer.Plugin.MacroManager)
 local PluginScope = require(PluginContainer.Plugin.Scope)
@@ -33,7 +34,7 @@ function Manager:Initialize(plugin: Plugin)
 
 	Manager:OnThemeChange(Studio.Theme)
 
-	MacroManager:SetupContainer()
+	ContainerManager:SetupContainer()
 	MacroManager:LoadMacrosFromContainer()
 end
 
