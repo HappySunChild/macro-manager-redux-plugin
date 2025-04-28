@@ -1,19 +1,22 @@
 local ScriptEditorService = game:GetService "ScriptEditorService"
 local Selection = game:GetService "Selection"
 
-local PluginContainer = script.Parent.Parent
+local pluginContainer = script.Parent.Parent
 
-local Fusion = require(PluginContainer.Packages.Fusion)
+local Icons = require(pluginContainer.Plugin.Icons)
+
+local Fusion = require(pluginContainer.Packages.Fusion)
 local Children = Fusion.Children
 local OnEvent = Fusion.OnEvent
 
-local ItemsContainer = require(PluginContainer.Components.ItemsContainer)
-local Theme = require(PluginContainer.Components.Theme)
+local ItemsContainer = require(pluginContainer.Components.ItemsContainer)
+local Theme = require(pluginContainer.Components.Theme)
 
 local function Title(
 	scope: Fusion.Scope,
 	props: {
 		Text: string,
+		Icon: string?,
 		Document: LuaSourceContainer?,
 	}
 )
@@ -55,14 +58,23 @@ local function Title(
 				PaddingLeft = UDim.new(0, 2),
 				PaddingRight = UDim.new(0, 2),
 			},
+			Icon = scope:New "ImageLabel" {
+				Size = UDim2.fromOffset(16, 16),
+
+				BackgroundTransparency = 1,
+
+				Image = props.Icon or Icons.DefaultMacroIcon,
+			},
 			Label = scope:New "TextLabel" {
-				Size = UDim2.fromScale(0, 1),
+				Position = UDim2.fromOffset(18, 0),
+				Size = UDim2.fromOffset(0, 16),
 				AutomaticSize = Enum.AutomaticSize.X,
 
 				Text = props.Text,
 				TextSize = 16,
 				TextColor3 = Theme.Colors.TitleText,
 				TextTruncate = Enum.TextTruncate.AtEnd,
+				FontFace = Theme.Font,
 
 				BackgroundTransparency = 1,
 			},
@@ -93,6 +105,7 @@ local function Macro(
 		scope:innerScope { Title = Title, ItemsContainer = ItemsContainer }
 
 	return inner:New "Frame" {
+		Name = `Macro_{name}`,
 		Size = UDim2.new(1, 0, 0, 20),
 		AutomaticSize = Enum.AutomaticSize.Y,
 

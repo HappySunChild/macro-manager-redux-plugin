@@ -1,11 +1,11 @@
-local PluginContainer = script.Parent.Parent
+local pluginContainer = script.Parent.Parent
 
-local MacroManager = require(PluginContainer.Plugin.MacroManager)
+local MacroManager = require(pluginContainer.Utility.MacroManager)
 
-local Fusion = require(PluginContainer.Packages.Fusion)
+local Fusion = require(pluginContainer.Packages.Fusion)
 local Children = Fusion.Children
 
-local MacroContainer = require(PluginContainer.Components.MacroContainer)
+local MacroContainer = require(pluginContainer.Components.MacroContainer)
 -- local Theme = require(PluginFolder.Components.Theme)
 
 local function Widget(

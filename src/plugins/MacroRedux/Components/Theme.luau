@@ -1,9 +1,9 @@
 local Studio = settings():GetService "Studio"
 
-local PluginContainer = script.Parent.Parent
-local PluginScope = require(PluginContainer.Plugin.Scope)
+local pluginContainer = script.Parent.Parent
+local PluginScope = require(pluginContainer.Plugin.Scope)
 
-local Fusion = require(PluginContainer.Packages.Fusion)
+local Fusion = require(pluginContainer.Packages.Fusion)
 local map, peek = Fusion.map, Fusion.peek
 
 local currentTheme = PluginScope:Value(Studio.Theme)
@@ -38,16 +38,32 @@ local Theme = {
 
 	Colors = {
 		Background = StudioColor(Enum.StudioStyleGuideColor.MainBackground),
+
 		MacroBackground = StudioColor(Enum.StudioStyleGuideColor.Border),
 		MacroTitleBackground = ColorSet {
 			Light = Color3.fromRGB(138, 138, 138),
 			Dark = Color3.fromRGB(17, 17, 17),
 		},
+
 		ItemContainerBackground = StudioColor(Enum.StudioStyleGuideColor.Light),
+		ItemBackground = StudioColor(Enum.StudioStyleGuideColor.Notification),
+
+		ButtonBorder = StudioColor(Enum.StudioStyleGuideColor.ButtonBorder),
+		Button = StudioColor(Enum.StudioStyleGuideColor.Button),
+		ButtonHover = StudioColor(
+			Enum.StudioStyleGuideColor.Button,
+			Enum.StudioStyleGuideModifier.Hover
+		),
+		ButtonPress = StudioColor(
+			Enum.StudioStyleGuideColor.Button,
+			Enum.StudioStyleGuideModifier.Pressed
+		),
 
 		Text = StudioColor(Enum.StudioStyleGuideColor.MainText),
 		TitleText = StudioColor(Enum.StudioStyleGuideColor.InfoText),
+		ButtonText = StudioColor(Enum.StudioStyleGuideColor.ButtonText),
 	},
+	Font = Font.fromName "SourceSansPro",
 }
 
 function Theme:SetTheme(newTheme: StudioTheme)

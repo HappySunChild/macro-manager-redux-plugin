@@ -1,10 +1,10 @@
-local PluginContainer = script.Parent.Parent
+local pluginContainer = script.Parent.Parent
 
-local Fusion = require(PluginContainer.Packages.Fusion)
+local Fusion = require(pluginContainer.Packages.Fusion)
 local Children = Fusion.Children
 
-local Macro = require(PluginContainer.Components.Macro)
-local Theme = require(PluginContainer.Components.Theme)
+local Macro = require(pluginContainer.Components.Macro)
+local Theme = require(pluginContainer.Components.Theme)
 
 type Macro = {
 	Module: ModuleScript,
