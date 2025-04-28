@@ -1,0 +1,68 @@
+local pluginContainer = script.Parent.Parent
+
+local Types = require(pluginContainer.Types)
+
+local Fusion = require(pluginContainer.Packages.Fusion)
+local map, peek = Fusion.map, Fusion.peek
+local Children = Fusion.Children
+
+local Button = require(pluginContainer.Components.Button)
+local Theme = require(pluginContainer.Components.Theme)
+
+local class = {}
+local METATABLE = table.freeze { __index = class, __metatable = "Boolean" }
+
+local function Boolean(scope: Fusion.Scope, macroItem: Types.MacroItem)
+	setmetatable(macroItem, METATABLE)
+
+	local inner = scope:innerScope { Button = Button }
+	local value = inner:Value(macroItem.Value)
+
+	return inner:New "Frame" {
+		BackgroundColor3 = Theme.Colors.ItemBackground,
+
+		Size = UDim2.new(1, 0, 0, 24),
+
+		[Children] = {
+			Padding = inner:New "UIPadding" {
+				PaddingLeft = UDim.new(0, 2),
+				PaddingRight = UDim.new(0, 2),
+				PaddingTop = UDim.new(0, 2),
+				PaddingBottom = UDim.new(0, 2),
+			},
+
+			Label = inner:New "TextLabel" {
+				Size = UDim2.fromScale(0, 1),
+				AutomaticSize = Enum.AutomaticSize.X,
+
+				BackgroundTransparency = 1,
+
+				Text = macroItem.Name or macroItem.Text or "Boolean",
+				TextColor3 = Theme.Colors.Text,
+				TextSize = 16,
+			},
+
+			Button = inner:Button {
+				AnchorPoint = Vector2.new(1, 0),
+				Position = UDim2.fromScale(1, 0),
+				Size = UDim2.fromScale(1, 1),
+				SizeConstraint = Enum.SizeConstraint.RelativeYY,
+
+				Text = map(value, function(v: boolean)
+					return if v then "✓" else ""
+				end),
+				TextSize = 24,
+				FontFace = Theme.Font,
+
+				Callback = function()
+					local newValue = not peek(value)
+					value:set(newValue)
+
+					macroItem.Value = newValue
+				end,
+			},
+		},
+	}
+end
+
+return Boolean
