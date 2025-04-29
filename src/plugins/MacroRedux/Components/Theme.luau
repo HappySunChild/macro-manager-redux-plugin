@@ -48,8 +48,7 @@ local Theme = {
 		ItemContainerBackground = StudioColor(Enum.StudioStyleGuideColor.Light),
 		ItemBackground = StudioColor(Enum.StudioStyleGuideColor.Notification),
 
-		ButtonBorder = StudioColor(Enum.StudioStyleGuideColor.ButtonBorder),
-		Button = StudioColor(Enum.StudioStyleGuideColor.Button),
+		ButtonBackground = StudioColor(Enum.StudioStyleGuideColor.Button),
 		ButtonHover = StudioColor(
 			Enum.StudioStyleGuideColor.Button,
 			Enum.StudioStyleGuideModifier.Hover
@@ -58,9 +57,20 @@ local Theme = {
 			Enum.StudioStyleGuideColor.Button,
 			Enum.StudioStyleGuideModifier.Pressed
 		),
+		ButtonBorder = StudioColor(Enum.StudioStyleGuideColor.ButtonBorder),
+
+		InputFieldBackground = StudioColor(
+			Enum.StudioStyleGuideColor.InputFieldBackground
+		),
+		InputFieldBorder = StudioColor(
+			Enum.StudioStyleGuideColor.InputFieldBorder
+		),
 
 		Text = StudioColor(Enum.StudioStyleGuideColor.MainText),
+		BrightText = StudioColor(Enum.StudioStyleGuideColor.BrightText),
+		SubText = StudioColor(Enum.StudioStyleGuideColor.SubText),
 		TitleText = StudioColor(Enum.StudioStyleGuideColor.InfoText),
+		DimmedText = StudioColor(Enum.StudioStyleGuideColor.DimmedText),
 		ButtonText = StudioColor(Enum.StudioStyleGuideColor.ButtonText),
 	},
 	Font = Font.fromName "SourceSansPro",
