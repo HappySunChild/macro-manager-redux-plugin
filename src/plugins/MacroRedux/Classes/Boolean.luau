@@ -10,9 +10,9 @@ local Button = require(pluginContainer.Components.Button)
 local Theme = require(pluginContainer.Components.Theme)
 
 local class = {}
-local METATABLE = table.freeze { __index = class, __metatable = "Boolean" }
+local METATABLE = table.freeze { __index = class }
 
-local function Boolean(scope: Fusion.Scope, macroItem: Types.MacroItem)
+local function BooleanMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
 	setmetatable(macroItem, METATABLE)
 
 	local inner = scope:innerScope { Button = Button }
@@ -38,8 +38,9 @@ local function Boolean(scope: Fusion.Scope, macroItem: Types.MacroItem)
 				BackgroundTransparency = 1,
 
 				Text = macroItem.Name or macroItem.Text or "Boolean",
-				TextColor3 = Theme.Colors.Text,
+				TextColor3 = Theme.Colors.BrightText,
 				TextSize = 16,
+				FontFace = Theme.Font,
 			},
 
 			Button = inner:Button {
@@ -65,4 +66,4 @@ local function Boolean(scope: Fusion.Scope, macroItem: Types.MacroItem)
 	}
 end
 
-return Boolean
+return BooleanMacroItem
