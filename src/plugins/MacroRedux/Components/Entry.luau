@@ -24,7 +24,7 @@ local function Entry(
 	}
 )
 	local inner = scope:innerScope { Corners = Corners }
-	local text = inner:Value(props.Text or "")
+	local text = inner:Value(peek(props.Text) or "")
 
 	local isFocused = inner:Value(false)
 	local borderColor = inner:Computed(function(use)
