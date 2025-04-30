@@ -68,7 +68,7 @@ local function StringItemClass(
 				PlaceholderText = displayText,
 
 				Callback = function(text: string)
-					print("changed", text)
+					setValueInternal(text)
 				end,
 			},
 		},
