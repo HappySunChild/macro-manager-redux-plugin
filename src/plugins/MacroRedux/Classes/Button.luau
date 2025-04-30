@@ -9,8 +9,8 @@ local Button = require(pluginContainer.Components.Button)
 local Theme = require(pluginContainer.Components.Theme)
 
 type ButtonMacroItem = Types.MacroItem & {
-	Activate: () -> (),
-	Activated: () -> (),
+	Activate: (ButtonMacroItem) -> (),
+	Activated: (ButtonMacroItem) -> (),
 }
 
 local function ButtonMacroItem(scope: Fusion.Scope, macroItem: ButtonMacroItem)
@@ -40,7 +40,7 @@ local function ButtonMacroItem(scope: Fusion.Scope, macroItem: ButtonMacroItem)
 
 				Callback = if macroItem.Activate
 					then function()
-						macroItem.Activate()
+						macroItem:Activate()
 					end
 					else nil,
 			},

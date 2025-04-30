@@ -23,7 +23,7 @@ local function BooleanMacroItem(
 		value:set(newValue)
 
 		if type(macroItem.Changed) == "function" then
-			macroItem.Changed(newValue, oldValue)
+			macroItem:Changed(newValue, oldValue)
 		end
 	end
 
