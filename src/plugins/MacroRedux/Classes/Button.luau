@@ -9,11 +9,15 @@ local Button = require(pluginContainer.Components.Button)
 local Theme = require(pluginContainer.Components.Theme)
 
 type ButtonMacroItem = Types.MacroItem & {
+	Activate: () -> (),
 	Activated: () -> (),
 }
 
 local function ButtonMacroItem(scope: Fusion.Scope, macroItem: ButtonMacroItem)
 	local inner = scope:innerScope { Button = Button }
+
+	-- for backwards compatibility
+	macroItem.Activate = macroItem.Activate or macroItem.Activated
 
 	return inner:New "Frame" {
 		Size = UDim2.new(1, 0, 0, 24),
@@ -34,9 +38,9 @@ local function ButtonMacroItem(scope: Fusion.Scope, macroItem: ButtonMacroItem)
 				Text = macroItem.Text,
 				TextSize = 18,
 
-				Callback = if macroItem.Activated
+				Callback = if macroItem.Activate
 					then function()
-						macroItem.Activated()
+						macroItem.Activate()
 					end
 					else nil,
 			},
