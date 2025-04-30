@@ -113,6 +113,12 @@ local function Macro(
 		end
 	end
 
+	local visible = inner:Value(true)
+
+	function macro:SetVisible(isVisible: boolean)
+		visible:set(isVisible)
+	end
+
 	-- have to do this so items are loaded before :Init is called.
 	local itemContainer = inner:ItemsContainer { Items = macro.Items }
 
@@ -140,6 +146,8 @@ local function Macro(
 		Name = `Macro_{name}`,
 		Size = UDim2.new(1, 0, 0, 20),
 		AutomaticSize = Enum.AutomaticSize.Y,
+
+		Visible = visible,
 
 		LayoutOrder = macro.Order,
 		BackgroundColor3 = Theme.Colors.MacroBackground,

@@ -27,8 +27,6 @@ local function getMacroItemClass(name: string)
 end
 
 local function Item(scope: Fusion.Scope, macroItem: Types.MacroItem)
-	-- TODO: Make this use class components
-
 	local constructor = getMacroItemClass(macroItem.Type)
 
 	if not constructor then
@@ -37,18 +35,40 @@ local function Item(scope: Fusion.Scope, macroItem: Types.MacroItem)
 		return
 	end
 
-	local itemScope = scope:innerScope()
+	local inner = scope:innerScope()
 
 	local frame
 	local success, err = pcall(function()
-		frame = constructor(itemScope, macroItem)
+		frame = constructor(inner, macroItem)
 	end)
 
 	if not success then
 		warn(`Error while adding MacroItem '{macroItem.Type}';\n\t{err}`)
 	end
 
-	return frame
+	local visible = inner:Value(true)
+	local absoluteSize = inner:Value(Vector2.zero)
+
+	function macroItem:SetVisible(isVisible: boolean)
+		visible:set(isVisible)
+	end
+
+	if frame then
+		absoluteSize:bindToInstanceProperty(frame, "AbsoluteSize")
+	end
+
+	return inner:New "Frame" {
+		Size = inner:Computed(function(use)
+			return UDim2.new(1, 0, 0, use(absoluteSize).Y)
+		end),
+
+		Name = `{macroItem.Type}_MacroItem`,
+		BackgroundTransparency = 1,
+
+		Visible = visible,
+
+		[Children] = frame,
+	}
 end
 
 local function ItemsContainer(
@@ -60,7 +80,6 @@ local function ItemsContainer(
 	end
 
 	local inner = scope:innerScope { Item = Item }
-
 	local items = {}
 
 	for ind, macroItem in props.Items do
