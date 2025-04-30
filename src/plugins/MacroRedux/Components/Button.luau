@@ -1,8 +1,10 @@
 local pluginContainer = script.Parent.Parent
 
 local Fusion = require(pluginContainer.Packages.Fusion)
+local Children = Fusion.Children
 local OnEvent, Out = Fusion.OnEvent, Fusion.Out
 
+local Corners = require(pluginContainer.Components.Corners)
 local Theme = require(pluginContainer.Components.Theme)
 
 local function Button(
@@ -13,25 +15,34 @@ local function Button(
 		SizeConstraint: Fusion.UsedAs<Enum.SizeConstraint>?,
 		Position: Fusion.UsedAs<UDim2>?,
 
+		BorderColor: Fusion.UsedAs<Color3>?,
+		IdleColor: Fusion.UsedAs<Color3>?,
+		PressColor: Fusion.UsedAs<Color3>?,
+		HoverColor: Fusion.UsedAs<Color3>?,
+
 		Text: Fusion.UsedAs<string>?,
 		TextSize: Fusion.UsedAs<number>?,
+		TextColor: Fusion.UsedAs<Color3>?,
 		Callback: () -> (),
 	}
 )
-	local state = scope:Value(Enum.GuiState.Idle)
-	local color = scope:Computed(function(use)
+	local inner = scope:innerScope {
+		Corners = Corners,
+	}
+	local state = inner:Value(Enum.GuiState.Idle)
+	local color = inner:Computed(function(use)
 		local current = use(state) :: Enum.GuiState
 
 		if current == Enum.GuiState.Hover then
-			return use(Theme.Colors.ButtonHover)
+			return use(props.HoverColor or Theme.Colors.ButtonHover)
 		elseif current == Enum.GuiState.Press then
-			return use(Theme.Colors.ButtonPress)
+			return use(props.PressColor or Theme.Colors.ButtonPress)
 		end
 
-		return use(Theme.Colors.Button)
+		return use(props.IdleColor or Theme.Colors.ButtonBackground)
 	end)
 
-	return scope:New "TextButton" {
+	return inner:New "TextButton" {
 		AnchorPoint = props.AnchorPoint,
 		Size = props.Size,
 		SizeConstraint = props.SizeConstraint,
@@ -39,18 +50,17 @@ local function Button(
 
 		Text = props.Text,
 		TextSize = props.TextSize,
-		TextColor3 = Theme.Colors.ButtonText,
+		TextColor3 = props.TextColor or Theme.Colors.ButtonText,
 		FontFace = Theme.Font,
 
-		AutoButtonColor = false,
 		BackgroundColor3 = color,
-		BorderColor3 = Theme.Colors.ButtonBorder,
-		BorderSizePixel = 1,
 
 		[Out "GuiState"] = state,
-		[OnEvent "MouseButton1Click"] = function()
-			props.Callback()
-		end,
+		[OnEvent "MouseButton1Click"] = props.Callback,
+
+		[Children] = inner:Corners {
+			Color = props.BorderColor or Theme.Colors.ButtonBorder,
+		},
 	}
 end
 

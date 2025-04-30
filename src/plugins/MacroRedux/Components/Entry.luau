@@ -1,10 +1,12 @@
 local pluginContainer = script.Parent.Parent
 
 local Fusion = require(pluginContainer.Packages.Fusion)
-
-local Theme = require(pluginContainer.Components.Theme)
 local OnEvent, Out = Fusion.OnEvent, Fusion.Out
+local Children = Fusion.Children
 local peek = Fusion.peek
+
+local Corners = require(pluginContainer.Components.Corners)
+local Theme = require(pluginContainer.Components.Theme)
 
 local function Entry(
 	scope: Fusion.Scope,
@@ -21,31 +23,47 @@ local function Entry(
 		Callback: (string) -> (),
 	}
 )
-	local text = scope:Value(props.Text or "")
+	local inner = scope:innerScope { Corners = Corners }
+	local text = inner:Value(props.Text or "")
 
-	return scope:New "TextBox" {
+	local isFocused = inner:Value(false)
+	local borderColor = inner:Computed(function(use)
+		if use(isFocused) then
+			return use(Theme.Colors.ActiveBorder)
+		end
+
+		return use(Theme.Colors.InputFieldBorder)
+	end)
+
+	return inner:New "TextBox" {
 		AnchorPoint = props.AnchorPoint,
 		Size = props.Size,
 		Position = props.Position,
 
 		BackgroundColor3 = Theme.Colors.InputFieldBackground,
 
-		BorderColor3 = Theme.Colors.InputFieldBorder,
-		BorderSizePixel = 1,
-
 		PlaceholderText = props.PlaceholderText,
 		PlaceholderColor3 = Theme.Colors.DimmedText,
 
 		Text = props.Text,
 		TextSize = props.TextSize or 18,
-		TextColor3 = Theme.Colors.SubText,
+		TextColor3 = Theme.Colors.Text,
 		TextTruncate = Enum.TextTruncate.AtEnd,
 		FontFace = Theme.Font,
 
 		[Out "Text"] = text,
+		[OnEvent "Focused"] = function()
+			isFocused:set(true)
+		end,
 		[OnEvent "FocusLost"] = function()
+			isFocused:set(false)
+
 			props.Callback(peek(text))
 		end,
+
+		[Children] = inner:Corners {
+			Color = inner:Tween(borderColor, Theme.TweenInfo.ActiveHighlight),
+		},
 	}
 end
 
