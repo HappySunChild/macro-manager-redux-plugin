@@ -4,6 +4,7 @@ local Selection = game:GetService "Selection"
 local pluginContainer = script.Parent.Parent
 
 local Icons = require(pluginContainer.Plugin.Icons)
+local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 local Children = Fusion.Children
@@ -92,17 +93,48 @@ local function Macro(
 	local name = props.Module.Name
 	local displayName = name:gsub("(%l)([%u%d])", "%1 %2")
 
-	local macro = {}
-	local success, err = pcall(function()
+	local macro: Types.Macro = {}
+	local reqSuccess, reqErr = pcall(function()
 		macro = require(props.Module) :: unknown
 	end)
 
-	if not success then
-		warn(`Error occured while requiring Macro '{name}'\n{err}`)
+	if not reqSuccess then
+		warn(`Error occured while requiring Macro '{name}'\n{reqErr}`)
 	end
 
 	local inner =
 		scope:innerScope { Title = Title, ItemsContainer = ItemsContainer }
+
+	if macro.Setup then
+		local success, err = pcall(macro.Setup, macro)
+
+		if not success then
+			warn(`Error occured while running :Setup for Macro '{name}'\n{err}`)
+		end
+	end
+
+	-- have to do this so items are loaded before :Init is called.
+	local itemContainer = inner:ItemsContainer { Items = macro.Items }
+
+	if macro.Init then
+		local success, err = pcall(macro.Init, macro)
+
+		if not success then
+			warn(`Error occured while running :Init for Macro '{name}'\n{err}`)
+		end
+	end
+
+	if macro.Cleanup then
+		table.insert(inner, function()
+			local success, err = pcall(macro.Cleanup, macro)
+
+			if not success then
+				warn(
+					`Error occured while running :Cleanup for Macro '{name}'\n{err}`
+				)
+			end
+		end)
+	end
 
 	return inner:New "Frame" {
 		Name = `Macro_{name}`,
@@ -124,7 +156,7 @@ local function Macro(
 				Text = displayName,
 				Document = props.Reference,
 			},
-			Items = inner:ItemsContainer { Items = macro.Items },
+			Items = itemContainer,
 		},
 	}
 end
