@@ -12,9 +12,25 @@ local function NumberMacroItem(
 	scope: Fusion.Scope,
 	macroItem: Types.ValueMacroItem<number>
 )
+	local inner = scope:innerScope { Entry = Entry }
+	local value = inner:Value(macroItem.Value)
+
 	local name = macroItem.Name or macroItem.Text
 
-	local inner = scope:innerScope { Entry = Entry }
+	local function setValueInternal(newValue: number)
+		local oldValue = macroItem.Value
+		macroItem.Value = newValue
+
+		value:set(newValue)
+
+		if type(macroItem.Changed) == "function" then
+			macroItem.Changed(newValue, oldValue)
+		end
+	end
+
+	function macroItem:SetValue(newValue: number)
+		setValueInternal(newValue)
+	end
 
 	return inner:New "Frame" {
 		Size = UDim2.new(1, 0, 0, 24),
@@ -49,7 +65,7 @@ local function NumberMacroItem(
 				PlaceholderText = name,
 
 				Callback = function(text: string)
-					macroItem.Value = tonumber(text) or 0
+					setValueInternal(tonumber(text) or 0)
 				end,
 			},
 		},

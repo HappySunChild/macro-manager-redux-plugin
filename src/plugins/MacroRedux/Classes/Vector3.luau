@@ -33,14 +33,19 @@ local function Vector3ItemClass(
 		)
 	end
 
-	local function setValue(newValue: Vector3)
+	local function setValueInternal(newValue: Vector3)
+		local oldValue = macroItem.Value
 		macroItem.Value = newValue
 
 		value:set(newValue)
+
+		if type(macroItem.Changed) == "function" then
+			macroItem.Changed(newValue, oldValue)
+		end
 	end
 
 	function macroItem:SetValue(newValue: Vector3)
-		setValue(newValue)
+		setValueInternal(newValue)
 	end
 
 	return inner:New "Frame" {
@@ -84,7 +89,7 @@ local function Vector3ItemClass(
 						end),
 
 						Callback = function()
-							setValue(getInputValue())
+							setValueInternal(getInputValue())
 						end,
 					}
 				end,

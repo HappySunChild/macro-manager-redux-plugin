@@ -14,8 +14,22 @@ local function BooleanMacroItem(
 	macroItem: Types.ValueMacroItem<boolean>
 )
 	local inner = scope:innerScope { Button = Button }
-
 	local value = inner:Value(macroItem.Value)
+
+	local function setValueInternal(newValue: boolean)
+		local oldValue = macroItem.Value
+		macroItem.Value = newValue
+
+		value:set(newValue)
+
+		if type(macroItem.Changed) == "function" then
+			macroItem.Changed(newValue, oldValue)
+		end
+	end
+
+	function macroItem:SetValue(newValue: boolean)
+		setValueInternal(newValue)
+	end
 
 	return inner:New "Frame" {
 		BackgroundColor3 = Theme.Colors.ItemBackground,
@@ -59,9 +73,8 @@ local function BooleanMacroItem(
 
 				Callback = function()
 					local newValue = not peek(value)
-					value:set(newValue)
 
-					macroItem.Value = newValue
+					setValueInternal(newValue)
 				end,
 			},
 		},

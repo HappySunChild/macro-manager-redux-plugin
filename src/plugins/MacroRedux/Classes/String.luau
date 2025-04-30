@@ -13,8 +13,24 @@ local function StringItemClass(
 	macroItem: Types.ValueMacroItem<string>
 )
 	local inner = scope:innerScope { Entry = Entry }
+	local value = scope:Value(macroItem.Value)
 
 	local name = macroItem.Name or macroItem.Text
+
+	local function setValueInternal(newValue: string)
+		local oldValue = macroItem.Value
+		macroItem.Value = newValue
+
+		value:set(newValue)
+
+		if type(macroItem.Changed) == "function" then
+			macroItem.Changed(newValue, oldValue)
+		end
+	end
+
+	function macroItem:SetValue(newValue: string)
+		setValueInternal(newValue)
+	end
 
 	return inner:New "Frame" {
 		Size = UDim2.new(1, 0, 0, 24),
@@ -45,7 +61,7 @@ local function StringItemClass(
 				Position = UDim2.fromScale(0.5, 0),
 				Size = UDim2.fromScale(0.5, 1),
 
-				Text = macroItem.Value,
+				Text = value,
 				PlaceholderText = name,
 
 				Callback = function(text: string)

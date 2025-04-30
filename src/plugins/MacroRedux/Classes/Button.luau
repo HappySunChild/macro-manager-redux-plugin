@@ -8,7 +8,11 @@ local Children = Fusion.Children
 local Button = require(pluginContainer.Components.Button)
 local Theme = require(pluginContainer.Components.Theme)
 
-local function ButtonMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
+type ButtonMacroItem = Types.MacroItem & {
+	Activated: () -> (),
+}
+
+local function ButtonMacroItem(scope: Fusion.Scope, macroItem: ButtonMacroItem)
 	local inner = scope:innerScope { Button = Button }
 
 	return inner:New "Frame" {
@@ -30,9 +34,11 @@ local function ButtonMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
 				Text = macroItem.Text,
 				TextSize = 18,
 
-				Callback = function()
-					print "clicked"
-				end,
+				Callback = if macroItem.Activated
+					then function()
+						macroItem.Activated()
+					end
+					else nil,
 			},
 		},
 	}
