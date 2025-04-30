@@ -9,10 +9,10 @@ local Theme = require(pluginContainer.Components.Theme)
 
 local function Title(scope: Fusion.Scope, macroItem: Types.MacroItem)
 	local inner = scope:innerScope()
-	local text = inner:Value(macroItem.Text)
+	local displayText = inner:Value(macroItem.Text)
 
-	function macroItem:SetText(newText: string)
-		text:set(newText)
+	function macroItem:UpdateText(newText: string)
+		displayText:set(newText)
 	end
 
 	return inner:New "Frame" {
@@ -26,7 +26,7 @@ local function Title(scope: Fusion.Scope, macroItem: Types.MacroItem)
 
 				BackgroundTransparency = 1,
 
-				Text = text,
+				Text = displayText,
 				TextSize = 18,
 				TextColor3 = Theme.Colors.Text,
 				FontFace = Font.new(Theme.Font.Family, Enum.FontWeight.Bold),

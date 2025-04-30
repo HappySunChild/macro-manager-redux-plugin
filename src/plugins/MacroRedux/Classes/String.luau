@@ -14,8 +14,7 @@ local function StringItemClass(
 )
 	local inner = scope:innerScope { Entry = Entry }
 	local value = scope:Value(macroItem.Value)
-
-	local name = macroItem.Name or macroItem.Text
+	local displayText = scope:Value(macroItem.Name or macroItem.Text)
 
 	local function setValueInternal(newValue: string)
 		local oldValue = macroItem.Value
@@ -30,6 +29,10 @@ local function StringItemClass(
 
 	function macroItem:SetValue(newValue: string)
 		setValueInternal(newValue)
+	end
+
+	function macroItem:UpdateText(newText: string)
+		displayText:set(newText)
 	end
 
 	return inner:New "Frame" {
@@ -51,7 +54,7 @@ local function StringItemClass(
 
 				BackgroundTransparency = 1,
 
-				Text = name,
+				Text = displayText,
 				TextSize = 16,
 				TextColor3 = Theme.Colors.BrightText,
 				FontFace = Theme.Font,
@@ -62,7 +65,7 @@ local function StringItemClass(
 				Size = UDim2.fromScale(0.5, 1),
 
 				Text = value,
-				PlaceholderText = name,
+				PlaceholderText = displayText,
 
 				Callback = function(text: string)
 					print("changed", text)

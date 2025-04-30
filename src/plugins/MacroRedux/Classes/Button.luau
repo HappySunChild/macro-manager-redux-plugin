@@ -15,9 +15,14 @@ type ButtonMacroItem = Types.MacroItem & {
 
 local function ButtonMacroItem(scope: Fusion.Scope, macroItem: ButtonMacroItem)
 	local inner = scope:innerScope { Button = Button }
+	local displayText = inner:Value(macroItem.Text)
 
 	-- for backwards compatibility
 	macroItem.Activate = macroItem.Activate or macroItem.Activated
+
+	function macroItem:UpdateText(newText: string)
+		displayText:set(newText)
+	end
 
 	return inner:New "Frame" {
 		Size = UDim2.new(1, 0, 0, 24),
@@ -35,7 +40,7 @@ local function ButtonMacroItem(scope: Fusion.Scope, macroItem: ButtonMacroItem)
 			Button = inner:Button {
 				Size = UDim2.fromScale(1, 1),
 
-				Text = macroItem.Text,
+				Text = displayText,
 				TextSize = 18,
 
 				Callback = if macroItem.Activate

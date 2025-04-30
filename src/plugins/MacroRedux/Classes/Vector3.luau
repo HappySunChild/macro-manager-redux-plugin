@@ -16,6 +16,7 @@ local function Vector3ItemClass(
 )
 	local inner = scope:innerScope { Entry = Entry, Group = Group }
 	local value = inner:Value(macroItem.Value)
+	local displayText = inner:Value(macroItem.Name or macroItem.Text)
 
 	local xFieldRef = inner:Value()
 	local yFieldRef = inner:Value()
@@ -48,6 +49,10 @@ local function Vector3ItemClass(
 		setValueInternal(newValue)
 	end
 
+	function macroItem:UpdateText(newText: string)
+		displayText:set(newText)
+	end
+
 	return inner:New "Frame" {
 		Size = UDim2.new(1, 0, 0, 24),
 
@@ -67,7 +72,7 @@ local function Vector3ItemClass(
 
 				BackgroundTransparency = 1,
 
-				Text = macroItem.Name or macroItem.Text,
+				Text = displayText,
 				TextSize = 16,
 				TextColor3 = Theme.Colors.BrightText,
 				FontFace = Theme.Font,

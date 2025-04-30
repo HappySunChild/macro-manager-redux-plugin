@@ -15,6 +15,7 @@ local function BooleanMacroItem(
 )
 	local inner = scope:innerScope { Button = Button }
 	local value = inner:Value(macroItem.Value)
+	local displayText = inner:Value(macroItem.Name or macroItem.Text)
 
 	local function setValueInternal(newValue: boolean)
 		local oldValue = macroItem.Value
@@ -29,6 +30,10 @@ local function BooleanMacroItem(
 
 	function macroItem:SetValue(newValue: boolean)
 		setValueInternal(newValue)
+	end
+
+	function macroItem:UpdateText(newText: string)
+		displayText:set(newText)
 	end
 
 	return inner:New "Frame" {
@@ -50,7 +55,7 @@ local function BooleanMacroItem(
 
 				BackgroundTransparency = 1,
 
-				Text = macroItem.Name or macroItem.Text or "Boolean",
+				Text = displayText,
 				TextColor3 = Theme.Colors.BrightText,
 				TextSize = 16,
 				FontFace = Theme.Font,

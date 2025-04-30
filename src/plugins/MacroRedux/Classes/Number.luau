@@ -14,8 +14,7 @@ local function NumberMacroItem(
 )
 	local inner = scope:innerScope { Entry = Entry }
 	local value = inner:Value(macroItem.Value)
-
-	local name = macroItem.Name or macroItem.Text
+	local displayText = inner:Value(macroItem.Name or macroItem.Text)
 
 	local function setValueInternal(newValue: number)
 		local oldValue = macroItem.Value
@@ -30,6 +29,10 @@ local function NumberMacroItem(
 
 	function macroItem:SetValue(newValue: number)
 		setValueInternal(newValue)
+	end
+
+	function macroItem:UpdateText(newText: string)
+		displayText:set(newText)
 	end
 
 	return inner:New "Frame" {
@@ -51,7 +54,7 @@ local function NumberMacroItem(
 
 				BackgroundTransparency = 1,
 
-				Text = name,
+				Text = displayText,
 				TextSize = 16,
 				TextColor3 = Theme.Colors.BrightText,
 				FontFace = Theme.Font,
@@ -62,7 +65,7 @@ local function NumberMacroItem(
 				Size = UDim2.fromScale(0.5, 1),
 
 				Text = macroItem.Value,
-				PlaceholderText = name,
+				PlaceholderText = displayText,
 
 				Callback = function(text: string)
 					setValueInternal(tonumber(text) or 0)
