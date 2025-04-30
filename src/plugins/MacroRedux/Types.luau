@@ -11,4 +11,8 @@ export type MacroItem = {
 	[string]: any,
 }
 
+export type ValueMacroItem<V> = MacroItem & {
+	Value: V?
+}
+
 return nil

@@ -8,7 +8,10 @@ local Children = Fusion.Children
 local Entry = require(pluginContainer.Components.Entry)
 local Theme = require(pluginContainer.Components.Theme)
 
-local function NumberMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
+local function NumberMacroItem(
+	scope: Fusion.Scope,
+	macroItem: Types.ValueMacroItem<number>
+)
 	local name = macroItem.Name or macroItem.Text
 
 	local inner = scope:innerScope { Entry = Entry }

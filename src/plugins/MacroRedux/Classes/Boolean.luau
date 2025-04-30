@@ -9,7 +9,10 @@ local Children = Fusion.Children
 local Button = require(pluginContainer.Components.Button)
 local Theme = require(pluginContainer.Components.Theme)
 
-local function BooleanMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
+local function BooleanMacroItem(
+	scope: Fusion.Scope,
+	macroItem: Types.ValueMacroItem<boolean>
+)
 	local inner = scope:innerScope { Button = Button }
 
 	local value = inner:Value(macroItem.Value)
