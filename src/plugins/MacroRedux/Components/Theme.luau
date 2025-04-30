@@ -4,7 +4,7 @@ local pluginContainer = script.Parent.Parent
 local PluginScope = require(pluginContainer.Plugin.Scope)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
-local map, peek = Fusion.map, Fusion.peek
+local map = Fusion.map
 
 local currentTheme = PluginScope:Value(Studio.Theme)
 
@@ -36,6 +36,7 @@ end
 local Theme = {
 	Current = currentTheme,
 
+	Font = Font.fromName "SourceSansPro",
 	Colors = {
 		Background = StudioColor(Enum.StudioStyleGuideColor.MainBackground),
 
@@ -72,16 +73,18 @@ local Theme = {
 		TitleText = StudioColor(Enum.StudioStyleGuideColor.InfoText),
 		DimmedText = StudioColor(Enum.StudioStyleGuideColor.DimmedText),
 		ButtonText = StudioColor(Enum.StudioStyleGuideColor.ButtonText),
+
+		ActiveBorder = StudioColor(
+			Enum.StudioStyleGuideColor.OnboardingHighlight
+		),
 	},
-	Font = Font.fromName "SourceSansPro",
+	TweenInfo = {
+		ActiveHighlight = TweenInfo.new(0.1),
+	},
 }
 
 function Theme:SetTheme(newTheme: StudioTheme)
 	currentTheme:set(newTheme)
-end
-
-function Theme:GetTheme(): StudioTheme
-	return peek(currentTheme)
 end
 
 return Theme
