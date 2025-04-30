@@ -9,13 +9,9 @@ local Children = Fusion.Children
 local Button = require(pluginContainer.Components.Button)
 local Theme = require(pluginContainer.Components.Theme)
 
-local class = {}
-local METATABLE = table.freeze { __index = class }
-
 local function BooleanMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
-	setmetatable(macroItem, METATABLE)
-
 	local inner = scope:innerScope { Button = Button }
+
 	local value = inner:Value(macroItem.Value)
 
 	return inner:New "Frame" {
@@ -49,11 +45,14 @@ local function BooleanMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
 				Size = UDim2.fromScale(1, 1),
 				SizeConstraint = Enum.SizeConstraint.RelativeYY,
 
+				IdleColor = Theme.Colors.InputFieldBackground,
+				BorderColor = Theme.Colors.InputFieldBorder,
+
 				Text = map(value, function(v: boolean)
 					return if v then "✓" else ""
 				end),
 				TextSize = 24,
-				FontFace = Theme.Font,
+				TextColor = Theme.Colors.BrightText,
 
 				Callback = function()
 					local newValue = not peek(value)
