@@ -8,12 +8,7 @@ local Children = Fusion.Children
 local Entry = require(pluginContainer.Components.Entry)
 local Theme = require(pluginContainer.Components.Theme)
 
-local class = {}
-local METATABLE = table.freeze { __index = class }
-
 local function NumberMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
-	setmetatable(macroItem, METATABLE)
-
 	local name = macroItem.Name or macroItem.Text
 
 	local inner = scope:innerScope { Entry = Entry }
@@ -38,8 +33,8 @@ local function NumberMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
 				BackgroundTransparency = 1,
 
 				Text = name,
-				TextColor3 = Theme.Colors.BrightText,
 				TextSize = 16,
+				TextColor3 = Theme.Colors.BrightText,
 				FontFace = Theme.Font,
 			},
 
@@ -47,6 +42,7 @@ local function NumberMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
 				Position = UDim2.fromScale(0.5, 0),
 				Size = UDim2.fromScale(0.5, 1),
 
+				Text = macroItem.Value,
 				PlaceholderText = name,
 
 				Callback = function(text: string)
