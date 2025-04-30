@@ -14,18 +14,28 @@ local function Group(
 
 		Render: (index: number, label: string) -> Fusion.Child,
 		Labels: { string },
+		Refs: { Fusion.Value<Fusion.Child> },
 
 		[Fusion.SpecialKey<"Children">]: { Fusion.Child }?,
 	}
 )
+	local labels = props.Labels
+	local refs = props.Refs
+
 	local inner = scope:innerScope()
 	local elements = {}
 
-	for index, label in props.Labels do
+	for index, label in labels do
 		local element = props.Render(index, label)
 
 		if not element then
 			continue
+		end
+
+		local ref = refs[index]
+
+		if ref ~= nil then
+			ref:set(element)
 		end
 
 		table.insert(elements, element)
