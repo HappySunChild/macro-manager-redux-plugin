@@ -15,8 +15,9 @@ local function Vector3ItemClass(
 	macroItem: Types.ValueMacroItem<Vector3>
 )
 	local inner = scope:innerScope { Entry = Entry, Group = Group }
-	local value = inner:Value(macroItem.Value)
-	local displayText = inner:Value(macroItem.Name or macroItem.Text)
+	local value = inner:Value(macroItem.Value or Vector3.zero)
+	local displayText =
+		inner:Value(macroItem.Name or macroItem.Text or "Vector3")
 
 	local xFieldRef = inner:Value()
 	local yFieldRef = inner:Value()
@@ -56,7 +57,7 @@ local function Vector3ItemClass(
 	return inner:New "Frame" {
 		Size = UDim2.new(1, 0, 0, 24),
 
-		BackgroundColor3 = Theme.Colors.ItemBackground,
+		BackgroundTransparency = 1,
 
 		[Children] = {
 			Padding = inner:New "UIPadding" {

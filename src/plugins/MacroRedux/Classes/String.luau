@@ -13,8 +13,9 @@ local function StringItemClass(
 	macroItem: Types.ValueMacroItem<string>
 )
 	local inner = scope:innerScope { Entry = Entry }
-	local value = scope:Value(macroItem.Value)
-	local displayText = scope:Value(macroItem.Name or macroItem.Text)
+	local value = scope:Value(macroItem.Value or "")
+	local displayText =
+		scope:Value(macroItem.Name or macroItem.Text or "String")
 
 	local function setValueInternal(newValue: string)
 		local oldValue = macroItem.Value
@@ -38,7 +39,7 @@ local function StringItemClass(
 	return inner:New "Frame" {
 		Size = UDim2.new(1, 0, 0, 24),
 
-		BackgroundColor3 = Theme.Colors.ItemBackground,
+		BackgroundTransparency = 1,
 
 		[Children] = {
 			Padding = inner:New "UIPadding" {

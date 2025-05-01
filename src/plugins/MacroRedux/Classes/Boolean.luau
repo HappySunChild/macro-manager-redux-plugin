@@ -14,8 +14,9 @@ local function BooleanMacroItem(
 	macroItem: Types.ValueMacroItem<boolean>
 )
 	local inner = scope:innerScope { Button = Button }
-	local value = inner:Value(macroItem.Value)
-	local displayText = inner:Value(macroItem.Name or macroItem.Text)
+	local value = inner:Value(macroItem.Value or false)
+	local displayText =
+		inner:Value(macroItem.Name or macroItem.Text or "Boolean")
 
 	local function setValueInternal(newValue: boolean)
 		local oldValue = macroItem.Value
@@ -37,9 +38,9 @@ local function BooleanMacroItem(
 	end
 
 	return inner:New "Frame" {
-		BackgroundColor3 = Theme.Colors.ItemBackground,
-
 		Size = UDim2.new(1, 0, 0, 24),
+
+		BackgroundTransparency = 1,
 
 		[Children] = {
 			Padding = inner:New "UIPadding" {

@@ -13,8 +13,9 @@ local function NumberMacroItem(
 	macroItem: Types.ValueMacroItem<number>
 )
 	local inner = scope:innerScope { Entry = Entry }
-	local value = inner:Value(macroItem.Value)
-	local displayText = inner:Value(macroItem.Name or macroItem.Text)
+	local value = inner:Value(macroItem.Value or 0)
+	local displayText =
+		inner:Value(macroItem.Name or macroItem.Text or "Number")
 
 	local function setValueInternal(newValue: number)
 		local oldValue = macroItem.Value
@@ -38,7 +39,7 @@ local function NumberMacroItem(
 	return inner:New "Frame" {
 		Size = UDim2.new(1, 0, 0, 24),
 
-		BackgroundColor3 = Theme.Colors.ItemBackground,
+		BackgroundTransparency = 1,
 
 		[Children] = {
 			Padding = inner:New "UIPadding" {

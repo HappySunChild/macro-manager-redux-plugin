@@ -6,7 +6,6 @@ local Fusion = require(pluginContainer.Packages.Fusion)
 local Children = Fusion.Children
 
 local Button = require(pluginContainer.Components.Button)
-local Theme = require(pluginContainer.Components.Theme)
 
 type ButtonMacroItem = Types.MacroItem & {
 	Activate: (ButtonMacroItem) -> (),
@@ -15,7 +14,7 @@ type ButtonMacroItem = Types.MacroItem & {
 
 local function ButtonMacroItem(scope: Fusion.Scope, macroItem: ButtonMacroItem)
 	local inner = scope:innerScope { Button = Button }
-	local displayText = inner:Value(macroItem.Text)
+	local displayText = inner:Value(macroItem.Text or "Button")
 
 	-- for backwards compatibility
 	macroItem.Activate = macroItem.Activate or macroItem.Activated
@@ -27,7 +26,7 @@ local function ButtonMacroItem(scope: Fusion.Scope, macroItem: ButtonMacroItem)
 	return inner:New "Frame" {
 		Size = UDim2.new(1, 0, 0, 24),
 
-		BackgroundColor3 = Theme.Colors.ItemBackground,
+		BackgroundTransparency = 1,
 
 		[Children] = {
 			Padding = inner:New "UIPadding" {

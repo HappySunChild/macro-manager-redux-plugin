@@ -9,7 +9,7 @@ local Theme = require(pluginContainer.Components.Theme)
 
 local function Title(scope: Fusion.Scope, macroItem: Types.MacroItem)
 	local inner = scope:innerScope()
-	local displayText = inner:Value(macroItem.Text)
+	local displayText = inner:Value(macroItem.Text or "Title")
 
 	function macroItem:UpdateText(newText: string)
 		displayText:set(newText)
@@ -19,6 +19,7 @@ local function Title(scope: Fusion.Scope, macroItem: Types.MacroItem)
 		Size = UDim2.new(1, 0, 0, 26),
 
 		BackgroundColor3 = Theme.Colors.MacroBackground,
+		BackgroundTransparency = 1,
 
 		[Children] = {
 			Label = inner:New "TextLabel" {
