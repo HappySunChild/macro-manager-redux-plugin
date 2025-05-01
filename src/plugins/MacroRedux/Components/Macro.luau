@@ -8,9 +8,10 @@ local PluginShared = require(pluginContainer.Plugin.Shared)
 local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
-local Children = Fusion.Children
-local OnEvent = Fusion.OnEvent
+local Children, OnEvent = Fusion.Children, Fusion.OnEvent
+local peek = Fusion.peek
 
+local Button = require(pluginContainer.Components.Button)
 local Corners = require(pluginContainer.Components.Corners)
 local ItemsContainer = require(pluginContainer.Components.ItemsContainer)
 local Theme = require(pluginContainer.Components.Theme)
@@ -113,6 +114,7 @@ local function Macro(
 		Title = Title,
 		ItemsContainer = ItemsContainer,
 		Corners = Corners,
+		Button = Button,
 	}
 
 	if macro.Setup then
@@ -180,6 +182,21 @@ local function Macro(
 				Text = displayName,
 				Icon = macro.Icon,
 				Document = props.Reference,
+			},
+
+			MinimizeButton = inner:Button {
+				AnchorPoint = Vector2.new(1, 0),
+				Position = UDim2.fromScale(1, 0),
+				Size = UDim2.fromOffset(16, 16),
+
+				Text = inner:Computed(function(use: Fusion.Use)
+					return if use(minimized) then "+" else "-"
+				end),
+				TextSize = 20,
+
+				Callback = function()
+					minimized:set(not peek(minimized))
+				end,
 			},
 
 			Corners = inner:Corners { Thickness = 0 },
