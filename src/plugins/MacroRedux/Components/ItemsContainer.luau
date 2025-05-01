@@ -101,12 +101,18 @@ local function ItemsContainer(
 		AutomaticSize = Enum.AutomaticSize.Y,
 
 		BackgroundColor3 = Theme.Colors.ItemBackground,
+		ClipsDescendants = true,
 
 		[Children] = {
 			Layout = inner:New "UIListLayout" {
 				FillDirection = Enum.FillDirection.Vertical,
 				SortOrder = Enum.SortOrder.LayoutOrder,
-				-- Padding = UDim.new(0, 0),
+			},
+			Padding = inner:New "UIPadding" {
+				PaddingTop = UDim.new(0, 2),
+				PaddingBottom = UDim.new(0, 2),
+				PaddingLeft = UDim.new(0, 1),
+				PaddingRight = UDim.new(0, 1),
 			},
 
 			Corners = inner:Corners { Thickness = 0 },
