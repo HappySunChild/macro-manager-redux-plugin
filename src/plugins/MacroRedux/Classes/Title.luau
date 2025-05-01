@@ -3,15 +3,19 @@ local pluginContainer = script.Parent.Parent
 local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
-local Children = Fusion.Children
+local t = require(pluginContainer.Packages.t)
 
 local Theme = require(pluginContainer.Components.Theme)
+
+local Children = Fusion.Children
 
 local function Title(scope: Fusion.Scope, macroItem: Types.MacroItem)
 	local inner = scope:innerScope()
 	local displayText = inner:Value(macroItem.Text or "Title")
 
 	function macroItem:UpdateText(newText: string)
+		assert(t.string(newText))
+
 		displayText:set(newText)
 	end
 

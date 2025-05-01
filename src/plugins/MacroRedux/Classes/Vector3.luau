@@ -3,17 +3,21 @@ local pluginContainer = script.Parent.Parent
 local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
-local Children = Fusion.Children
-local peek = Fusion.peek
+local t = require(pluginContainer.Packages.t)
 
 local Entry = require(pluginContainer.Components.Entry)
 local Group = require(pluginContainer.Components.Group)
 local Theme = require(pluginContainer.Components.Theme)
 
+local Children = Fusion.Children
+local peek = Fusion.peek
+
 local function Vector3ItemClass(
 	scope: Fusion.Scope,
 	macroItem: Types.ValueMacroItem<Vector3>
 )
+	macroItem.Value = t.default(Vector3.zero, t.Vector3)(macroItem.Value)
+
 	local inner = scope:innerScope { Entry = Entry, Group = Group }
 	local value = inner:Value(macroItem.Value or Vector3.zero)
 	local displayText =
@@ -47,10 +51,14 @@ local function Vector3ItemClass(
 	end
 
 	function macroItem:SetValue(newValue: Vector3)
+		assert(t.Vector3(newValue))
+
 		setValueInternal(newValue)
 	end
 
 	function macroItem:UpdateText(newText: string)
+		assert(t.string(newText))
+
 		displayText:set(newText)
 	end
 

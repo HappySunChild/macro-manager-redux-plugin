@@ -3,17 +3,21 @@ local pluginContainer = script.Parent.Parent
 local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
-local Children = Fusion.Children
+local t = require(pluginContainer.Packages.t)
 
 local Entry = require(pluginContainer.Components.Entry)
 local Theme = require(pluginContainer.Components.Theme)
+
+local Children = Fusion.Children
 
 local function StringItemClass(
 	scope: Fusion.Scope,
 	macroItem: Types.ValueMacroItem<string>
 )
+	macroItem.Value = t.default("", t.string)(macroItem.Value)
+
 	local inner = scope:innerScope { Entry = Entry }
-	local value = scope:Value(macroItem.Value or "")
+	local value = scope:Value(macroItem.Value)
 	local displayText =
 		scope:Value(macroItem.Name or macroItem.Text or "String")
 
@@ -29,10 +33,14 @@ local function StringItemClass(
 	end
 
 	function macroItem:SetValue(newValue: string)
+		assert(t.string(newValue))
+
 		setValueInternal(newValue)
 	end
 
 	function macroItem:UpdateText(newText: string)
+		assert(t.string(newText))
+
 		displayText:set(newText)
 	end
 

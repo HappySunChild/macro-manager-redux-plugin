@@ -3,9 +3,11 @@ local pluginContainer = script.Parent.Parent
 local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
-local Children = Fusion.Children
+local t = require(pluginContainer.Packages.t)
 
 local Button = require(pluginContainer.Components.Button)
+
+local Children = Fusion.Children
 
 type ButtonMacroItem = Types.MacroItem & {
 	Activate: (ButtonMacroItem) -> (),
@@ -20,6 +22,8 @@ local function ButtonMacroItem(scope: Fusion.Scope, macroItem: ButtonMacroItem)
 	macroItem.Activate = macroItem.Activate or macroItem.Activated
 
 	function macroItem:UpdateText(newText: string)
+		assert(t.strict(newText))
+
 		displayText:set(newText)
 	end
 

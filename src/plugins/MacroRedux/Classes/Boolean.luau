@@ -3,18 +3,22 @@ local pluginContainer = script.Parent.Parent
 local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
-local map, peek = Fusion.map, Fusion.peek
-local Children = Fusion.Children
+local t = require(pluginContainer.Packages.t)
 
 local Button = require(pluginContainer.Components.Button)
 local Theme = require(pluginContainer.Components.Theme)
+
+local map, peek = Fusion.map, Fusion.peek
+local Children = Fusion.Children
 
 local function BooleanMacroItem(
 	scope: Fusion.Scope,
 	macroItem: Types.ValueMacroItem<boolean>
 )
+	macroItem.Value = t.default(false, t.boolean)(macroItem.Value)
+
 	local inner = scope:innerScope { Button = Button }
-	local value = inner:Value(macroItem.Value or false)
+	local value = inner:Value(macroItem.Value)
 	local displayText =
 		inner:Value(macroItem.Name or macroItem.Text or "Boolean")
 
@@ -30,10 +34,14 @@ local function BooleanMacroItem(
 	end
 
 	function macroItem:SetValue(newValue: boolean)
+		assert(t.boolean(newValue))
+
 		setValueInternal(newValue)
 	end
 
 	function macroItem:UpdateText(newText: string)
+		assert(t.string(newText))
+
 		displayText:set(newText)
 	end
 
