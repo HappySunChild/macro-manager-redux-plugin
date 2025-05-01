@@ -1,20 +1,17 @@
 local pluginContainer = script.Parent.Parent
 
+local Types = require(pluginContainer.Types)
+
 local Fusion = require(pluginContainer.Packages.Fusion)
 local Children = Fusion.Children
 
 local Macro = require(pluginContainer.Components.Macro)
 local Theme = require(pluginContainer.Components.Theme)
 
-type Macro = {
-	Module: ModuleScript,
-	Reference: LuaSourceContainer?,
-}
-
 local function MacroContainer(
 	scope: Fusion.Scope,
 	props: {
-		Macros: Fusion.UsedAs<{ Macro }>,
+		Macros: Fusion.UsedAs<{ Types.Macro }>,
 	}
 )
 	local inner = scope:innerScope { Macro = Macro }
@@ -33,7 +30,7 @@ local function MacroContainer(
 				PaddingBottom = UDim.new(0, 2),
 			},
 			Layout = inner:New "UIListLayout" {
-				Padding = UDim.new(0, 2),
+				Padding = UDim.new(0, 4),
 			},
 
 			Macros = inner:ForPairs(

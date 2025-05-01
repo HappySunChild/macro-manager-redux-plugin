@@ -8,6 +8,7 @@ local MacroManager = require(pluginContainer.Utility.MacroManager)
 local Fusion = require(pluginContainer.Packages.Fusion)
 local Children = Fusion.Children
 
+local Corners = require(pluginContainer.Components.Corners)
 local Theme = require(pluginContainer.Components.Theme)
 
 local function getMacroItemClass(name: string)
@@ -79,7 +80,7 @@ local function ItemsContainer(
 		return
 	end
 
-	local inner = scope:innerScope { Item = Item }
+	local inner = scope:innerScope { Item = Item, Corners = Corners }
 	local items = {}
 
 	for ind, macroItem in props.Items do
@@ -99,7 +100,7 @@ local function ItemsContainer(
 		Size = UDim2.new(1, 0, 0, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
 
-		BackgroundColor3 = Theme.Colors.ItemContainerBackground,
+		BackgroundColor3 = Theme.Colors.ItemBackground,
 
 		[Children] = {
 			Layout = inner:New "UIListLayout" {
@@ -107,6 +108,8 @@ local function ItemsContainer(
 				SortOrder = Enum.SortOrder.LayoutOrder,
 				-- Padding = UDim.new(0, 0),
 			},
+
+			Corners = inner:Corners { Thickness = 0 },
 
 			Items = items,
 		},
