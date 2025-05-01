@@ -14,6 +14,7 @@ type Fusion = Types.Fusion
 
 export type Scope<Constructors = Fusion> = Types.Scope<Constructors>
 export type UsedAs<V> = Types.UsedAs<V>
+export type Use = Types.Use
 
 export type SpecialKey<T> = Types.SpecialKey<T>
 
