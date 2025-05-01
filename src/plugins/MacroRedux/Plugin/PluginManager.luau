@@ -6,7 +6,7 @@ local ContainerManager = require(pluginContainer.Utility.ContainerManager)
 local MacroManager = require(pluginContainer.Utility.MacroManager)
 
 local Icons = require(pluginContainer.Plugin.Icons)
-local PluginScope = require(pluginContainer.Plugin.Scope)
+local PluginShared = require(pluginContainer.Plugin.Shared)
 
 local Theme = require(pluginContainer.Components.Theme)
 local Widget = require(pluginContainer.Components.Widget)
@@ -22,6 +22,8 @@ Manager.ButtonWidget = nil :: PluginToolbarButton?
 Manager.ButtonRefresh = nil :: PluginToolbarButton?
 
 function Manager:Initialize(plugin: Plugin)
+	PluginShared.Plugin = plugin
+
 	Manager:SetupWidget(plugin)
 	Manager:SetupToolbar(plugin)
 
@@ -40,7 +42,7 @@ function Manager:Initialize(plugin: Plugin)
 end
 
 function Manager:SetupWidget(plugin: Plugin)
-	local scope = PluginScope:deriveScope { Widget = Widget }
+	local scope = PluginShared.Scope:deriveScope { Widget = Widget }
 	local widget = scope:Widget {
 		Plugin = plugin,
 		Title = `Macros {PLUGIN_VERSION}`,
@@ -125,7 +127,7 @@ end
 function Manager:OnClose()
 	Manager:Deactivate()
 
-	PluginScope:doCleanup()
+	PluginShared.Scope:doCleanup()
 end
 
 return Manager

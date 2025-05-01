@@ -1,12 +1,13 @@
 local Studio = settings():GetService "Studio"
 
 local pluginContainer = script.Parent.Parent
-local PluginScope = require(pluginContainer.Plugin.Scope)
+
+local PluginShared = require(pluginContainer.Plugin.Shared)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 local map = Fusion.map
 
-local currentTheme = PluginScope:Value(Studio.Theme)
+local currentTheme = PluginShared.Scope:Value(Studio.Theme)
 
 local MISSING_COLOR = Color3.new(1, 0, 1)
 

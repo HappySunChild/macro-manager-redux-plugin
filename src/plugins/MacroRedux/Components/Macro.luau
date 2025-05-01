@@ -4,6 +4,7 @@ local Selection = game:GetService "Selection"
 local pluginContainer = script.Parent.Parent
 
 local Icons = require(pluginContainer.Plugin.Icons)
+local PluginShared = require(pluginContainer.Plugin.Shared)
 local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
@@ -106,7 +107,7 @@ local function Macro(
 		scope:innerScope { Title = Title, ItemsContainer = ItemsContainer }
 
 	if macro.Setup then
-		local success, err = pcall(macro.Setup, macro)
+		local success, err = pcall(macro.Setup, macro, PluginShared.Plugin)
 
 		if not success then
 			warn(`Error occured while running :Setup for Macro '{name}'\n{err}`)
@@ -114,16 +115,21 @@ local function Macro(
 	end
 
 	local visible = inner:Value(true)
+	local minimized = inner:Value(false)
 
 	function macro:SetVisible(isVisible: boolean)
 		visible:set(isVisible)
+	end
+
+	function macro:SetMinimized(isMinimized: boolean)
+		minimized:set(isMinimized)
 	end
 
 	-- have to do this so items are loaded before :Init is called.
 	local itemContainer = inner:ItemsContainer { Items = macro.Items }
 
 	if macro.Init then
-		local success, err = pcall(macro.Init, macro)
+		local success, err = pcall(macro.Init, macro, PluginShared.Plugin)
 
 		if not success then
 			warn(`Error occured while running :Init for Macro '{name}'\n{err}`)
@@ -132,7 +138,8 @@ local function Macro(
 
 	if macro.Cleanup then
 		table.insert(inner, function()
-			local success, err = pcall(macro.Cleanup, macro)
+			local success, err =
+				pcall(macro.Cleanup, macro, PluginShared.Plugin)
 
 			if not success then
 				warn(
@@ -164,7 +171,9 @@ local function Macro(
 				Text = displayName,
 				Document = props.Reference,
 			},
-			Items = itemContainer,
+			Items = inner:Computed(function(use)
+				return if use(minimized) then nil else itemContainer
+			end),
 		},
 	}
 end

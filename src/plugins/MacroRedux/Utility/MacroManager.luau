@@ -1,13 +1,13 @@
 local pluginContainer = script.Parent.Parent
 
 local ContainerManager = require(pluginContainer.Utility.ContainerManager)
-local PluginScope = require(pluginContainer.Plugin.Scope)
+local PluginShared = require(pluginContainer.Plugin.Shared)
 
 local MacroManager = {}
 MacroManager.CustomItemClasses = {}
 
 local loadedMacros = {}
-MacroManager.ActiveMacros = PluginScope:Value(loadedMacros)
+MacroManager.ActiveMacros = PluginShared.Scope:Value(loadedMacros)
 
 function MacroManager:LoadMacro(macroModule: ModuleScript, reference: Instance?)
 	table.insert(loadedMacros, { Module = macroModule, Reference = reference })
