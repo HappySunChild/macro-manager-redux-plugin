@@ -16,6 +16,8 @@ local function Button(
 		Position: Fusion.UsedAs<UDim2>?,
 
 		BorderColor: Fusion.UsedAs<Color3>?,
+		HoverBorderColor: Fusion.UsedAs<Color3>?,
+
 		IdleColor: Fusion.UsedAs<Color3>?,
 		PressColor: Fusion.UsedAs<Color3>?,
 		HoverColor: Fusion.UsedAs<Color3>?,
@@ -36,10 +38,20 @@ local function Button(
 		if current == Enum.GuiState.Hover then
 			return use(props.HoverColor or Theme.Colors.ButtonHover)
 		elseif current == Enum.GuiState.Press then
-			return use(props.PressColor or Theme.Colors.ButtonPress)
+			return use(props.PressColor or Theme.Colors.ButtonPressed)
 		end
 
 		return use(props.IdleColor or Theme.Colors.ButtonBackground)
+	end)
+
+	local borderColor = inner:Computed(function(use)
+		local current = use(state)
+
+		if current == Enum.GuiState.Hover then
+			return use(props.BorderColor or Theme.Colors.AccentBorder)
+		end
+
+		return use(props.BorderColor or Theme.Colors.ButtonBorder)
 	end)
 
 	return inner:New "TextButton" {
@@ -53,13 +65,13 @@ local function Button(
 		TextColor3 = props.TextColor or Theme.Colors.ButtonText,
 		FontFace = Theme.Font,
 
-		BackgroundColor3 = color,
+		BackgroundColor3 = inner:Tween(color, Theme.TweenInfo.Hover),
 
 		[Out "GuiState"] = state,
 		[OnEvent "MouseButton1Click"] = props.Callback,
 
 		[Children] = inner:Corners {
-			Color = props.BorderColor or Theme.Colors.ButtonBorder,
+			Color = inner:Tween(borderColor, Theme.TweenInfo.Hover),
 		},
 	}
 end

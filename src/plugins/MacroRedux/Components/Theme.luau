@@ -39,6 +39,13 @@ local Theme = {
 
 	Font = Font.fromName "SourceSansPro",
 	Colors = {
+		Text = StudioColor(Enum.StudioStyleGuideColor.MainText),
+		BrightText = StudioColor(Enum.StudioStyleGuideColor.BrightText),
+		SubText = StudioColor(Enum.StudioStyleGuideColor.SubText),
+		TitleText = StudioColor(Enum.StudioStyleGuideColor.InfoText),
+		DimmedText = StudioColor(Enum.StudioStyleGuideColor.DimmedText),
+		ButtonText = StudioColor(Enum.StudioStyleGuideColor.ButtonText),
+
 		Background = StudioColor(Enum.StudioStyleGuideColor.MainBackground),
 
 		MacroBackground = StudioColor(Enum.StudioStyleGuideColor.Border),
@@ -47,19 +54,24 @@ local Theme = {
 			Dark = Color3.fromRGB(17, 17, 17),
 		},
 
-		ItemContainerBackground = StudioColor(Enum.StudioStyleGuideColor.Light),
 		ItemBackground = StudioColor(Enum.StudioStyleGuideColor.Notification),
 
-		ButtonBackground = StudioColor(Enum.StudioStyleGuideColor.Button),
+		ButtonBackground = ColorSet {
+			Light = Color3.fromRGB(252, 252, 252),
+			Dark = Color3.fromRGB(56, 56, 56),
+		},
 		ButtonHover = StudioColor(
 			Enum.StudioStyleGuideColor.Button,
 			Enum.StudioStyleGuideModifier.Hover
 		),
-		ButtonPress = StudioColor(
+		ButtonPressed = StudioColor(
 			Enum.StudioStyleGuideColor.Button,
 			Enum.StudioStyleGuideModifier.Pressed
 		),
-		ButtonBorder = StudioColor(Enum.StudioStyleGuideColor.ButtonBorder),
+		ButtonBorder = ColorSet {
+			Light = Color3.fromRGB(162, 162, 162),
+			Dark = Color3.fromRGB(26, 26, 26),
+		},
 
 		InputFieldBackground = StudioColor(
 			Enum.StudioStyleGuideColor.InputFieldBackground
@@ -68,19 +80,14 @@ local Theme = {
 			Enum.StudioStyleGuideColor.InputFieldBorder
 		),
 
-		Text = StudioColor(Enum.StudioStyleGuideColor.MainText),
-		BrightText = StudioColor(Enum.StudioStyleGuideColor.BrightText),
-		SubText = StudioColor(Enum.StudioStyleGuideColor.SubText),
-		TitleText = StudioColor(Enum.StudioStyleGuideColor.InfoText),
-		DimmedText = StudioColor(Enum.StudioStyleGuideColor.DimmedText),
-		ButtonText = StudioColor(Enum.StudioStyleGuideColor.ButtonText),
-
-		ActiveBorder = StudioColor(
-			Enum.StudioStyleGuideColor.OnboardingHighlight
-		),
+		AccentBorder = ColorSet {
+			Light = Color3.fromRGB(146, 163, 255),
+			Dark = Color3.fromRGB(247, 152, 58),
+		},
 	},
 	TweenInfo = {
 		ActiveHighlight = TweenInfo.new(0.1),
+		Hover = TweenInfo.new(0.1),
 	},
 }
 

@@ -29,7 +29,7 @@ local function Entry(
 	local isFocused = inner:Value(false)
 	local borderColor = inner:Computed(function(use)
 		if use(isFocused) then
-			return use(Theme.Colors.ActiveBorder)
+			return use(Theme.Colors.AccentBorder)
 		end
 
 		return use(Theme.Colors.InputFieldBorder)
