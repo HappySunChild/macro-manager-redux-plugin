@@ -11,6 +11,7 @@ local Fusion = require(pluginContainer.Packages.Fusion)
 local Children = Fusion.Children
 local OnEvent = Fusion.OnEvent
 
+local Corners = require(pluginContainer.Components.Corners)
 local ItemsContainer = require(pluginContainer.Components.ItemsContainer)
 local Theme = require(pluginContainer.Components.Theme)
 
@@ -22,11 +23,12 @@ local function Title(
 		Document: LuaSourceContainer?,
 	}
 )
-	local transparency = scope:Value(1)
+	local inner = scope:innerScope { Corners = Corners }
+	local transparency = inner:Value(1)
 
 	local lastClick = 0
 
-	return scope:New "Frame" {
+	return inner:New "Frame" {
 		Size = UDim2.fromOffset(0, 16),
 		AutomaticSize = Enum.AutomaticSize.X,
 
@@ -56,18 +58,22 @@ local function Title(
 			else nil,
 
 		[Children] = {
-			Padding = scope:New "UIPadding" {
+			Padding = inner:New "UIPadding" {
 				PaddingLeft = UDim.new(0, 2),
 				PaddingRight = UDim.new(0, 2),
 			},
-			Icon = scope:New "ImageLabel" {
+			Corners = inner:Corners {
+				Thickness = 0,
+			},
+
+			Icon = inner:New "ImageLabel" {
 				Size = UDim2.fromOffset(16, 16),
 
 				BackgroundTransparency = 1,
 
 				Image = props.Icon or Icons.DefaultMacroIcon,
 			},
-			Label = scope:New "TextLabel" {
+			Label = inner:New "TextLabel" {
 				Position = UDim2.fromOffset(18, 0),
 				Size = UDim2.fromOffset(0, 16),
 				AutomaticSize = Enum.AutomaticSize.X,
@@ -103,8 +109,11 @@ local function Macro(
 		warn(`Error occured while requiring Macro '{name}'\n{reqErr}`)
 	end
 
-	local inner =
-		scope:innerScope { Title = Title, ItemsContainer = ItemsContainer }
+	local inner = scope:innerScope {
+		Title = Title,
+		ItemsContainer = ItemsContainer,
+		Corners = Corners,
+	}
 
 	if macro.Setup then
 		local success, err = pcall(macro.Setup, macro, PluginShared.Plugin)
@@ -169,8 +178,12 @@ local function Macro(
 
 			Title = inner:Title {
 				Text = displayName,
+				Icon = macro.Icon,
 				Document = props.Reference,
 			},
+
+			Corners = inner:Corners { Thickness = 0 },
+
 			Items = inner:Computed(function(use)
 				return if use(minimized) then nil else itemContainer
 			end),
