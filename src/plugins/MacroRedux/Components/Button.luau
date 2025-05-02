@@ -14,6 +14,7 @@ local function Button(
 		Size: Fusion.UsedAs<UDim2>?,
 		SizeConstraint: Fusion.UsedAs<Enum.SizeConstraint>?,
 		Position: Fusion.UsedAs<UDim2>?,
+		LayoutOrder: Fusion.UsedAs<number>?,
 
 		BorderColor: Fusion.UsedAs<Color3>?,
 		HoverBorderColor: Fusion.UsedAs<Color3>?,
@@ -59,6 +60,7 @@ local function Button(
 		Size = props.Size,
 		SizeConstraint = props.SizeConstraint,
 		Position = props.Position,
+		LayoutOrder = props.LayoutOrder,
 
 		Text = props.Text,
 		TextSize = props.TextSize,
