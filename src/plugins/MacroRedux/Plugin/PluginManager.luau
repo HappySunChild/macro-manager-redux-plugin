@@ -5,7 +5,7 @@ local pluginContainer = script.Parent.Parent
 local ContainerManager = require(pluginContainer.Utility.ContainerManager)
 local MacroManager = require(pluginContainer.Utility.MacroManager)
 
-local Icons = require(pluginContainer.Plugin.Icons)
+local Assets = require(pluginContainer.Plugin.Assets)
 local PluginShared = require(pluginContainer.Plugin.Shared)
 
 local Theme = require(pluginContainer.Components.Theme)
@@ -61,7 +61,7 @@ function Manager:SetupToolbar(plugin: Plugin)
 	local buttonWidget = toolbar:CreateButton(
 		"MacroWidget",
 		"Show/hide the macros widget",
-		Icons.WidgetButton,
+		Assets.Images.WidgetButton,
 		"Macros Widget"
 	)
 	buttonWidget:SetActive(false)
@@ -77,7 +77,7 @@ function Manager:SetupToolbar(plugin: Plugin)
 	local buttonRefresh = toolbar:CreateButton(
 		"RefreshMacros",
 		`Refresh macros in \`{MacroManager.ContainerName}.Macros\` folder.`,
-		Icons.RefreshButtonDark,
+		Assets.Images.RefreshButtonDark,
 		"Refresh Macros"
 	)
 	buttonRefresh:SetActive(false)
@@ -118,8 +118,8 @@ function Manager:OnThemeChange(currentTheme: StudioTheme)
 	local isDark = currentTheme.Name == "Dark"
 
 	Manager.ButtonRefresh.Icon = if isDark
-		then Icons.RefreshButtonDark
-		else Icons.RefreshButtonLight
+		then Assets.Images.RefreshButtonDark
+		else Assets.Images.RefreshButtonLight
 
 	Theme:SetTheme(currentTheme)
 end

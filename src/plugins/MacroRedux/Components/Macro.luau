@@ -3,7 +3,7 @@ local Selection = game:GetService "Selection"
 
 local pluginContainer = script.Parent.Parent
 
-local Icons = require(pluginContainer.Plugin.Icons)
+local Assets = require(pluginContainer.Plugin.Assets)
 local PluginShared = require(pluginContainer.Plugin.Shared)
 local Types = require(pluginContainer.Types)
 
@@ -72,7 +72,7 @@ local function Title(
 
 				BackgroundTransparency = 1,
 
-				Image = props.Icon or Icons.DefaultMacroIcon,
+				Image = props.Icon or Assets.Images.DefaultMacroIcon,
 			},
 			Label = inner:New "TextLabel" {
 				Position = UDim2.fromOffset(18, 0),
