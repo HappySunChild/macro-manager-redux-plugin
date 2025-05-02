@@ -90,12 +90,16 @@ local function Vector2ItemClass(
 
 				Padding = UDim.new(0, 4),
 
-				Render = function(index, label)
-					return inner:Entry {
+				Render = function(
+					scope: typeof(inner),
+					index: number,
+					label: string
+				)
+					return scope:Entry {
 						PlaceholderText = label,
 						Size = UDim2.fromScale(1, 1),
 
-						Text = inner:Computed(function(use)
+						Text = scope:Computed(function(use)
 							return string.format("%.2f", use(value)[label])
 						end),
 
@@ -105,7 +109,7 @@ local function Vector2ItemClass(
 					}
 				end,
 
-				Labels = { "X", "Y"},
+				Labels = { "X", "Y" },
 				Refs = { xFieldRef, yFieldRef },
 			},
 		},

@@ -12,8 +12,12 @@ local function Group(
 
 		Padding: Fusion.UsedAs<UDim>?,
 
-		Render: (index: number, label: string) -> Fusion.Child,
-		Labels: { string },
+		Render: (
+			scope: Fusion.Scope,
+			index: number,
+			label: string
+		) -> Fusion.Child,
+		Labels: Fusion.UsedAs<{ string }>,
 		Refs: { Fusion.Value<Fusion.Child> },
 
 		[Fusion.SpecialKey<"Children">]: { Fusion.Child }?,
@@ -23,23 +27,24 @@ local function Group(
 	local refs = props.Refs
 
 	local inner = scope:innerScope()
-	local elements = {}
+	local elements = inner:ForPairs(
+		labels,
+		function(_, forScope: typeof(inner), index: number, label: string)
+			local element = props.Render(forScope, index, label)
 
-	for index, label in labels do
-		local element = props.Render(index, label)
+			if not element then
+				return index
+			end
 
-		if not element then
-			continue
+			local ref = refs[index]
+
+			if ref ~= nil then
+				ref:set(element)
+			end
+
+			return index, element
 		end
-
-		local ref = refs[index]
-
-		if ref ~= nil then
-			ref:set(element)
-		end
-
-		table.insert(elements, element)
-	end
+	)
 
 	return inner:New "Frame" {
 		AnchorPoint = props.AnchorPoint,
@@ -53,6 +58,7 @@ local function Group(
 				FillDirection = Enum.FillDirection.Horizontal,
 				HorizontalAlignment = Enum.HorizontalAlignment.Center,
 				HorizontalFlex = Enum.UIFlexAlignment.Fill,
+				SortOrder = Enum.SortOrder.LayoutOrder,
 				Padding = props.Padding,
 			},
 
