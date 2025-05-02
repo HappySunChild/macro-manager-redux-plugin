@@ -73,7 +73,10 @@ end
 
 local function ItemsContainer(
 	scope: Fusion.Scope,
-	props: { Items: { Types.MacroItem } }
+	props: {
+		Items: { Types.MacroItem },
+		Visible: Fusion.UsedAs<boolean>?,
+	}
 )
 	if props.Items == nil or #props.Items == 0 then
 		return
@@ -101,6 +104,7 @@ local function ItemsContainer(
 
 		BackgroundColor3 = Theme.Colors.ItemBackground,
 		ClipsDescendants = true,
+		Visible = props.Visible,
 
 		[Children] = {
 			Layout = inner:New "UIListLayout" {

@@ -137,7 +137,12 @@ local function Macro(
 	end
 
 	-- have to do this so items are loaded before :Init is called.
-	local itemContainer = inner:ItemsContainer { Items = macro.Items }
+	local itemContainer = inner:ItemsContainer {
+		Items = macro.Items,
+		Visible = inner:Computed(function(use)
+			return not use(minimized)
+		end),
+	}
 
 	if macro.Init then
 		local success, err = pcall(macro.Init, macro, PluginShared.Plugin)
@@ -201,9 +206,7 @@ local function Macro(
 
 			RoundBorder = inner:RoundBorder { Thickness = 0 },
 
-			Items = inner:Computed(function(use)
-				return if use(minimized) then nil else itemContainer
-			end),
+			Items = itemContainer,
 		},
 	}
 end
