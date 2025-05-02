@@ -1,15 +1,14 @@
 local pluginContainer = script.Parent.Parent
 local ItemClasses = pluginContainer.Classes
 
-local Types = require(pluginContainer.Types)
-
 local MacroManager = require(pluginContainer.Utility.MacroManager)
+local Theme = require(pluginContainer.Utility.Theme)
+local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 local Children = Fusion.Children
 
-local Corners = require(pluginContainer.Components.Corners)
-local Theme = require(pluginContainer.Components.Theme)
+local RoundBorder = require(pluginContainer.Components.RoundBorder)
 
 local function getMacroItemClass(name: string)
 	local customClass = MacroManager.CustomItemClasses[name]
@@ -80,7 +79,7 @@ local function ItemsContainer(
 		return
 	end
 
-	local inner = scope:innerScope { Item = Item, Corners = Corners }
+	local inner = scope:innerScope { Item = Item, RoundBorder = RoundBorder }
 	local items = {}
 
 	for ind, macroItem in props.Items do
@@ -115,7 +114,7 @@ local function ItemsContainer(
 				PaddingRight = UDim.new(0, 1),
 			},
 
-			Corners = inner:Corners { Thickness = 0 },
+			RoundBorder = inner:RoundBorder { Thickness = 0 },
 
 			Items = items,
 		},

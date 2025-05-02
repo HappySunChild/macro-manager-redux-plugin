@@ -6,7 +6,6 @@ local Fusion = require(pluginContainer.Packages.Fusion)
 local Children = Fusion.Children
 
 local MacroContainer = require(pluginContainer.Components.MacroContainer)
--- local Theme = require(PluginFolder.Components.Theme)
 
 local function Widget(
 	scope: Fusion.Scope,

@@ -1,12 +1,12 @@
 local pluginContainer = script.Parent.Parent
 
+local Theme = require(pluginContainer.Utility.Theme)
 local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 local t = require(pluginContainer.Packages.t)
 
-local Button = require(pluginContainer.Components.Button)
-local Theme = require(pluginContainer.Components.Theme)
+local TextButton = require(pluginContainer.Components.TextButton)
 
 local map, peek = Fusion.map, Fusion.peek
 local Children = Fusion.Children
@@ -17,7 +17,7 @@ local function BooleanMacroItem(
 )
 	macroItem.Value = t.default(false, t.boolean)(macroItem.Value)
 
-	local inner = scope:innerScope { Button = Button }
+	local inner = scope:innerScope { TextButton = TextButton }
 	local value = inner:Value(macroItem.Value)
 	local displayText =
 		inner:Value(macroItem.Name or macroItem.Text or "Boolean")
@@ -70,7 +70,7 @@ local function BooleanMacroItem(
 				FontFace = Theme.Font,
 			},
 
-			Button = inner:Button {
+			Button = inner:TextButton {
 				AnchorPoint = Vector2.new(1, 0),
 				Position = UDim2.fromScale(1, 0),
 				Size = UDim2.fromScale(1, 1),

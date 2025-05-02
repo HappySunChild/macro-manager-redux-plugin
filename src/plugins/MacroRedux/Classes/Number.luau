@@ -1,13 +1,13 @@
 local pluginContainer = script.Parent.Parent
 
+local Theme = require(pluginContainer.Utility.Theme)
 local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 local t = require(pluginContainer.Packages.t)
 local Children = Fusion.Children
 
-local Entry = require(pluginContainer.Components.Entry)
-local Theme = require(pluginContainer.Components.Theme)
+local TextEntry = require(pluginContainer.Components.TextEntry)
 
 local function NumberMacroItem(
 	scope: Fusion.Scope,
@@ -15,7 +15,7 @@ local function NumberMacroItem(
 )
 	macroItem.Value = tonumber(macroItem.Value) or 0
 
-	local inner = scope:innerScope { Entry = Entry }
+	local inner = scope:innerScope { TextEntry = TextEntry }
 	local value = inner:Value(macroItem.Value)
 	local displayText =
 		inner:Value(macroItem.Name or macroItem.Text or "Number")
@@ -68,7 +68,7 @@ local function NumberMacroItem(
 				FontFace = Theme.Font,
 			},
 
-			Entry = inner:Entry {
+			Input = inner:TextEntry {
 				Position = UDim2.fromScale(0.5, 0),
 				Size = UDim2.fromScale(0.5, 1),
 

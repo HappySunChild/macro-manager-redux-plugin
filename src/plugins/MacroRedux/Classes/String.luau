@@ -1,12 +1,12 @@
 local pluginContainer = script.Parent.Parent
 
+local Theme = require(pluginContainer.Utility.Theme)
 local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 local t = require(pluginContainer.Packages.t)
 
-local Entry = require(pluginContainer.Components.Entry)
-local Theme = require(pluginContainer.Components.Theme)
+local TextEntry = require(pluginContainer.Components.TextEntry)
 
 local Children = Fusion.Children
 
@@ -16,7 +16,7 @@ local function StringItemClass(
 )
 	macroItem.Value = t.default("", t.string)(macroItem.Value)
 
-	local inner = scope:innerScope { Entry = Entry }
+	local inner = scope:innerScope { TextEntry = TextEntry }
 	local value = scope:Value(macroItem.Value)
 	local displayText =
 		scope:Value(macroItem.Name or macroItem.Text or "String")
@@ -69,7 +69,7 @@ local function StringItemClass(
 				FontFace = Theme.Font,
 			},
 
-			Entry = inner:Entry {
+			Input = inner:TextEntry {
 				Position = UDim2.fromScale(0.5, 0),
 				Size = UDim2.fromScale(0.5, 1),
 

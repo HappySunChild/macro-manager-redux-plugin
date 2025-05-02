@@ -1,14 +1,14 @@
 local pluginContainer = script.Parent.Parent
 
+local Theme = require(pluginContainer.Utility.Theme)
+
 local Fusion = require(pluginContainer.Packages.Fusion)
-local OnEvent, Out = Fusion.OnEvent, Fusion.Out
-local Children = Fusion.Children
+local Children, OnEvent, Out = Fusion.Children, Fusion.OnEvent, Fusion.Out
 local peek = Fusion.peek
 
-local Corners = require(pluginContainer.Components.Corners)
-local Theme = require(pluginContainer.Components.Theme)
+local RoundBorder = require(pluginContainer.Components.RoundBorder)
 
-local function Entry(
+local function TextEntry(
 	scope: Fusion.Scope,
 	props: {
 		AnchorPoint: Fusion.UsedAs<Vector2>?,
@@ -23,7 +23,7 @@ local function Entry(
 		Callback: (string) -> (),
 	}
 )
-	local inner = scope:innerScope { Corners = Corners }
+	local inner = scope:innerScope { RoundBorder = RoundBorder }
 	local text = inner:Value(peek(props.Text) or "")
 
 	local isFocused = inner:Value(false)
@@ -61,10 +61,10 @@ local function Entry(
 			props.Callback(peek(text))
 		end,
 
-		[Children] = inner:Corners {
+		[Children] = inner:RoundBorder {
 			Color = inner:Tween(borderColor, Theme.TweenInfo.ActiveHighlight),
 		},
 	}
 end
 
-return Entry
+return TextEntry

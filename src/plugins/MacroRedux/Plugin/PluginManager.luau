@@ -4,12 +4,12 @@ local pluginContainer = script.Parent.Parent
 
 local ContainerManager = require(pluginContainer.Utility.ContainerManager)
 local MacroManager = require(pluginContainer.Utility.MacroManager)
+local Theme = require(pluginContainer.Utility.Theme)
 
 local Assets = require(pluginContainer.Plugin.Assets)
 local PluginShared = require(pluginContainer.Plugin.Shared)
 
-local Theme = require(pluginContainer.Components.Theme)
-local Widget = require(pluginContainer.Components.Widget)
+local PluginWidget = require(pluginContainer.Components.PluginWidget)
 
 local PLUGIN_VERSION = pluginContainer.Version.Value
 
@@ -42,8 +42,8 @@ function Manager:Initialize(plugin: Plugin)
 end
 
 function Manager:SetupWidget(plugin: Plugin)
-	local scope = PluginShared.Scope:deriveScope { Widget = Widget }
-	local widget = scope:Widget {
+	local scope = PluginShared.Scope:deriveScope { PluginWidget = PluginWidget }
+	local widget = scope:PluginWidget {
 		Plugin = plugin,
 		Title = `Macros {PLUGIN_VERSION}`,
 	}

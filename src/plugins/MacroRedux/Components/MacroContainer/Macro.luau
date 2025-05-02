@@ -1,20 +1,20 @@
 local ScriptEditorService = game:GetService "ScriptEditorService"
 local Selection = game:GetService "Selection"
 
-local pluginContainer = script.Parent.Parent
+local pluginContainer = script.Parent.Parent.Parent
 
 local Assets = require(pluginContainer.Plugin.Assets)
 local PluginShared = require(pluginContainer.Plugin.Shared)
+local Theme = require(pluginContainer.Utility.Theme)
 local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 local Children, OnEvent = Fusion.Children, Fusion.OnEvent
 local peek = Fusion.peek
 
-local Button = require(pluginContainer.Components.Button)
-local Corners = require(pluginContainer.Components.Corners)
 local ItemsContainer = require(pluginContainer.Components.ItemsContainer)
-local Theme = require(pluginContainer.Components.Theme)
+local RoundBorder = require(pluginContainer.Components.RoundBorder)
+local TextButton = require(pluginContainer.Components.TextButton)
 
 local function Title(
 	scope: Fusion.Scope,
@@ -24,7 +24,7 @@ local function Title(
 		Document: LuaSourceContainer?,
 	}
 )
-	local inner = scope:innerScope { Corners = Corners }
+	local inner = scope:innerScope { RoundBorder = RoundBorder }
 	local transparency = inner:Value(1)
 
 	local lastClick = 0
@@ -63,7 +63,7 @@ local function Title(
 				PaddingLeft = UDim.new(0, 2),
 				PaddingRight = UDim.new(0, 2),
 			},
-			Corners = inner:Corners {
+			RoundBorder = inner:RoundBorder {
 				Thickness = 0,
 			},
 
@@ -113,8 +113,8 @@ local function Macro(
 	local inner = scope:innerScope {
 		Title = Title,
 		ItemsContainer = ItemsContainer,
-		Corners = Corners,
-		Button = Button,
+		RoundBorder = RoundBorder,
+		TextButton = TextButton,
 	}
 
 	if macro.Setup then
@@ -184,7 +184,7 @@ local function Macro(
 				Document = props.Reference,
 			},
 
-			MinimizeButton = inner:Button {
+			MinimizeButton = inner:TextButton {
 				AnchorPoint = Vector2.new(1, 0),
 				Position = UDim2.fromScale(1, 0),
 				Size = UDim2.fromOffset(16, 16),
@@ -199,7 +199,7 @@ local function Macro(
 				end,
 			},
 
-			Corners = inner:Corners { Thickness = 0 },
+			RoundBorder = inner:RoundBorder { Thickness = 0 },
 
 			Items = inner:Computed(function(use)
 				return if use(minimized) then nil else itemContainer

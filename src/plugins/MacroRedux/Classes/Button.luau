@@ -5,7 +5,7 @@ local Types = require(pluginContainer.Types)
 local Fusion = require(pluginContainer.Packages.Fusion)
 local t = require(pluginContainer.Packages.t)
 
-local Button = require(pluginContainer.Components.Button)
+local TextButton = require(pluginContainer.Components.TextButton)
 
 local Children = Fusion.Children
 
@@ -15,7 +15,7 @@ type ButtonMacroItem = Types.MacroItem & {
 }
 
 local function ButtonMacroItem(scope: Fusion.Scope, macroItem: ButtonMacroItem)
-	local inner = scope:innerScope { Button = Button }
+	local inner = scope:innerScope { TextButton = TextButton }
 	local displayText = inner:Value(macroItem.Text or "Button")
 
 	-- for backwards compatibility
@@ -40,7 +40,7 @@ local function ButtonMacroItem(scope: Fusion.Scope, macroItem: ButtonMacroItem)
 				PaddingBottom = UDim.new(0, 2),
 			},
 
-			Button = inner:Button {
+			Button = inner:TextButton {
 				Size = UDim2.fromScale(1, 1),
 
 				Text = displayText,

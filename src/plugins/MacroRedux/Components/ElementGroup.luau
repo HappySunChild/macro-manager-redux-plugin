@@ -3,7 +3,7 @@ local pluginContainer = script.Parent.Parent
 local Fusion = require(pluginContainer.Packages.Fusion)
 local Children = Fusion.Children
 
-local function Group(
+local function ElementGroup(
 	scope: Fusion.Scope,
 	props: {
 		AnchorPoint: Fusion.UsedAs<Vector2>,
@@ -68,4 +68,4 @@ local function Group(
 	}
 end
 
-return Group
+return ElementGroup

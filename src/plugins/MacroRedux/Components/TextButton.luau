@@ -1,13 +1,14 @@
 local pluginContainer = script.Parent.Parent
 
+local Theme = require(pluginContainer.Utility.Theme)
+
 local Fusion = require(pluginContainer.Packages.Fusion)
 local Children = Fusion.Children
 local OnEvent, Out = Fusion.OnEvent, Fusion.Out
 
-local Corners = require(pluginContainer.Components.Corners)
-local Theme = require(pluginContainer.Components.Theme)
+local RoundBorder = require(pluginContainer.Components.RoundBorder)
 
-local function Button(
+local function TextButton(
 	scope: Fusion.Scope,
 	props: {
 		AnchorPoint: Fusion.UsedAs<Vector2>?,
@@ -30,7 +31,7 @@ local function Button(
 	}
 )
 	local inner = scope:innerScope {
-		Corners = Corners,
+		RoundBorder = RoundBorder,
 	}
 	local state = inner:Value(Enum.GuiState.Idle)
 	local color = inner:Computed(function(use)
@@ -72,10 +73,10 @@ local function Button(
 		[Out "GuiState"] = state,
 		[OnEvent "MouseButton1Click"] = props.Callback,
 
-		[Children] = inner:Corners {
+		[Children] = inner:RoundBorder {
 			Color = inner:Tween(borderColor, Theme.TweenInfo.Hover),
 		},
 	}
 end
 
-return Button
+return TextButton

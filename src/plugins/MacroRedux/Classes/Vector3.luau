@@ -1,13 +1,13 @@
 local pluginContainer = script.Parent.Parent
 
+local Theme = require(pluginContainer.Utility.Theme)
 local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 local t = require(pluginContainer.Packages.t)
 
-local Entry = require(pluginContainer.Components.Entry)
-local Group = require(pluginContainer.Components.Group)
-local Theme = require(pluginContainer.Components.Theme)
+local ElementGroup = require(pluginContainer.Components.ElementGroup)
+local TextEntry = require(pluginContainer.Components.TextEntry)
 
 local Children = Fusion.Children
 local peek = Fusion.peek
@@ -18,7 +18,8 @@ local function Vector3ItemClass(
 )
 	macroItem.Value = t.default(Vector3.zero, t.Vector3)(macroItem.Value)
 
-	local inner = scope:innerScope { Entry = Entry, Group = Group }
+	local inner =
+		scope:innerScope { TextEntry = TextEntry, ElementGroup = ElementGroup }
 	local value = inner:Value(macroItem.Value or Vector3.zero)
 	local displayText =
 		inner:Value(macroItem.Name or macroItem.Text or "Vector3")
@@ -87,7 +88,7 @@ local function Vector3ItemClass(
 				FontFace = Theme.Font,
 			},
 
-			Input = inner:Group {
+			Input = inner:ElementGroup {
 				Position = UDim2.fromScale(0.5, 0),
 				Size = UDim2.fromScale(0.5, 1),
 
@@ -98,7 +99,7 @@ local function Vector3ItemClass(
 					index: number,
 					label: string
 				)
-					return scope:Entry {
+					return scope:TextEntry {
 						PlaceholderText = label,
 						Size = UDim2.fromScale(1, 1),
 

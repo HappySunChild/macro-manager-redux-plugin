@@ -5,8 +5,8 @@ local Types = require(pluginContainer.Types)
 local Fusion = require(pluginContainer.Packages.Fusion)
 local t = require(pluginContainer.Packages.t)
 
-local Button = require(pluginContainer.Components.Button)
-local Group = require(pluginContainer.Components.Group)
+local ElementGroup = require(pluginContainer.Components.ElementGroup)
+local TextButton = require(pluginContainer.Components.TextButton)
 
 local Children = Fusion.Children
 
@@ -23,7 +23,10 @@ local function ButtonGroupMacroItem(
 )
 	macroItem.Buttons = t.default({ "Default" }, t.table)(macroItem.Buttons)
 
-	local inner = scope:innerScope { Button = Button, Group = Group }
+	local inner = scope:innerScope {
+		TextButton = TextButton,
+		ElementGroup = ElementGroup,
+	}
 	local buttons = scope:Value(macroItem.Buttons)
 
 	macroItem.Activate = macroItem.Activate or macroItem.Activated
@@ -51,7 +54,7 @@ local function ButtonGroupMacroItem(
 				PaddingBottom = UDim.new(0, 2),
 			},
 
-			Buttons = inner:Group {
+			Buttons = inner:ElementGroup {
 				Size = UDim2.fromScale(1, 1),
 
 				Padding = UDim.new(0, 4),
@@ -61,7 +64,7 @@ local function ButtonGroupMacroItem(
 					index: number,
 					label: string
 				)
-					return scope:Button {
+					return scope:TextButton {
 						Size = UDim2.fromScale(0, 1),
 						LayoutOrder = index,
 

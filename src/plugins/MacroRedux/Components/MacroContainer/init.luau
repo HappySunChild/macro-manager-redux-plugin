@@ -1,12 +1,12 @@
 local pluginContainer = script.Parent.Parent
 
+local Theme = require(pluginContainer.Utility.Theme)
 local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 local Children = Fusion.Children
 
-local Macro = require(pluginContainer.Components.Macro)
-local Theme = require(pluginContainer.Components.Theme)
+local Macro = require(script.Macro)
 
 local function MacroContainer(
 	scope: Fusion.Scope,
@@ -31,6 +31,7 @@ local function MacroContainer(
 			},
 			Layout = inner:New "UIListLayout" {
 				Padding = UDim.new(0, 4),
+				SortOrder = Enum.SortOrder.LayoutOrder,
 			},
 
 			Macros = inner:ForPairs(
