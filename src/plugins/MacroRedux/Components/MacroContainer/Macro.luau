@@ -9,12 +9,13 @@ local Theme = require(pluginContainer.Utility.Theme)
 local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
-local Children, OnEvent = Fusion.Children, Fusion.OnEvent
-local peek = Fusion.peek
 
 local ItemsContainer = require(pluginContainer.Components.ItemsContainer)
 local RoundBorder = require(pluginContainer.Components.RoundBorder)
 local TextButton = require(pluginContainer.Components.TextButton)
+
+local Children, OnEvent = Fusion.Children, Fusion.OnEvent
+local peek = Fusion.peek
 
 local function Title(
 	scope: Fusion.Scope,
@@ -139,6 +140,8 @@ local function Macro(
 	-- have to do this so items are loaded before :Init is called.
 	local itemContainer = inner:ItemsContainer {
 		Items = macro.Items,
+
+		Position = UDim2.fromOffset(0, 18),
 		Visible = inner:Computed(function(use)
 			return not use(minimized)
 		end),

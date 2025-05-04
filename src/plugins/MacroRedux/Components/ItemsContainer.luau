@@ -4,6 +4,7 @@ local ItemClasses = pluginContainer.Classes
 local MacroManager = require(pluginContainer.Utility.MacroManager)
 local Theme = require(pluginContainer.Utility.Theme)
 local Types = require(pluginContainer.Types)
+local merge = require(pluginContainer.Utility.merge)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 local Children = Fusion.Children
@@ -35,6 +36,12 @@ local function Item(scope: Fusion.Scope, macroItem: Types.MacroItem)
 		return
 	end
 
+	if macroItem._rendered then
+		warn(`MacroItem '{macroItem.Type}' has already been rendered!`)
+
+		return
+	end
+
 	local inner = scope:innerScope()
 
 	local frame
@@ -57,17 +64,30 @@ local function Item(scope: Fusion.Scope, macroItem: Types.MacroItem)
 		absoluteSize:bindToInstanceProperty(frame, "AbsoluteSize")
 	end
 
+	macroItem._rendered = true
+
 	return inner:New "Frame" {
+		Name = `{macroItem.Order}_{macroItem.Type}_MacroItem`,
+		LayoutOrder = macroItem.Order,
+
 		Size = inner:Computed(function(use)
 			return UDim2.new(1, 0, 0, use(absoluteSize).Y)
 		end),
 
-		Name = `{macroItem.Type}_MacroItem`,
 		BackgroundTransparency = 1,
 
 		Visible = visible,
 
-		[Children] = frame,
+		[Children] = {
+			Padding = if macroItem.InSection
+					and macroItem.Type ~= "Section"
+				then inner:New "UIPadding" {
+					PaddingLeft = UDim.new(0, 20),
+				}
+				else nil,
+
+			ItemFrame = frame,
+		},
 	}
 end
 
@@ -75,6 +95,12 @@ local function ItemsContainer(
 	scope: Fusion.Scope,
 	props: {
 		Items: { Types.MacroItem },
+		ItemProperties: { [string]: any }?,
+
+		Position: Fusion.UsedAs<UDim2>?,
+		Size: Fusion.UsedAs<UDim2>?,
+		BackgroundColor: Fusion.UsedAs<Color3>?,
+		BackgroundTransparency: Fusion.UsedAs<number>?,
 		Visible: Fusion.UsedAs<boolean>?,
 	}
 )
@@ -86,23 +112,28 @@ local function ItemsContainer(
 	local items = {}
 
 	for ind, macroItem in props.Items do
+		macroItem.Order = macroItem.Order or ind
+
+		if props.ItemProperties then
+			merge(macroItem, props.ItemProperties)
+		end
+
 		local frame = inner:Item(macroItem)
 
 		if not frame then
 			continue
 		end
 
-		macroItem.Order = macroItem.Order or ind
-
 		table.insert(items, frame)
 	end
 
-	return scope:New "Frame" {
-		Position = UDim2.fromOffset(0, 18),
-		Size = UDim2.new(1, 0, 0, 0),
+	return inner:New "Frame" {
+		Position = props.Position,
+		Size = props.Size or UDim2.new(1, 0, 0, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
 
-		BackgroundColor3 = Theme.Colors.ItemBackground,
+		BackgroundColor3 = props.BackgroundColor or Theme.Colors.ItemBackground,
+		BackgroundTransparency = props.BackgroundTransparency,
 		ClipsDescendants = true,
 		Visible = props.Visible,
 
