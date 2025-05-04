@@ -11,7 +11,7 @@ local Children = Fusion.Children
 local function DividerMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
 	local inner = scope:innerScope()
 	local displayText =
-		inner:Value(macroItem.Text or macroItem.Name or "Divider")
+		inner:Value(macroItem.Text or macroItem.Name or "")
 
 	function macroItem:UpdateText(newText: string)
 		assert(t.strict(newText))
@@ -19,30 +19,43 @@ local function DividerMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
 		displayText:set(newText)
 	end
 
+	macroItem.InSection = nil
+	macroItem.SectionDepth = nil
+
 	return inner:New "Frame" {
 		BackgroundTransparency = 1,
 		Size = UDim2.new(1, 0, 0, 26),
 
 		[Children] = {
-			Label = inner:New "TextLabel" {
-				AnchorPoint = Vector2.new(0.5, 0.5),
-				Position = UDim2.fromScale(0.5, 0.5),
-				Size = UDim2.fromOffset(0, 16),
-				AutomaticSize = Enum.AutomaticSize.X,
+			Label = inner:Computed(
+				function(use: Fusion.Use, scope: typeof(inner))
+					if use(displayText) == "" then
+						return
+					end
 
-				BackgroundColor3 = Theme.Colors.ItemBackground,
+					return scope:New "TextLabel" {
+						AnchorPoint = Vector2.new(0.5, 0.5),
+						Position = UDim2.fromScale(0.5, 0.5),
+						Size = UDim2.fromOffset(0, 16),
+						AutomaticSize = Enum.AutomaticSize.X,
 
-				Text = displayText,
-				TextColor3 = Theme.Colors.SubText,
-				FontFace = Theme.Font,
+						BackgroundColor3 = Theme.Colors.ItemBackground,
 
-				[Children] = {
-					Padding = inner:New "UIPadding" {
-						PaddingLeft = UDim.new(0, 2),
-						PaddingRight = UDim.new(0, 2),
-					},
-				},
-			},
+						Text = displayText,
+						TextColor3 = Theme.Colors.SubText,
+						TextXAlignment = Enum.TextXAlignment.Center,
+						TextYAlignment = Enum.TextYAlignment.Center,
+						FontFace = Theme.Font,
+
+						[Children] = {
+							Padding = inner:New "UIPadding" {
+								PaddingLeft = UDim.new(0, 2),
+								PaddingRight = UDim.new(0, 2),
+							},
+						},
+					}
+				end
+			),
 			Line = inner:New "Frame" {
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				Position = UDim2.fromScale(0.5, 0.5),
