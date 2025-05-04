@@ -63,6 +63,8 @@ local function Vector3ItemClass(
 		displayText:set(newText)
 	end
 
+	macroItem.Set = macroItem.SetValue
+
 	return inner:New "Frame" {
 		Size = UDim2.new(1, 0, 0, 24),
 
