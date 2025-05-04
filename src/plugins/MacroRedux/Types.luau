@@ -14,6 +14,9 @@ export type MacroItem = {
 	Order: number?,
 	Type: string,
 
+	InSection: boolean?,
+	SectionDepth: number?,
+
 	SetVisible: (MacroItem, visible: boolean) -> (),
 
 	[string]: unknown,

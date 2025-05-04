@@ -54,7 +54,19 @@ local Theme = {
 			Dark = Color3.fromRGB(17, 17, 17),
 		},
 
-		ItemBackground = StudioColor(Enum.StudioStyleGuideColor.Notification),
+		ItemBackground = ColorSet {
+			Light = Color3.fromRGB(255, 255, 255),
+			Dark = Color3.fromRGB(46, 46, 46),
+		},
+
+		SectionBackground = ColorSet {
+			Light = Color3.fromRGB(239, 239, 239),
+			Dark = Color3.fromRGB(55, 55, 55),
+		},
+		SectionBackgroundAlt = ColorSet {
+			Light = Color3.fromRGB(255, 255, 255),
+			Dark = Color3.fromRGB(50, 50, 50),
+		},
 
 		ButtonBackground = ColorSet {
 			Light = Color3.fromRGB(252, 252, 252),
