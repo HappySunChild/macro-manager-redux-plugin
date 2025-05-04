@@ -17,7 +17,7 @@ type SectionMacroItem = Types.MacroItem & {
 	Items: { Types.MacroItem },
 }
 
-local function Label(
+local function TitleLabel(
 	scope: Fusion.Scope,
 	props: {
 		Text: Fusion.UsedAs<string>,
@@ -78,7 +78,7 @@ local function SectionMacroItem(
 	local inner = scope:innerScope {
 		ItemsContainer = ItemsContainer,
 		RoundBorder = RoundBorder,
-		Label = Label,
+		TitleLabel = TitleLabel,
 	}
 	local displayText =
 		inner:Value(macroItem.Name or macroItem.Text or "Section")
@@ -95,7 +95,8 @@ local function SectionMacroItem(
 
 		displayText:set(newText)
 	end
-
+	
+	macroItem.InSection = nil -- this may seem a little unintuitive, but it's just so they don't get indented
 	macroItem.SectionDepth = currentDepth
 
 	local background = if currentDepth % 2 == 0
@@ -136,10 +137,10 @@ local function SectionMacroItem(
 						Color = Theme.Colors.MacroBackground,
 						Thickness = 2,
 					},
-					Label = inner:Computed(
+					TitleLabel = inner:Computed(
 						function(use: Fusion.Use, scope: typeof(inner))
 							if use(hasTitle) then
-								return scope:Label {
+								return scope:TitleLabel {
 									Text = displayText,
 									BackgroundColor = background,
 								}

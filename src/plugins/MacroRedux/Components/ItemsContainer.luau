@@ -80,7 +80,6 @@ local function Item(scope: Fusion.Scope, macroItem: Types.MacroItem)
 
 		[Children] = {
 			Padding = if macroItem.InSection
-					and macroItem.Type ~= "Section"
 				then inner:New "UIPadding" {
 					PaddingLeft = UDim.new(0, 20),
 				}
