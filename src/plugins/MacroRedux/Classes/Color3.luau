@@ -116,7 +116,11 @@ local RenderStyles = {
 			local saturation = tonumber(saturationField.Text) or 0
 			local value = tonumber(valueField.Text) or 0
 
-			return Color3.fromHSV(hue / 360, saturation / 100, value / 100)
+			return Color3.fromHSV(
+				math.clamp(hue / 360, 0, 1),
+				math.clamp(saturation / 100, 0, 1),
+				math.clamp(value / 100, 0, 1)
+			)
 		end
 
 		return inner:ElementGroup {
