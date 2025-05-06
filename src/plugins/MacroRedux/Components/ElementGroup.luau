@@ -18,13 +18,13 @@ local function ElementGroup(
 			label: string
 		) -> Fusion.Child,
 		Labels: Fusion.UsedAs<{ string }>,
-		Refs: { Fusion.Value<Fusion.Child> },
+		Refs: { Fusion.Value<Fusion.Child> }?,
 
 		[Fusion.SpecialKey<"Children">]: { Fusion.Child }?,
 	}
 )
 	local labels = props.Labels
-	local refs = props.Refs
+	local refs = props.Refs or {}
 
 	local inner = scope:innerScope()
 	local elements = inner:ForPairs(
