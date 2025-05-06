@@ -1,5 +1,7 @@
 local pluginContainer = script.Parent.Parent
 
+local Theme = require(pluginContainer.Utility.Theme)
+
 local Fusion = require(pluginContainer.Packages.Fusion)
 
 local function Corners(
@@ -13,7 +15,7 @@ local function Corners(
 	local thickness = props.Thickness or 1
 	return {
 		Corner = scope:New "UICorner" {
-			CornerRadius = props.Roundness or UDim.new(0, 4),
+			CornerRadius = props.Roundness or Theme.Roundness,
 		},
 		Border = if thickness > 0
 			then scope:New "UIStroke" {

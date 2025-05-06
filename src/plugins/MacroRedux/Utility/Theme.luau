@@ -7,7 +7,9 @@ local PluginShared = require(pluginContainer.Plugin.Shared)
 local Fusion = require(pluginContainer.Packages.Fusion)
 local map = Fusion.map
 
-local currentTheme = PluginShared.Scope:Value(Studio.Theme)
+local scope = PluginShared.Scope
+
+local currentTheme = scope:Value(Studio.Theme)
 
 local MISSING_COLOR = Color3.new(1, 0, 1)
 
@@ -101,6 +103,8 @@ local Theme = {
 		ActiveHighlight = TweenInfo.new(0.1),
 		Hover = TweenInfo.new(0.1),
 	},
+
+	Roundness = scope:Value(UDim.new(0, 4)),
 }
 
 function Theme:SetTheme(newTheme: StudioTheme)
