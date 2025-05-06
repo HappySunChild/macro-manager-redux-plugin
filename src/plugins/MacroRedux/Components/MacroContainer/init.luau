@@ -14,12 +14,15 @@ local function MacroContainer(
 		Macros: Fusion.UsedAs<{ Types.Macro }>,
 	}
 )
-	local inner = scope:innerScope { Macro = Macro }
+	local inner =
+		scope:innerScope { Macro = Macro, ScrollingFrame = ScrollingFrame }
 
 	return inner:New "ScrollingFrame" {
 		Size = UDim2.fromScale(1, 1),
-		BackgroundColor3 = Theme.Colors.Background,
+		CanvasSize = UDim2.fromScale(0, 0),
+		AutomaticCanvasSize = Enum.AutomaticSize.Y,
 
+		BackgroundColor3 = Theme.Colors.MainBackground,
 		ScrollBarThickness = 0,
 
 		[Children] = {
