@@ -3,7 +3,8 @@ local pluginContainer = script.Parent.Parent
 local Theme = require(pluginContainer.Utility.Theme)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
-local Children, OnEvent, Out = Fusion.Children, Fusion.OnEvent, Fusion.Out
+local Children, Ref, OnEvent, Out =
+	Fusion.Children, Fusion.Ref, Fusion.OnEvent, Fusion.Out
 local peek = Fusion.peek
 
 local RoundBorder = require(pluginContainer.Components.RoundBorder)
@@ -21,6 +22,8 @@ local function TextEntry(
 		TextSize: number?,
 
 		Callback: (string) -> (),
+
+		[Fusion.SpecialKey<"Ref">]: Fusion.Value<unknown>?,
 	}
 )
 	local inner = scope:innerScope { RoundBorder = RoundBorder }
@@ -64,6 +67,7 @@ local function TextEntry(
 		[Children] = inner:RoundBorder {
 			Color = inner:Tween(borderColor, Theme.TweenInfo.ActiveHighlight),
 		},
+		[Ref] = props[Ref],
 	}
 end
 
