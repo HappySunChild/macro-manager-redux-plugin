@@ -13,6 +13,7 @@ export type Macro = {
 export type MacroItem = {
 	Order: number?,
 	Type: string,
+	Text: string?,
 
 	InSection: boolean?,
 	SectionDepth: number?,
