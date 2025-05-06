@@ -11,11 +11,13 @@ local TextButton = require(pluginContainer.Components.TextButton)
 local map, peek = Fusion.map, Fusion.peek
 local Children = Fusion.Children
 
+local default = t.default(false, t.boolean)
+
 local function BooleanMacroItem(
 	scope: Fusion.Scope,
 	macroItem: Types.ValueMacroItem<boolean>
 )
-	macroItem.Value = t.default(false, t.boolean)(macroItem.Value)
+	macroItem.Value = default(macroItem.Value)
 
 	local inner = scope:innerScope { TextButton = TextButton }
 	local value = inner:Value(macroItem.Value)

@@ -11,6 +11,8 @@ local RoundBorder = require(pluginContainer.Components.RoundBorder)
 
 local Children = Fusion.Children
 
+local default = t.default(1, t.number)
+
 type SectionMacroItem = Types.MacroItem & {
 	Name: string?,
 	Text: string?,
@@ -73,7 +75,7 @@ local function SectionMacroItem(
 	scope: Fusion.Scope,
 	macroItem: SectionMacroItem
 )
-	local currentDepth = t.default(1, t.number)(macroItem.SectionDepth)
+	local currentDepth = default(macroItem.SectionDepth)
 
 	local inner = scope:innerScope {
 		ItemsContainer = ItemsContainer,
@@ -95,7 +97,7 @@ local function SectionMacroItem(
 
 		displayText:set(newText)
 	end
-	
+
 	macroItem.InSection = nil -- this may seem a little unintuitive, but it's just so they don't get indented
 	macroItem.SectionDepth = currentDepth
 

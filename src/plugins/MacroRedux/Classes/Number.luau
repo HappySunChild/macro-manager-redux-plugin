@@ -5,15 +5,18 @@ local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 local t = require(pluginContainer.Packages.t)
-local Children = Fusion.Children
 
 local TextEntry = require(pluginContainer.Components.TextEntry)
+
+local Children = Fusion.Children
+
+local default = t.default(0, t.number)
 
 local function NumberMacroItem(
 	scope: Fusion.Scope,
 	macroItem: Types.ValueMacroItem<number>
 )
-	macroItem.Value = tonumber(macroItem.Value) or 0
+	macroItem.Value = default(macroItem.Value)
 
 	local inner = scope:innerScope { TextEntry = TextEntry }
 	local value = inner:Value(macroItem.Value)

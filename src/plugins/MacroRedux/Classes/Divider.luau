@@ -8,13 +8,16 @@ local t = require(pluginContainer.Packages.t)
 
 local Children = Fusion.Children
 
+local default = t.default("", t.string)
+
 local function DividerMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
+	macroItem.Text = default(macroItem.Text)
+
 	local inner = scope:innerScope()
-	local displayText =
-		inner:Value(macroItem.Text or macroItem.Name or "")
+	local displayText = inner:Value(macroItem.Text)
 
 	function macroItem:UpdateText(newText: string)
-		assert(t.strict(newText))
+		assert(t.string(newText))
 
 		displayText:set(newText)
 	end

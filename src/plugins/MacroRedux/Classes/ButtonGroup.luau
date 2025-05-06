@@ -10,6 +10,8 @@ local TextButton = require(pluginContainer.Components.TextButton)
 
 local Children = Fusion.Children
 
+local default = t.default({ "Button" }, t.table)
+
 type ButtonGroupMacroItem = Types.MacroItem & {
 	Buttons: { string },
 
@@ -21,7 +23,7 @@ local function ButtonGroupMacroItem(
 	scope: Fusion.Scope,
 	macroItem: ButtonGroupMacroItem
 )
-	macroItem.Buttons = t.default({ "Default" }, t.table)(macroItem.Buttons)
+	macroItem.Buttons = default(macroItem.Buttons)
 
 	local inner = scope:innerScope {
 		TextButton = TextButton,

@@ -10,11 +10,13 @@ local TextEntry = require(pluginContainer.Components.TextEntry)
 
 local Children = Fusion.Children
 
+local default = t.default("", t.string)
+
 local function StringItemClass(
 	scope: Fusion.Scope,
 	macroItem: Types.ValueMacroItem<string>
 )
-	macroItem.Value = t.default("", t.string)(macroItem.Value)
+	macroItem.Value = default(macroItem.Value)
 
 	local inner = scope:innerScope { TextEntry = TextEntry }
 	local value = scope:Value(macroItem.Value)

@@ -8,16 +8,20 @@ local t = require(pluginContainer.Packages.t)
 
 local Children = Fusion.Children
 
+local default = t.default("Title", t.string)
+
 local function Title(scope: Fusion.Scope, macroItem: Types.MacroItem)
+	macroItem.Text = default(macroItem.Text)
+
 	local inner = scope:innerScope()
-	local displayText = inner:Value(macroItem.Text or "Title")
+	local displayText = inner:Value(macroItem.Text)
 
 	function macroItem:UpdateText(newText: string)
 		assert(t.string(newText))
 
 		displayText:set(newText)
 	end
-	
+
 	macroItem.InSection = nil
 	macroItem.SectionDepth = nil
 

@@ -9,14 +9,18 @@ local TextButton = require(pluginContainer.Components.TextButton)
 
 local Children = Fusion.Children
 
+local default = t.default("Button", t.string)
+
 type ButtonMacroItem = Types.MacroItem & {
 	Activate: (ButtonMacroItem) -> (),
 	Activated: (ButtonMacroItem) -> (),
 }
 
 local function ButtonMacroItem(scope: Fusion.Scope, macroItem: ButtonMacroItem)
+	macroItem.Text = default(macroItem.Text)
+
 	local inner = scope:innerScope { TextButton = TextButton }
-	local displayText = inner:Value(macroItem.Text or "Button")
+	local displayText = inner:Value(macroItem.Text)
 
 	-- for backwards compatibility
 	macroItem.Activate = macroItem.Activate or macroItem.Activated

@@ -12,11 +12,13 @@ local TextEntry = require(pluginContainer.Components.TextEntry)
 local Children = Fusion.Children
 local peek = Fusion.peek
 
+local default = t.default(Vector2.zero, t.Vector2)
+
 local function Vector2ItemClass(
 	scope: Fusion.Scope,
 	macroItem: Types.ValueMacroItem<Vector2>
 )
-	macroItem.Value = t.default(Vector2.zero, t.Vector2)(macroItem.Value)
+	macroItem.Value = default(macroItem.Value)
 
 	local inner =
 		scope:innerScope { TextEntry = TextEntry, ElementGroup = ElementGroup }
@@ -87,7 +89,7 @@ local function Vector2ItemClass(
 				FontFace = Theme.Font,
 			},
 
-			Input = inner:ElementGroup {
+			InputElements = inner:ElementGroup {
 				Position = UDim2.fromScale(0.5, 0),
 				Size = UDim2.fromScale(0.5, 1),
 
