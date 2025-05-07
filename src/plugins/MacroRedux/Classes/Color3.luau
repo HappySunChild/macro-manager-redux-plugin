@@ -255,7 +255,9 @@ local function Color3MacroItem(
 
 	function macroItem:UpdateText(newText: string)
 		assert(t.string(newText))
-
+		
+		macroItem.Text = newText
+		
 		displayText:set(newText)
 	end
 
