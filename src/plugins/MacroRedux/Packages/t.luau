@@ -34,12 +34,56 @@ t.typeof = function(expected: string)
 	end
 end
 
+t.numberMin = function(minimum: number)
+	return function(value: number)
+		local numSuccess, numMessage = t.number(value)
+
+		if numSuccess == false then
+			return false, numMessage
+		end
+
+		if value >= minimum then
+			return false, `number >= {minimum} expected, got {value}`
+		end
+
+		return true
+	end
+end
+t.numberMax = function(maximum: number)
+	return function(value: number)
+		local numSuccess, numMessage = t.number(value)
+
+		if numSuccess == false then
+			return false, numMessage
+		end
+
+		if value >= maximum then
+			return false, `number <= {maximum} expected, got {value}`
+		end
+
+		return true
+	end
+end
+
 t.any = function(value: any?)
 	if value ~= nil then
 		return true
 	end
 
 	return false, "any expected, got nil"
+end
+t.integer = function(value: number)
+	local success, message = t.number(value)
+
+	if success == false then
+		return false, message
+	end
+
+	if value % 1 ~= 0 then
+		return false, `integer expected, got {value}`
+	end
+
+	return true
 end
 
 t.boolean = t.type "boolean"
@@ -66,10 +110,10 @@ t.Vector3 = t.typeof "Vector3"
 
 t.withKeys = function(keys: { any })
 	return function(tab: { [any]: any })
-		local tabSuccess, tabMessage = t.table(tab)
+		local success, message = t.table(tab)
 
-		if tabSuccess == false then
-			return false, tabMessage
+		if success == false then
+			return false, message
 		end
 
 		for _, key in keys do
@@ -82,13 +126,12 @@ t.withKeys = function(keys: { any })
 		return true
 	end
 end
-
 t.withValues = function(values: { any })
 	return function(tab: { [any]: any })
-		local tabSuccess, tabMessage = t.table(tab)
+		local success, message = t.table(tab)
 
-		if tabSuccess == false then
-			return false, tabMessage
+		if success == false then
+			return false, message
 		end
 
 		local swapped = swap(tab)
