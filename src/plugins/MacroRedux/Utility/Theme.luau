@@ -44,13 +44,15 @@ local Theme = {
 		Text = StudioColor(Enum.StudioStyleGuideColor.MainText),
 		BrightText = StudioColor(Enum.StudioStyleGuideColor.BrightText),
 		SubText = StudioColor(Enum.StudioStyleGuideColor.SubText),
-		TitleText = StudioColor(Enum.StudioStyleGuideColor.InfoText),
+		InfoText = StudioColor(Enum.StudioStyleGuideColor.InfoText),
 		DimmedText = StudioColor(Enum.StudioStyleGuideColor.DimmedText),
 		ButtonText = StudioColor(Enum.StudioStyleGuideColor.ButtonText),
 
-		Background = StudioColor(Enum.StudioStyleGuideColor.MainBackground),
+		Border = StudioColor(Enum.StudioStyleGuideColor.Border),
 
-		MacroBackground = StudioColor(Enum.StudioStyleGuideColor.Border),
+		MainBackground = StudioColor(Enum.StudioStyleGuideColor.MainBackground),
+
+		MacroBackground = StudioColor(Enum.StudioStyleGuideColor.Mid),
 		MacroTitleBackground = ColorSet {
 			Light = Color3.fromRGB(138, 138, 138),
 			Dark = Color3.fromRGB(17, 17, 17),
@@ -93,6 +95,23 @@ local Theme = {
 		InputFieldBorder = StudioColor(
 			Enum.StudioStyleGuideColor.InputFieldBorder
 		),
+
+		SliderBarBackground = ColorSet {
+			Light = Color3.fromRGB(208, 208, 208),
+			Dark = Color3.fromRGB(74, 74, 74),
+		},
+		SliderHandleBackground = ColorSet {
+			Light = Color3.fromRGB(207, 207, 207),
+			Dark = Color3.fromRGB(200, 200, 200),
+		},
+		SliderBorder = ColorSet {
+			Light = Color3.fromRGB(143, 143, 143),
+			Dark = Color3.fromRGB(28, 28, 28),
+		},
+		SliderBarTick = ColorSet {
+			Light = Color3.new(),
+			Dark = Color3.new(),
+		},
 
 		AccentBorder = ColorSet {
 			Light = Color3.fromRGB(146, 163, 255),

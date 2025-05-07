@@ -82,7 +82,7 @@ local function Title(
 
 				Text = props.Text,
 				TextSize = 16,
-				TextColor3 = Theme.Colors.TitleText,
+				TextColor3 = Theme.Colors.InfoText,
 				TextTruncate = Enum.TextTruncate.AtEnd,
 				FontFace = Theme.Font,
 
