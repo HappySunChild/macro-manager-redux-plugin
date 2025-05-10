@@ -76,7 +76,7 @@ function Manager:SetupToolbar(plugin: Plugin)
 
 	local buttonRefresh = toolbar:CreateButton(
 		"RefreshMacros",
-		`Refresh macros in \`{MacroManager.ContainerName}.Macros\` folder.`,
+		`Refresh macros in '{ContainerManager.ContainerName}.Macros' folder`,
 		Assets.Images.RefreshButtonDark,
 		"Refresh Macros"
 	)
