@@ -8,6 +8,8 @@ local function swap(tab: { [any]: any })
 	return swapped
 end
 
+type CheckCallback = (value: any?) -> (boolean, string?)
+
 local t = {}
 
 t.type = function(expected: string)
@@ -108,6 +110,24 @@ t.EnumItem = t.typeof "EnumItem"
 t.Vector2 = t.typeof "Vector2"
 t.Vector3 = t.typeof "Vector3"
 
+t.InstanceIsA = function(className: string)
+	assert(t.string(className))
+
+	return function(value: Instance?)
+		local success, message = t.Instance(value)
+
+		if success == false then
+			return false, message
+		end
+
+		if not value:IsA(className) then
+			return false, `{className} expected, got {value.ClassName}`
+		end
+
+		return true
+	end
+end
+
 t.withKeys = function(keys: { any })
 	return function(tab: { [any]: any })
 		local success, message = t.table(tab)
@@ -147,7 +167,7 @@ t.withValues = function(values: { any })
 	end
 end
 
-t.default = function<V>(default: V, check: (any) -> boolean)
+t.default = function<V>(default: V, check: CheckCallback)
 	return function(value: any): V
 		local ok = check(value)
 
@@ -159,7 +179,7 @@ t.default = function<V>(default: V, check: (any) -> boolean)
 	end
 end
 
-t.union = function(...: (any) -> (boolean, string?))
+t.union = function(...: CheckCallback)
 	local checks = { ... }
 
 	return function(value: any)
@@ -179,9 +199,26 @@ t.union = function(...: (any) -> (boolean, string?))
 	end
 end
 
-t.strict = function(check)
+t.strict = function(check: CheckCallback)
 	return function(...)
 		assert(check(...))
+	end
+end
+t.optional = function(check: CheckCallback)
+	assert(t.callback(check))
+
+	return function(value: any?)
+		if value == nil then
+			return true
+		end
+
+		local success, message = check(value)
+
+		if success then
+			return true
+		end
+
+		return false, `(optional) {message}`
 	end
 end
 
