@@ -101,7 +101,7 @@ local Theme = {
 			Dark = Color3.fromRGB(74, 74, 74),
 		},
 		SliderHandleBackground = ColorSet {
-			Light = Color3.fromRGB(207, 207, 207),
+			Light = Color3.fromRGB(232, 232, 232),
 			Dark = Color3.fromRGB(200, 200, 200),
 		},
 		SliderBorder = ColorSet {
