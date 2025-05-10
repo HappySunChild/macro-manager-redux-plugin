@@ -5,10 +5,14 @@ local pluginContainer = script.Parent.Parent.Parent
 
 local Assets = require(pluginContainer.Plugin.Assets)
 local PluginShared = require(pluginContainer.Plugin.Shared)
+
+local Logging = require(pluginContainer.Utility.Logging)
 local Theme = require(pluginContainer.Utility.Theme)
+
 local Types = require(pluginContainer.Types)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
+local t = require(pluginContainer.Packages.t)
 
 local ItemsContainer = require(pluginContainer.Components.ItemsContainer)
 local RoundBorder = require(pluginContainer.Components.RoundBorder)
@@ -103,12 +107,20 @@ local function Macro(
 	local displayName = name:gsub("(%l)([%u%d])", "%1 %2")
 
 	local macro: Types.Macro = {}
-	local reqSuccess, reqErr = pcall(function()
+	local reqOk, reqErr = pcall(function()
 		macro = require(props.Module) :: unknown
 	end)
 
-	if not reqSuccess then
-		warn(`Error occured while requiring Macro '{name}'\n{reqErr}`)
+	if not reqOk then
+		Logging.warn("macroRequireError", reqErr, name)
+	end
+
+	local typeOk = t.table(macro)
+
+	if not typeOk then
+		Logging.warn("invalidMacroType", nil, name, type(macro))
+
+		return
 	end
 
 	local inner = scope:innerScope {
@@ -122,7 +134,7 @@ local function Macro(
 		local success, err = pcall(macro.Setup, macro, PluginShared.Plugin)
 
 		if not success then
-			warn(`Error occured while running :Setup for Macro '{name}'\n{err}`)
+			Logging.warn("macroMethodError", err, "Setup", name)
 		end
 	end
 
@@ -151,7 +163,7 @@ local function Macro(
 		local success, err = pcall(macro.Init, macro, PluginShared.Plugin)
 
 		if not success then
-			warn(`Error occured while running :Init for Macro '{name}'\n{err}`)
+			Logging.warn("macroMethodError", err, "Init", name)
 		end
 	end
 
@@ -161,9 +173,7 @@ local function Macro(
 				pcall(macro.Cleanup, macro, PluginShared.Plugin)
 
 			if not success then
-				warn(
-					`Error occured while running :Cleanup for Macro '{name}'\n{err}`
-				)
+				Logging.warn("macroMethodError", err, "Cleanup", name)
 			end
 		end)
 	end
