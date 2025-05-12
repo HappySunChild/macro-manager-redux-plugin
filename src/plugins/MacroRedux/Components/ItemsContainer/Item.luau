@@ -35,6 +35,7 @@ local function Item(scope: Fusion.Scope, macroItem: Types.MacroItem)
 
 	if not constructor then
 		Logging.warn("classCannotFind", nil, targetType)
+
 		return
 	end
 
@@ -45,15 +46,17 @@ local function Item(scope: Fusion.Scope, macroItem: Types.MacroItem)
 	end
 
 	local inner = scope:innerScope()
-
 	local itemContents: Frame?
-	local success, err = pcall(function()
-		itemContents = constructor(inner, macroItem)
-	end)
 
-	if not success then
-		Logging.errorNonFatal("itemConstructorError", err, targetType)
-	end
+	xpcall(function()
+		itemContents = constructor(inner, macroItem)
+	end, function(err)
+		Logging.errorNonFatal(
+			"itemConstructorError",
+			Logging.parse(err),
+			targetType
+		)
+	end)
 
 	local ok, msg = validate(itemContents)
 

@@ -1,9 +1,13 @@
 local formatError = require(script.formatError)
+local parseError = require(script.parseError)
 
 local Logging = {
+	format = formatError,
+	parse = parseError,
+
 	warn = function(
 		messageId: formatError.MessageId,
-		errorOrTrace: string?,
+		errorOrTrace: (formatError.Error | string)?,
 		...: string?
 	)
 		local message = formatError(messageId, errorOrTrace, ...)
@@ -13,7 +17,7 @@ local Logging = {
 
 	error = function(
 		messageId: formatError.MessageId,
-		errorOrTrace: string?,
+		errorOrTrace: (formatError.Error | string)?,
 		...: string?
 	)
 		local message = formatError(messageId, errorOrTrace, ...)
@@ -22,7 +26,7 @@ local Logging = {
 	end,
 	errorNonFatal = function(
 		messageId: formatError.MessageId,
-		errorOrTrace: string?,
+		errorOrTrace: (formatError.Error | string)?,
 		...: string?
 	)
 		local message = formatError(messageId, errorOrTrace, ...)

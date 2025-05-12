@@ -131,11 +131,9 @@ local function Macro(
 	}
 
 	if macro.Setup then
-		local success, err = pcall(macro.Setup, macro, PluginShared.Plugin)
-
-		if not success then
-			Logging.warn("macroMethodError", err, "Setup", name)
-		end
+		xpcall(macro.Setup, function(err)
+			Logging.warn("macroMethodError", Logging.parse(err), "Setup", name)
+		end, macro, PluginShared.Plugin)
 	end
 
 	local visible = inner:Value(true)
@@ -160,21 +158,21 @@ local function Macro(
 	}
 
 	if macro.Init then
-		local success, err = pcall(macro.Init, macro, PluginShared.Plugin)
-
-		if not success then
-			Logging.warn("macroMethodError", err, "Init", name)
-		end
+		xpcall(macro.Init, function(err)
+			Logging.warn("macroMethodError", Logging.parse(err), "Init", name)
+		end, macro, PluginShared.Plugin)
 	end
 
 	if macro.Cleanup then
 		table.insert(inner, function()
-			local success, err =
-				pcall(macro.Cleanup, macro, PluginShared.Plugin)
-
-			if not success then
-				Logging.warn("macroMethodError", err, "Cleanup", name)
-			end
+			xpcall(macro.Cleanup, function(err)
+				Logging.warn(
+					"macroMethodError",
+					Logging.parse(err),
+					"Cleanup",
+					name
+				)
+			end, macro, PluginShared.Plugin)
 		end)
 	end
 

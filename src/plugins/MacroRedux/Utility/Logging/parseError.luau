@@ -3,7 +3,7 @@ local function parseError(message: string)
 		type = "Error",
 		raw = message,
 		message = message:gsub("^.+:%d+:%s*", ""),
-		trace = debug.traceback(nil, 2),
+		trace = debug.traceback(nil, 4),
 	}
 end
 
