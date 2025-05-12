@@ -15,7 +15,10 @@ local peek = Fusion.peek
 
 local function ColorDisplay(
 	scope: Fusion.Scope,
-	props: { Color: Fusion.Value<Color3> }
+	props: {
+		Color: Fusion.UsedAs<Color3>,
+		Callback: (Color3) -> (),
+	}
 )
 	local inner = scope:innerScope { RoundBorder = RoundBorder }
 
@@ -35,13 +38,13 @@ local function ColorDisplay(
 				return
 			end
 
-			props.Color:set(newColor)
+			props.Callback(newColor)
 		end,
 		[Children] = {
+			Flex = inner:New "UIFlexItem" {},
 			Border = inner:RoundBorder {
 				Color = Theme.Colors.InputFieldBorder,
 			},
-			Flex = inner:New "UIFlexItem" {},
 		},
 	}
 end
@@ -52,13 +55,7 @@ type StyleProperties = {
 }
 
 return {
-	Hex = function(
-		scope: Fusion.Scope,
-		props: {
-			Value: Fusion.Value<Color3>,
-			Callback: (Color3) -> (),
-		}
-	)
+	Hex = function(scope: Fusion.Scope, props: StyleProperties)
 		local inner = scope:innerScope {
 			ColorDisplay = ColorDisplay,
 			ElementGroup = ElementGroup,
@@ -102,17 +99,14 @@ return {
 
 					[Ref] = hexFieldRef,
 				},
-				Display = inner:ColorDisplay { Color = props.Value },
+				Display = inner:ColorDisplay {
+					Color = props.Value,
+					Callback = props.Callback,
+				},
 			},
 		}
 	end,
-	HSV = function(
-		scope: Fusion.Scope,
-		props: {
-			Value: Fusion.Value<Color3>,
-			Callback: (Color3) -> (),
-		}
-	)
+	HSV = function(scope: Fusion.Scope, props: StyleProperties)
 		local inner = scope:innerScope {
 			ColorDisplay = ColorDisplay,
 			ElementGroup = ElementGroup,
@@ -174,17 +168,14 @@ return {
 			Refs = { hueFieldRef, saturationFieldRef, valueFieldRef },
 
 			[Children] = {
-				Display = inner:ColorDisplay { Color = props.Value },
+				Display = inner:ColorDisplay {
+					Color = props.Value,
+					Callback = props.Callback,
+				},
 			},
 		}
 	end,
-	RGB = function(
-		scope: Fusion.Scope,
-		props: {
-			Value: Fusion.Value<Color3>,
-			Callback: (Color3) -> (),
-		}
-	)
+	RGB = function(scope: Fusion.Scope, props: StyleProperties)
 		local inner = scope:innerScope {
 			ColorDisplay = ColorDisplay,
 			ElementGroup = ElementGroup,
@@ -231,7 +222,10 @@ return {
 			Refs = { redFieldRef, greenFieldRef, blueFieldRef },
 
 			[Children] = {
-				Display = inner:ColorDisplay { Color = props.Value },
+				Display = inner:ColorDisplay {
+					Color = props.Value,
+					Callback = props.Callback,
+				},
 			},
 		}
 	end,
