@@ -129,6 +129,8 @@ t.InstanceIsA = function(className: string)
 end
 
 t.withKeys = function(keys: { any })
+	assert(t.table(keys))
+
 	return function(tab: { [any]: any })
 		local success, message = t.table(tab)
 
@@ -147,6 +149,8 @@ t.withKeys = function(keys: { any })
 	end
 end
 t.withValues = function(values: { any })
+	assert(t.table(values))
+
 	return function(tab: { [any]: any })
 		local success, message = t.table(tab)
 
@@ -159,7 +163,30 @@ t.withValues = function(values: { any })
 		for _, value in values do
 			if swapped[value] == nil then
 				return false,
-					`expected {tostring(value)} value in table to be present`
+					`expected value {tostring(value)} to be present in table`
+			end
+		end
+
+		return true
+	end
+end
+t.withPairs = function(pairs: { [any]: CheckCallback })
+	assert(t.table(pairs))
+
+	return function(tab: { [any]: any })
+		local tabSuccess, tabMessage = t.table(tab)
+
+		if tabSuccess == false then
+			return false, tabMessage
+		end
+
+		for key, check in pairs do
+			local value = tab[key]
+			local success, message = check(value)
+
+			if success == false then
+				return false,
+					`invalid value assigned to key {tostring(key)}; {message}`
 			end
 		end
 
@@ -198,12 +225,6 @@ t.union = function(...: CheckCallback)
 		return ok, failMessage
 	end
 end
-
-t.strict = function(check: CheckCallback)
-	return function(...)
-		assert(check(...))
-	end
-end
 t.optional = function(check: CheckCallback)
 	assert(t.callback(check))
 
@@ -219,6 +240,39 @@ t.optional = function(check: CheckCallback)
 		end
 
 		return false, `(optional) {message}`
+	end
+end
+t.literal = function(...: any)
+	local count = select("#", ...)
+
+	if count == 1 then
+		local literal = ...
+
+		return function(value: any)
+			if value ~= literal then
+				return false,
+					`expected value to exactly equal {tostring(literal)}, got {tostring(
+						value
+					)}`
+			end
+
+			return true
+		end
+	end
+
+	local literals = {}
+
+	for i = 1, count do
+		local literal = select(i, ...)
+
+		literals[i] = t.literal(literal)
+	end
+
+	return t.union(unpack(literals))
+end
+t.strict = function(check: CheckCallback)
+	return function(...)
+		assert(check(...))
 	end
 end
 
