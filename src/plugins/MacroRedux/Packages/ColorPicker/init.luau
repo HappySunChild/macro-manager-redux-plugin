@@ -1,5 +1,5 @@
--- bump this post RIGHT NOW!
 -- this is ridiculous... how is this still not a feature??
+-- bump this post RIGHT NOW!
 -- https://devforum.roblox.com/t/allow-plugins-to-use-color-picker/63257/
 
 local pluginContainer = script.Parent.Parent
@@ -18,7 +18,6 @@ local validate = t.optional(t.Color3)
 
 local isEnabled = scope:Value(false)
 local currentValue = scope:Value(Color3.new(1, 1, 1))
-
 local currentThread = nil
 
 local ColorPicker = {}
