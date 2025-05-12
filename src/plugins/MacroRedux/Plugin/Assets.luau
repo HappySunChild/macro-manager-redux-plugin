@@ -5,6 +5,11 @@ local Assets = {
 		RefreshButtonLight = "rbxassetid://17210880996",
 
 		DefaultMacroIcon = "rbxassetid://95866080",
+
+		ColorPickerHueSat = "rbxassetid://117908944470249",
+		ColorPickerVal = "rbxassetid://138329933807601",
+		ColorPickerArrow = "rbxassetid://79353367608217",
+		ColorPickerCrosshair = "rbxassetid://75007077378600",
 	},
 }
 
