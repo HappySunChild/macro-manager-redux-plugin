@@ -27,9 +27,9 @@ local function ButtonMacroItem(scope: Fusion.Scope, macroItem: ButtonMacroItem)
 
 	function macroItem:UpdateText(newText: string)
 		assert(t.strict(newText))
-		
+
 		macroItem.Text = newText
-		
+
 		displayText:set(newText)
 	end
 

@@ -65,19 +65,16 @@ local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
 	local snappingState = inner:Value(macroItem.Snapping)
 
 	local alphaState = inner:Computed(function(use: Types.Use)
-		local min = use(minimumState)
-		local max = use(maximumState)
-		local current = use(valueState)
+		local min = use(minimumState) :: number
+		local max = use(maximumState) :: number
+		local current = use(valueState) :: number
 
-		return (current - min) / (max - min)
+		return snap((current - min) / (max - min), use(snappingState))
 	end)
 
 	-- messy...
-	macroItem.Value = math.lerp(
-		macroItem.Minimum,
-		macroItem.Maximum,
-		snap(peek(alphaState), macroItem.Snapping)
-	)
+	macroItem.Value =
+		math.lerp(macroItem.Minimum, macroItem.Maximum, peek(alphaState))
 
 	valueState:set(macroItem.Value)
 
@@ -146,7 +143,7 @@ local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
 			local ticks = {}
 
 			for i = 1, snapping - 1 do
-				table.insert(ticks, inner:SliderTick { Alpha = i / snapping })
+				table.insert(ticks, scope:SliderTick { Alpha = i / snapping })
 			end
 
 			return ticks

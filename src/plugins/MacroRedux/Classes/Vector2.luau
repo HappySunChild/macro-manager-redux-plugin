@@ -58,9 +58,9 @@ local function Vector2ItemClass(
 
 	function macroItem:UpdateText(newText: string)
 		assert(t.string(newText))
-		
+
 		macroItem.Text = newText
-		
+
 		displayText:set(newText)
 	end
 
@@ -99,7 +99,7 @@ local function Vector2ItemClass(
 
 				Render = function(
 					scope: typeof(inner),
-					index: number,
+					_: number,
 					label: string
 				)
 					return scope:TextEntry {

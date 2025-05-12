@@ -61,9 +61,9 @@ local function Vector3ItemClass(
 
 	function macroItem:UpdateText(newText: string)
 		assert(t.string(newText))
-		
+
 		macroItem.Text = newText
-		
+
 		displayText:set(newText)
 	end
 
@@ -100,11 +100,7 @@ local function Vector3ItemClass(
 
 				Padding = UDim.new(0, 4),
 
-				Render = function(
-					scope: typeof(inner),
-					index: number,
-					label: string
-				)
+				Render = function(scope: typeof(inner), _, label: string)
 					return scope:TextEntry {
 						PlaceholderText = label,
 						Size = UDim2.fromScale(1, 1),
