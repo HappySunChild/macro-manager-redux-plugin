@@ -118,7 +118,7 @@ local function Macro(
 	local typeOk = t.table(macro)
 
 	if not typeOk then
-		Logging.warn("invalidMacroType", nil, name, type(macro))
+		Logging.warn("macroInvalidType", nil, name, type(macro))
 
 		return
 	end

@@ -6,6 +6,8 @@ local ContainerManager = require(pluginContainer.Utility.ContainerManager)
 local MacroManager = require(pluginContainer.Utility.MacroManager)
 local Theme = require(pluginContainer.Utility.Theme)
 
+local ColorPicker = require(pluginContainer.Packages.ColorPicker)
+
 local Assets = require(pluginContainer.Plugin.Assets)
 local PluginShared = require(pluginContainer.Plugin.Shared)
 
@@ -39,10 +41,12 @@ function Manager:Initialize(plugin: Plugin)
 
 	ContainerManager:SetupContainer()
 	MacroManager:LoadCurrentContainer()
+
+	ColorPicker:Initialize(plugin)
 end
 
 function Manager:SetupWidget(plugin: Plugin)
-	local scope = PluginShared.Scope:deriveScope { PluginWidget = PluginWidget }
+	local scope = PluginShared.Scope:innerScope { PluginWidget = PluginWidget }
 	local widget = scope:PluginWidget {
 		Plugin = plugin,
 		Title = `Macros {PLUGIN_VERSION}`,

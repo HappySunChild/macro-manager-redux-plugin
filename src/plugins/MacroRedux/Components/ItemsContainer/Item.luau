@@ -34,7 +34,7 @@ local function Item(scope: Fusion.Scope, macroItem: Types.MacroItem)
 	local constructor = getMacroItemClass(targetType)
 
 	if not constructor then
-		Logging.warn("cannotFindClass", nil, targetType)
+		Logging.warn("classCannotFind", nil, targetType)
 		return
 	end
 
@@ -57,7 +57,7 @@ local function Item(scope: Fusion.Scope, macroItem: Types.MacroItem)
 	local ok, msg = validate(itemContents)
 
 	if not ok then
-		Logging.errorNonFatal("invalidItemContainer", nil, targetType, msg)
+		Logging.errorNonFatal("itemInvalidContainer", nil, targetType, msg)
 
 		inner:doCleanup()
 

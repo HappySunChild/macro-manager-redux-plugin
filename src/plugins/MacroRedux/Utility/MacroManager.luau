@@ -1,7 +1,11 @@
 local pluginContainer = script.Parent.Parent
 
 local ContainerManager = require(pluginContainer.Utility.ContainerManager)
+local Logging = require(pluginContainer.Utility.Logging)
+
 local PluginShared = require(pluginContainer.Plugin.Shared)
+
+local t = require(pluginContainer.Packages.t)
 
 local MacroManager = {}
 MacroManager.CustomItemClasses = {}
@@ -37,17 +41,15 @@ function MacroManager:LoadCurrentContainer()
 		end)
 
 		if not success then
-			warn(`Failed to load MacroItem class '{index}'; {err}`)
+			Logging.warn("classRequireError", err, index)
 
 			continue
 		end
 
-		if type(constructor) ~= "function" then
-			warn(
-				`Failed to load MacroItem class '{index}'; Invalid return type: expected function, got {type(
-					constructor
-				)}.\n\tYou may have to remove or modify MacroItem classes from Defaultio's version!`
-			)
+		local typeOk = t.callback(constructor)
+
+		if not typeOk then
+			Logging.warn("classInvalidType", nil, index, type(constructor))
 
 			continue
 		end
