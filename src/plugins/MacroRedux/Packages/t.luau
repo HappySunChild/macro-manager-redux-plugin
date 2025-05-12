@@ -23,7 +23,6 @@ t.type = function(expected: string)
 		return false, `{expected} expected, got {valueType}`
 	end
 end
-
 t.typeof = function(expected: string)
 	return function(value: any): (boolean, string?)
 		local valueType = typeof(value)
@@ -36,6 +35,27 @@ t.typeof = function(expected: string)
 	end
 end
 
+t.any = function(value: any?)
+	if value ~= nil then
+		return true
+	end
+
+	return false, "any expected, got nil"
+end
+
+t.nan = function(value: number)
+	local numSuccess, numMessage = t.number(value)
+
+	if numSuccess == false then
+		return false, numMessage
+	end
+
+	if value == value then
+		return false, `nan expected, got {value}`
+	end
+
+	return true
+end
 t.numberMin = function(minimum: number)
 	return function(value: number)
 		local numSuccess, numMessage = t.number(value)
@@ -66,14 +86,6 @@ t.numberMax = function(maximum: number)
 		return true
 	end
 end
-
-t.any = function(value: any?)
-	if value ~= nil then
-		return true
-	end
-
-	return false, "any expected, got nil"
-end
 t.integer = function(value: number)
 	local success, message = t.number(value)
 
@@ -94,8 +106,8 @@ t.number = t.type "number"
 t.table = t.type "table"
 t.userdata = t.type "userdata"
 t.none = t.type "nil"
-
 t.callback = t.type "function"
+
 t.thread = t.type "thread"
 t.buffer = t.type "buffer"
 t.vector = t.type "vector"
@@ -106,9 +118,13 @@ t.BrickColor = t.typeof "BrickColor"
 t.Enums = t.typeof "Enums"
 t.Enum = t.typeof "Enum"
 t.EnumItem = t.typeof "EnumItem"
-
 t.Vector2 = t.typeof "Vector2"
 t.Vector3 = t.typeof "Vector3"
+t.NumberRange = t.typeof "NumberRange"
+t.NumberSequence = t.typeof "NumberSequence"
+t.NumberSequenceKeypoint = t.typeof "NumberSequenceKeypoint"
+t.ColorSequence = t.typeof "ColorSequence"
+t.ColorSequenceKeypoint = t.typeof "ColorSequenceKeypoint"
 
 t.InstanceIsA = function(className: string)
 	assert(t.string(className))
@@ -194,18 +210,6 @@ t.withPairs = function(pairs: { [any]: CheckCallback })
 	end
 end
 
-t.default = function<V>(default: V, check: CheckCallback)
-	return function(value: any): V
-		local ok = check(value)
-
-		if ok then
-			return value
-		end
-
-		return default
-	end
-end
-
 t.union = function(...: CheckCallback)
 	local checks = { ... }
 
@@ -235,11 +239,22 @@ t.optional = function(check: CheckCallback)
 
 		local success, message = check(value)
 
-		if success then
-			return true
+		if not success then
+			return false, `(optional) {message}`
 		end
 
-		return false, `(optional) {message}`
+		return true
+	end
+end
+t.invert = function(check: CheckCallback)
+	return function(value: any)
+		local ok, message = check(value)
+
+		if ok then
+			return false, `(not) {message}`
+		end
+
+		return true
 	end
 end
 t.literal = function(...: any)
@@ -269,6 +284,18 @@ t.literal = function(...: any)
 	end
 
 	return t.union(unpack(literals))
+end
+
+t.default = function<V>(default: V, check: CheckCallback)
+	return function(value: any): V
+		local ok = check(value)
+
+		if ok then
+			return value
+		end
+
+		return default
+	end
 end
 t.strict = function(check: CheckCallback)
 	return function(...)
