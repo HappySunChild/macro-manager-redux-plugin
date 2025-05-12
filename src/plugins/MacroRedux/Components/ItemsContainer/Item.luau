@@ -38,8 +38,9 @@ local function Item(scope: Fusion.Scope, macroItem: Types.MacroItem)
 		return
 	end
 
-	if macroItem._alreadyRendered then
+	if macroItem._rendered == true then
 		Logging.warn("itemAlreadyRendered", nil, targetType)
+
 		return
 	end
 
@@ -70,7 +71,7 @@ local function Item(scope: Fusion.Scope, macroItem: Types.MacroItem)
 		visible:set(isVisible)
 	end
 
-	macroItem._alreadyRendered = true
+	macroItem._rendered = true
 
 	local size = scope:Value(Vector2.zero)
 
