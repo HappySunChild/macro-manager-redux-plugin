@@ -1,23 +1,21 @@
-local pluginContainer = script.Parent.Parent
+local pluginContainer = script.Parent.Parent.Parent
 
 local Theme = require(pluginContainer.Utility.Theme)
-local Types = require(pluginContainer.Types)
 
+local ColorPicker = require(pluginContainer.Packages.ColorPicker)
 local Fusion = require(pluginContainer.Packages.Fusion)
-local t = require(pluginContainer.Packages.t)
 
 local ElementGroup = require(pluginContainer.Components.ElementGroup)
 local RoundBorder = require(pluginContainer.Components.RoundBorder)
 local TextEntry = require(pluginContainer.Components.TextEntry)
 
 local Children, Ref = Fusion.Children, Fusion.Ref
+local OnEvent = Fusion.OnEvent
 local peek = Fusion.peek
-
-local default = t.default(Color3.new(0, 0, 0), t.Color3)
 
 local function ColorDisplay(
 	scope: Fusion.Scope,
-	props: { Color: Fusion.UsedAs<Color3> }
+	props: { Color: Fusion.Value<Color3> }
 )
 	local inner = scope:innerScope { RoundBorder = RoundBorder }
 
@@ -26,6 +24,19 @@ local function ColorDisplay(
 
 		BackgroundColor3 = props.Color,
 
+		[OnEvent "InputBegan"] = function(input: InputObject)
+			if input.UserInputType ~= Enum.UserInputType.MouseButton1 then
+				return
+			end
+
+			local newColor = ColorPicker:Prompt(peek(props.Color))
+
+			if not newColor then
+				return
+			end
+
+			props.Color:set(newColor)
+		end,
 		[Children] = {
 			Border = inner:RoundBorder {
 				Color = Theme.Colors.InputFieldBorder,
@@ -35,7 +46,12 @@ local function ColorDisplay(
 	}
 end
 
-local RenderStyles = {
+type StyleProperties = {
+	Value: Fusion.Value<Color3>,
+	Callback: (Color3) -> (),
+}
+
+return {
 	Hex = function(
 		scope: Fusion.Scope,
 		props: {
@@ -197,11 +213,7 @@ local RenderStyles = {
 
 			Padding = UDim.new(0, 4),
 
-			Render = function(
-				scope: typeof(inner),
-				index: number,
-				label: string
-			)
+			Render = function(scope: typeof(inner), _: number, label: string)
 				return scope:TextEntry {
 					Size = UDim2.fromScale(1, 1),
 
@@ -224,82 +236,3 @@ local RenderStyles = {
 		}
 	end,
 }
-
-local function Color3MacroItem(
-	scope: Fusion.Scope,
-	macroItem: Types.ValueMacroItem<Color3>
-)
-	macroItem.Value = default(macroItem.Value)
-
-	local inner = scope:innerScope()
-	local displayText =
-		inner:Value(macroItem.Text or macroItem.Name or "Color3")
-	local value = inner:Value(macroItem.Value)
-
-	local function setInternalValue(newValue: Color3)
-		local oldValue = macroItem.Value
-		macroItem.Value = newValue
-
-		value:set(newValue)
-
-		if type(macroItem.Changed) == "function" then
-			macroItem:Changed(newValue, oldValue)
-		end
-	end
-
-	function macroItem:SetValue(newValue: Color3)
-		assert(t.Color3(newValue))
-
-		setInternalValue(newValue)
-	end
-
-	function macroItem:UpdateText(newText: string)
-		assert(t.string(newText))
-		
-		macroItem.Text = newText
-		
-		displayText:set(newText)
-	end
-
-	macroItem.Set = macroItem.SetValue
-
-	local renderStyle = RenderStyles[macroItem.Style or "RGB"]
-
-	if not renderStyle then
-		renderStyle = RenderStyles.RGB
-		warn(`Color3 render style '{macroItem.Style}' does not exist.`)
-	end
-
-	return inner:New "Frame" {
-		Size = UDim2.new(1, 0, 0, 24),
-
-		BackgroundTransparency = 1,
-
-		[Children] = {
-			Padding = inner:New "UIPadding" {
-				PaddingTop = UDim.new(0, 2),
-				PaddingBottom = UDim.new(0, 2),
-				PaddingLeft = UDim.new(0, 2),
-				PaddingRight = UDim.new(0, 2),
-			},
-
-			Label = inner:New "TextLabel" {
-				Size = UDim2.fromScale(0, 1),
-				AutomaticSize = Enum.AutomaticSize.X,
-
-				BackgroundTransparency = 1,
-
-				Text = displayText,
-				TextSize = 16,
-				TextColor3 = Theme.Colors.BrightText,
-				FontFace = Theme.Font,
-			},
-			InputElements = renderStyle(inner, {
-				Value = value,
-				Callback = setInternalValue,
-			}),
-		},
-	}
-end
-
-return Color3MacroItem
