@@ -9,8 +9,14 @@ local function ElementGroup(
 		AnchorPoint: Fusion.UsedAs<Vector2>,
 		Position: Fusion.UsedAs<UDim2>?,
 		Size: Fusion.UsedAs<UDim2>?,
+		AutomaticSize: Fusion.UsedAs<Enum.AutomaticSize>?,
 
 		Padding: Fusion.UsedAs<UDim>?,
+		FillDirection: Fusion.UsedAs<Enum.FillDirection>?,
+
+		HorizontalAlignment: Fusion.UsedAs<Enum.HorizontalAlignment>?,
+		VerticalAlignment: Fusion.UsedAs<Enum.VerticalAlignment>?,
+		FlexAlignment: Fusion.UsedAs<Enum.UIFlexAlignment>?,
 
 		Render: (
 			scope: Fusion.Scope,
@@ -50,14 +56,24 @@ local function ElementGroup(
 		AnchorPoint = props.AnchorPoint,
 		Position = props.Position,
 		Size = props.Size,
+		AutomaticSize = props.AutomaticSize,
 
 		BackgroundTransparency = 1,
 
 		[Children] = {
 			Layout = inner:New "UIListLayout" {
-				FillDirection = Enum.FillDirection.Horizontal,
-				HorizontalAlignment = Enum.HorizontalAlignment.Center,
-				HorizontalFlex = Enum.UIFlexAlignment.Fill,
+				FillDirection = props.FillDirection
+					or Enum.FillDirection.Horizontal,
+
+				HorizontalAlignment = props.HorizontalAlignment
+					or Enum.HorizontalAlignment.Center,
+				HorizontalFlex = props.FlexAlignment
+					or Enum.UIFlexAlignment.Fill,
+
+				VerticalAlignment = props.VerticalAlignment
+					or Enum.VerticalAlignment.Center,
+				VerticalFlex = props.FlexAlignment or Enum.UIFlexAlignment.Fill,
+
 				SortOrder = Enum.SortOrder.LayoutOrder,
 				Padding = props.Padding,
 			},
