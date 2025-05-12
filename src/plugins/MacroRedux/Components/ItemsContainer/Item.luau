@@ -11,7 +11,7 @@ local t = require(pluginContainer.Packages.t)
 
 local Children = Fusion.Children
 
-local validate = t.optional(t.InstanceIsA "Frame")
+local validate = t.optional(t.InstanceIsA "GuiBase2d")
 
 local function getMacroItemClass(name: string)
 	local customClass = MacroManager.CustomItemClasses[name]
