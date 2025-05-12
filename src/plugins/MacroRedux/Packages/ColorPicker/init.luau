@@ -76,10 +76,4 @@ function ColorPicker:IsActive()
 	return peek(isEnabled) and currentThread ~= nil
 end
 
-task.spawn(function()
-	local color = ColorPicker:Prompt(Color3.fromRGB(133, 219, 94))
-
-	print(color)
-end)
-
 return ColorPicker
