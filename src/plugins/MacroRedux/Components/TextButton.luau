@@ -25,8 +25,11 @@ local function TextButton(
 		HoverColor: Fusion.UsedAs<Color3>?,
 
 		Text: Fusion.UsedAs<string>?,
+		TextXAlignment: Fusion.UsedAs<Enum.TextXAlignment>?,
+		TextYAlignment: Fusion.UsedAs<Enum.TextYAlignment>?,
 		TextSize: Fusion.UsedAs<number>?,
 		TextColor: Fusion.UsedAs<Color3>?,
+
 		Callback: () -> (),
 	}
 )
@@ -64,17 +67,26 @@ local function TextButton(
 		LayoutOrder = props.LayoutOrder,
 
 		Text = props.Text,
+		TextXAlignment = props.TextXAlignment,
+		TextYAlignment = props.TextYAlignment,
 		TextSize = props.TextSize,
 		TextColor3 = props.TextColor or Theme.Colors.ButtonText,
 		FontFace = Theme.Font,
+		TextTruncate = Enum.TextTruncate.AtEnd,
 
 		BackgroundColor3 = inner:Tween(color, Theme.TweenInfo.Hover),
 
 		[Out "GuiState"] = state,
 		[OnEvent "MouseButton1Click"] = props.Callback,
 
-		[Children] = inner:RoundBorder {
-			Color = inner:Tween(borderColor, Theme.TweenInfo.Hover),
+		[Children] = {
+			Border = inner:RoundBorder {
+				Color = inner:Tween(borderColor, Theme.TweenInfo.Hover),
+			},
+			Padding = inner:New "UIPadding" {
+				PaddingLeft = UDim.new(0, 2),
+				PaddingRight = UDim.new(0, 2),
+			},
 		},
 	}
 end
