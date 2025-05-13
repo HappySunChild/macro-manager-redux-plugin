@@ -83,17 +83,17 @@ local function Vector3ItemClass(
 			},
 
 			Label = inner:New "TextLabel" {
-				Size = UDim2.fromScale(0, 1),
-				AutomaticSize = Enum.AutomaticSize.X,
+				Size = UDim2.fromScale(0.5, 1),
 
 				BackgroundTransparency = 1,
 
 				Text = displayText,
+				TextXAlignment = Enum.TextXAlignment.Left,
+				TextTruncate = Enum.TextTruncate.AtEnd,
 				TextSize = 16,
 				TextColor3 = Theme.Colors.BrightText,
 				FontFace = Theme.Font,
 			},
-
 			InputElements = inner:ElementGroup {
 				Position = UDim2.fromScale(0.5, 0),
 				Size = UDim2.fromScale(0.5, 1),
