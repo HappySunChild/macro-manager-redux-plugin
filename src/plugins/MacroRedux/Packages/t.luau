@@ -209,6 +209,17 @@ t.withPairs = function(pairs: { [any]: CheckCallback })
 		return true
 	end
 end
+t.set = function(valid: { any })
+	return function(value: any)
+		for _, v in valid do
+			if value == v then
+				return true
+			end
+		end
+
+		return false, `expected value {tostring(value)} to be in set`
+	end
+end
 
 t.union = function(...: CheckCallback)
 	local checks = { ... }
@@ -246,7 +257,7 @@ t.optional = function(check: CheckCallback)
 		return true
 	end
 end
-t.invert = function(check: CheckCallback)
+t.negate = function(check: CheckCallback)
 	return function(value: any)
 		local ok, message = check(value)
 
