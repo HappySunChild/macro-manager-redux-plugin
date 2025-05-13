@@ -108,9 +108,14 @@ local Theme = {
 			Light = Color3.fromRGB(143, 143, 143),
 			Dark = Color3.fromRGB(28, 28, 28),
 		},
-		SliderBarTick = ColorSet {
-			Light = Color3.new(),
-			Dark = Color3.new(),
+
+		DropdownItemBackground = ColorSet {
+			Light = Color3.fromRGB(242, 242, 242),
+			Dark = Color3.fromRGB(50, 50, 50),
+		},
+		DropdownItemBackgroundAlt = ColorSet {
+			Light = Color3.fromRGB(227, 227, 227),
+			Dark = Color3.fromRGB(45, 45, 45),
 		},
 
 		AccentBorder = ColorSet {
@@ -119,8 +124,10 @@ local Theme = {
 		},
 	},
 	TweenInfo = {
-		ActiveHighlight = TweenInfo.new(0.1),
-		Hover = TweenInfo.new(0.1),
+		Highlight = TweenInfo.new(0.1),
+		Hover = TweenInfo.new(0.05),
+
+		DropdownRotation = TweenInfo.new(0.2),
 	},
 
 	Roundness = scope:Value(UDim.new(0, 4)),

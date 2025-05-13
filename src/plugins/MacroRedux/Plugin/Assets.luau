@@ -10,6 +10,8 @@ local Assets = {
 		ColorPickerVal = "rbxassetid://138329933807601",
 		ColorPickerArrow = "rbxassetid://79353367608217",
 		ColorPickerCrosshair = "rbxassetid://75007077378600",
+
+		DropdownArrow = "rbxassetid://4918373417",
 	},
 }
 

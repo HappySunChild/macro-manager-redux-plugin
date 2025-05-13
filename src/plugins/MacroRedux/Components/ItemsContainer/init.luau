@@ -57,7 +57,7 @@ local function ItemsContainer(
 
 		BackgroundColor3 = props.BackgroundColor or Theme.Colors.ItemBackground,
 		BackgroundTransparency = props.BackgroundTransparency,
-		ClipsDescendants = true,
+		-- ClipsDescendants = true,
 		Visible = props.Visible,
 
 		[Children] = {

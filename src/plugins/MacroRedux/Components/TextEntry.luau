@@ -65,7 +65,7 @@ local function TextEntry(
 		end,
 
 		[Children] = inner:RoundBorder {
-			Color = inner:Tween(borderColor, Theme.TweenInfo.ActiveHighlight),
+			Color = inner:Tween(borderColor, Theme.TweenInfo.Highlight),
 		},
 		[Ref] = props[Ref],
 	}
