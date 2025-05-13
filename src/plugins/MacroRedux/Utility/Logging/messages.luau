@@ -3,7 +3,7 @@ local messages = {
 	macroMethodError = "An error occured while running :%s for Macro '%s'\nERROR_MESSAGE",
 	macroInvalidType = "Expected Macro '%s' to return value of type table, got %s.",
 
-	itemConstructorError = "An error occured while adding MacroItem '%s'",
+	itemConstructorError = "An error occured while adding MacroItem '%s'\nERROR_MESSAGE",
 	itemAlreadyRendered = "MacroItem '%s' has already been rendered.",
 	itemInvalidContainer = "Invalid return value for MacroItem class '%s';\n%s",
 
