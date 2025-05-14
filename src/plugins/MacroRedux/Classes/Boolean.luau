@@ -1,7 +1,9 @@
 local pluginContainer = script.Parent.Parent
 
-local Theme = require(pluginContainer.Utility.Theme)
 local Types = require(pluginContainer.Types)
+
+local Theme = require(pluginContainer.Utility.Theme)
+local updateItemValue = require(pluginContainer.Utility.updateItemValue)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 local t = require(pluginContainer.Packages.t)
@@ -25,14 +27,9 @@ local function BooleanMacroItem(
 		inner:Value(macroItem.Name or macroItem.Text or "Boolean")
 
 	local function setValueInternal(newValue: boolean)
-		local oldValue = macroItem.Value
-		macroItem.Value = newValue
-
 		value:set(newValue)
 
-		if type(macroItem.Changed) == "function" then
-			macroItem:Changed(newValue, oldValue)
-		end
+		updateItemValue(macroItem, newValue)
 	end
 
 	function macroItem:SetValue(newValue: boolean)

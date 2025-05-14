@@ -1,0 +1,39 @@
+local pluginContainer = script.Parent.Parent
+
+local Types = require(pluginContainer.Types)
+
+local Logging = require(pluginContainer.Utility.Logging)
+
+local MAX_RECURSION_DEPTH = 8
+local _RECURSION_DEPTH = {}
+
+local function updateItemValue(
+	macroItem: Types.ValueMacroItem<any>,
+	newValue: any
+)
+	local oldValue = macroItem.Value
+
+	if oldValue == newValue then
+		return
+	end
+
+	macroItem.Value = newValue
+
+	if type(macroItem.Changed) == "function" then
+		local currentDepth = macroItem[_RECURSION_DEPTH] or 0
+
+		if currentDepth > MAX_RECURSION_DEPTH then
+			Logging.warn "itemChangedInfiniteLoop"
+
+			return
+		end
+
+		macroItem[_RECURSION_DEPTH] = currentDepth + 1
+
+		macroItem:Changed(newValue, oldValue)
+
+		macroItem[_RECURSION_DEPTH] = nil
+	end
+end
+
+return updateItemValue

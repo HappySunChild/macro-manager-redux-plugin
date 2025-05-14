@@ -1,7 +1,9 @@
 local pluginContainer = script.Parent.Parent
 
-local Theme = require(pluginContainer.Utility.Theme)
 local Types = require(pluginContainer.Types)
+
+local Theme = require(pluginContainer.Utility.Theme)
+local updateItemValue = require(pluginContainer.Utility.updateItemValue)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 local t = require(pluginContainer.Packages.t)
@@ -24,14 +26,9 @@ local function Color3MacroItem(
 	local value = inner:Value(macroItem.Value)
 
 	local function setInternalValue(newValue: Color3)
-		local oldValue = macroItem.Value
-		macroItem.Value = newValue
-
 		value:set(newValue)
 
-		if type(macroItem.Changed) == "function" then
-			macroItem:Changed(newValue, oldValue)
-		end
+		updateItemValue(macroItem, newValue)
 	end
 
 	function macroItem:SetValue(newValue: Color3)

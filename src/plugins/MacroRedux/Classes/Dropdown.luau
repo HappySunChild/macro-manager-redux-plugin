@@ -1,7 +1,9 @@
 local pluginContainer = script.Parent.Parent
 
-local Theme = require(pluginContainer.Utility.Theme)
 local Types = require(pluginContainer.Types)
+
+local Theme = require(pluginContainer.Utility.Theme)
+local updateItemValue = require(pluginContainer.Utility.updateItemValue)
 
 local Assets = require(pluginContainer.Plugin.Assets)
 
@@ -206,14 +208,9 @@ local function DropdownMacroItem(
 	local value = inner:Value(macroItem.Value)
 
 	local function setValueInternal(newValue: any)
-		local oldValue = macroItem.Value
-		macroItem.Value = newValue
-
 		value:set(newValue)
 
-		if type(macroItem.Changed) == "function" then
-			macroItem:Changed(newValue, oldValue)
-		end
+		updateItemValue(macroItem, newValue)
 	end
 
 	function macroItem:UpdateText(newText: string)

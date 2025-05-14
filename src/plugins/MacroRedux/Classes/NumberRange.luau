@@ -1,7 +1,9 @@
 local pluginContainer = script.Parent.Parent
 
-local Theme = require(pluginContainer.Utility.Theme)
 local Types = require(pluginContainer.Types)
+
+local Theme = require(pluginContainer.Utility.Theme)
+local updateItemValue = require(pluginContainer.Utility.updateItemValue)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 local t = require(pluginContainer.Packages.t)
@@ -42,14 +44,9 @@ local function NumberRangeMacroItem(
 	end
 
 	local function setValueInternal(newValue: NumberRange)
-		local oldValue = macroItem.Value
-		macroItem.Value = newValue
-
 		value:set(newValue)
 
-		if type(macroItem.Changed) == "function" then
-			macroItem:Changed(newValue, oldValue)
-		end
+		updateItemValue(newValue)
 	end
 
 	function macroItem:UpdateText(newText: string)
