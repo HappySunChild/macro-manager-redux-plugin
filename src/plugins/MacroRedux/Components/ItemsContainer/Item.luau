@@ -29,6 +29,8 @@ local function getMacroItemClass(name: string)
 	return require(classModule) :: any
 end
 
+local _RENDERED = {}
+
 local function Item(scope: Fusion.Scope, macroItem: Types.MacroItem)
 	local targetType = macroItem.Type
 	local constructor = getMacroItemClass(targetType)
@@ -39,7 +41,7 @@ local function Item(scope: Fusion.Scope, macroItem: Types.MacroItem)
 		return
 	end
 
-	if macroItem._rendered == true then
+	if macroItem[_RENDERED] == true then
 		Logging.warn("itemAlreadyRendered", nil, targetType)
 
 		return
@@ -74,7 +76,7 @@ local function Item(scope: Fusion.Scope, macroItem: Types.MacroItem)
 		visible:set(isVisible)
 	end
 
-	macroItem._rendered = true
+	macroItem[_RENDERED] = true
 
 	local size = scope:Value(Vector2.zero)
 
