@@ -56,6 +56,7 @@ local function ItemButton(
 	return scope:New "TextButton" {
 		Size = UDim2.new(1, 0, 0, 18),
 		LayoutOrder = props.Index,
+		ZIndex = 110,
 
 		BackgroundColor3 = color,
 
@@ -158,6 +159,7 @@ local function Dropdown(
 						math.min(#use(props.Items), 8) * 18 + 8
 					)
 				end),
+				ZIndex = 100,
 
 				CanvasSize = UDim2.fromScale(0, 0),
 				AutomaticCanvasSize = Enum.AutomaticSize.Y,
