@@ -7,8 +7,16 @@ export type Error = {
 	trace: string,
 }
 
-export type CleanupTask = Instance | RBXScriptConnection | () -> () | { CleanupTask }
-export type Child = Instance | ((Instance) -> Instance?) | { Child } | UsedAs<Child>
+export type CleanupTask =
+	Instance
+	| RBXScriptConnection
+	| () -> ()
+	| { CleanupTask }
+export type Child =
+	Instance
+	| ((Instance) -> Instance?)
+	| { Child }
+	| UsedAs<Child>
 
 export type Validity = "busy" | "invalid" | "valid"
 export type Timeliness = "lazy" | "eager"
@@ -17,7 +25,7 @@ export type Properties = { [SpecialKey | string]: any }
 
 export type Scope<T = unknown> = T & { CleanupTask? }
 
-export type UsedAs<V> = StateObject<V> | V
+export type UsedAs<V> = V | StateObject<V>
 export type Use = <V>(target: StateObject<V>) -> V
 
 type Disconnect = () -> ()
@@ -161,24 +169,24 @@ type AnimatedConstructor = <V>(
 	mover: AnimatedMover<V>
 ) -> Animated<V>
 
-type TweenConstructor = <V>(
+type TweenConstructor = <T>(
 	scope: Scope<unknown>,
-	goal: UsedAs<V>,
+	goal: UsedAs<T>,
 	info: UsedAs<TweenInfo>
-) -> Animated<V>
+) -> Animated<T>
 
-type SpringConstructor = <V>(
+type SpringConstructor = <T>(
 	scope: Scope<unknown>,
-	goal: UsedAs<V>,
+	goal: UsedAs<T>,
 	speed: UsedAs<number>,
 	damping: UsedAs<number>
-) -> Animated<V>
+) -> Animated<T>
 
-type DelayConstructor = <V>(
+type DelayConstructor = <T>(
 	scope: Scope<unknown>,
-	goal: UsedAs<V>,
+	goal: UsedAs<T>,
 	amount: UsedAs<number>
-) -> Animated<V>
+) -> Animated<T>
 
 export type SpecialKey<T = string> = {
 	type: T,
@@ -231,11 +239,14 @@ export type Fusion = {
 	read Spring: SpringConstructor,
 	read Delay: DelayConstructor,
 
-	New: (
+	read New: (
 		scope: Scope,
 		classNameOrTemplate: Instance | string
 	) -> (props: Properties) -> Instance,
-	read Hydrate: (scope: Scope, instance: Instance) -> (props: Properties) -> Instance,
+	read Hydrate: (
+		scope: Scope,
+		instance: Instance
+	) -> (props: Properties) -> Instance,
 	read Child: (
 		scope: Scope,
 		name: string
