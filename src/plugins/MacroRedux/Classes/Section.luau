@@ -40,7 +40,7 @@ local function TitleLabel(
 
 		[Children] = {
 			Border = inner:RoundBorder {
-				Color = Theme.Colors.MacroBackground,
+				Color = Theme.Color.Macro.Background,
 				Thickness = 2,
 			},
 			Padding = inner:New "UIPadding" {
@@ -64,8 +64,8 @@ local function TitleLabel(
 
 				Text = props.Text,
 				TextSize = 16,
-				TextColor3 = Theme.Colors.BrightText,
-				FontFace = Font.new(Theme.Font.Family, Enum.FontWeight.Bold),
+				TextColor3 = Theme.Color.BrightText,
+				FontFace = Theme.Font.Bold,
 			},
 		},
 	}
@@ -104,8 +104,8 @@ local function SectionMacroItem(
 	macroItem.SectionDepth = currentDepth
 
 	local background = if currentDepth % 2 == 0
-		then Theme.Colors.SectionBackgroundAlt
-		else Theme.Colors.SectionBackground
+		then Theme.Color.Section.BackgroundAlt
+		else Theme.Color.Section.Background
 
 	return inner:New "Frame" {
 		Size = UDim2.new(1, 0, 0, 20),
@@ -138,7 +138,7 @@ local function SectionMacroItem(
 
 				[Children] = {
 					Border = inner:RoundBorder {
-						Color = Theme.Colors.MacroBackground,
+						Color = Theme.Color.MacroBackground,
 						Thickness = 2,
 					},
 					TitleLabel = inner:Computed(

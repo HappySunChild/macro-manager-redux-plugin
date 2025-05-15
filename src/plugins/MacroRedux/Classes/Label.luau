@@ -51,8 +51,8 @@ local function LabelMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
 				TextYAlignment = macroItem.TextYAlignment,
 				TextSize = 16,
 				TextWrapped = true,
-				TextColor3 = Theme.Colors.Text,
-				FontFace = Theme.Font,
+				TextColor3 = Theme.Color.Text,
+				FontFace = Theme.Font.Regular,
 			},
 		},
 	}

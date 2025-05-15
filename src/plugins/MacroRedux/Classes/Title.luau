@@ -30,7 +30,6 @@ local function Title(scope: Fusion.Scope, macroItem: Types.MacroItem)
 	return inner:New "Frame" {
 		Size = UDim2.new(1, 0, 0, 26),
 
-		BackgroundColor3 = Theme.Colors.MacroBackground,
 		BackgroundTransparency = 1,
 
 		[Children] = {
@@ -41,8 +40,8 @@ local function Title(scope: Fusion.Scope, macroItem: Types.MacroItem)
 
 				Text = displayText,
 				TextSize = 18,
-				TextColor3 = Theme.Colors.Text,
-				FontFace = Font.new(Theme.Font.Family, Enum.FontWeight.Bold),
+				TextColor3 = Theme.Color.Text,
+				FontFace = Theme.Font.Bold,
 			},
 		},
 	}

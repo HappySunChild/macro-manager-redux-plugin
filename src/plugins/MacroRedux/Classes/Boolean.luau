@@ -8,6 +8,7 @@ local updateItemValue = require(pluginContainer.Utility.updateItemValue)
 local Fusion = require(pluginContainer.Packages.Fusion)
 local t = require(pluginContainer.Packages.t)
 
+local Label = require(pluginContainer.Components.Label)
 local TextButton = require(pluginContainer.Components.TextButton)
 
 local map, peek = Fusion.map, Fusion.peek
@@ -21,7 +22,7 @@ local function BooleanMacroItem(
 )
 	macroItem.Value = default(macroItem.Value)
 
-	local inner = scope:innerScope { TextButton = TextButton }
+	local inner = scope:innerScope { TextButton = TextButton, Label = Label }
 	local value = inner:Value(macroItem.Value)
 	local displayText =
 		inner:Value(macroItem.Name or macroItem.Text or "Boolean")
@@ -61,17 +62,9 @@ local function BooleanMacroItem(
 				PaddingBottom = UDim.new(0, 2),
 			},
 
-			Label = inner:New "TextLabel" {
+			Label = inner:Label {
 				Size = UDim2.fromScale(0.5, 1),
-
-				BackgroundTransparency = 1,
-
 				Text = displayText,
-				TextXAlignment = Enum.TextXAlignment.Left,
-				TextTruncate = Enum.TextTruncate.AtEnd,
-				TextSize = 16,
-				TextColor3 = Theme.Colors.BrightText,
-				FontFace = Theme.Font,
 			},
 			Checkbox = inner:TextButton {
 				AnchorPoint = Vector2.new(1, 0),
@@ -79,14 +72,14 @@ local function BooleanMacroItem(
 				Size = UDim2.fromScale(1, 1),
 				SizeConstraint = Enum.SizeConstraint.RelativeYY,
 
-				IdleColor = Theme.Colors.InputFieldBackground,
-				BorderColor = Theme.Colors.InputFieldBorder,
+				IdleColor = Theme.Color.InputField.Background,
+				BorderColor = Theme.Color.InputField.Border,
 
 				Text = map(value, function(v: boolean)
 					return if v then "✓" else ""
 				end),
 				TextSize = 24,
-				TextColor = Theme.Colors.BrightText,
+				TextColor = Theme.Color.BrightText,
 
 				Callback = function()
 					local newValue = not peek(value)

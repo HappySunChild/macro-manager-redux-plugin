@@ -44,13 +44,13 @@ local function DividerMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
 						Size = UDim2.fromOffset(0, 16),
 						AutomaticSize = Enum.AutomaticSize.X,
 
-						BackgroundColor3 = Theme.Colors.ItemBackground,
+						BackgroundColor3 = Theme.Color.Item.Background,
 
 						Text = displayText,
-						TextColor3 = Theme.Colors.SubText,
+						TextColor3 = Theme.Color.SubText,
 						TextXAlignment = Enum.TextXAlignment.Center,
 						TextYAlignment = Enum.TextYAlignment.Center,
-						FontFace = Theme.Font,
+						FontFace = Theme.Font.Regular,
 
 						[Children] = {
 							Padding = inner:New "UIPadding" {
@@ -66,7 +66,7 @@ local function DividerMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
 				Position = UDim2.fromScale(0.5, 0.5),
 				Size = UDim2.new(0.95, 0, 0, 1),
 
-				BackgroundColor3 = Theme.Colors.DimmedText,
+				BackgroundColor3 = Theme.Color.DimmedText,
 			},
 		},
 	}

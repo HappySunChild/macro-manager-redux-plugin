@@ -22,12 +22,12 @@ local function Button(
 		local currentState = use(state)
 
 		if currentState == Enum.GuiState.Hover then
-			return use(Theme.Colors.ButtonHover)
+			return use(Theme.Color.Button.HoverBackground)
 		elseif currentState == Enum.GuiState.Press then
-			return use(Theme.Colors.ButtonPressed)
+			return use(Theme.Color.Button.PressedBackground)
 		end
 
-		return use(Theme.Colors.ButtonBackground)
+		return use(Theme.Color.Button.Background)
 	end)
 
 	return inner:New "TextButton" {
@@ -35,11 +35,11 @@ local function Button(
 		Size = props.Size,
 
 		BackgroundColor3 = color,
-		BorderColor3 = Theme.Colors.ButtonBorder,
+		BorderColor3 = Theme.Color.Button.Border,
 		BorderSizePixel = 1,
 
 		Text = props.Text,
-		TextColor3 = Theme.Colors.ButtonText,
+		TextColor3 = Theme.Color.ButtonText,
 		TextSize = 16,
 
 		[Out "GuiState"] = state,

@@ -22,7 +22,7 @@ local function MacroContainer(
 		CanvasSize = UDim2.fromScale(0, 0),
 		AutomaticCanvasSize = Enum.AutomaticSize.Y,
 
-		BackgroundColor3 = Theme.Colors.MainBackground,
+		BackgroundColor3 = Theme.Color.MainBackground,
 		ScrollBarThickness = 0,
 
 		[Children] = {

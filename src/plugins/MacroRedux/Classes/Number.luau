@@ -2,12 +2,12 @@ local pluginContainer = script.Parent.Parent
 
 local Types = require(pluginContainer.Types)
 
-local Theme = require(pluginContainer.Utility.Theme)
 local updateItemValue = require(pluginContainer.Utility.updateItemValue)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 local t = require(pluginContainer.Packages.t)
 
+local Label = require(pluginContainer.Components.Label)
 local TextEntry = require(pluginContainer.Components.TextEntry)
 
 local Children = Fusion.Children
@@ -20,7 +20,7 @@ local function NumberMacroItem(
 )
 	macroItem.Value = default(macroItem.Value)
 
-	local inner = scope:innerScope { TextEntry = TextEntry }
+	local inner = scope:innerScope { TextEntry = TextEntry, Label = Label }
 	local value = inner:Value(macroItem.Value)
 	local displayText =
 		inner:Value(macroItem.Name or macroItem.Text or "Number")
@@ -60,17 +60,9 @@ local function NumberMacroItem(
 				PaddingBottom = UDim.new(0, 2),
 			},
 
-			Label = inner:New "TextLabel" {
+			Label = inner:Label {
 				Size = UDim2.fromScale(0.5, 1),
-
-				BackgroundTransparency = 1,
-
 				Text = displayText,
-				TextXAlignment = Enum.TextXAlignment.Left,
-				TextTruncate = Enum.TextTruncate.AtEnd,
-				TextSize = 16,
-				TextColor3 = Theme.Colors.BrightText,
-				FontFace = Theme.Font,
 			},
 			Input = inner:TextEntry {
 				Position = UDim2.fromScale(0.5, 0),

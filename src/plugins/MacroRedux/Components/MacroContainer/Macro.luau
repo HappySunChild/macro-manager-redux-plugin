@@ -39,7 +39,7 @@ local function Title(
 		AutomaticSize = Enum.AutomaticSize.X,
 
 		BackgroundTransparency = transparency,
-		BackgroundColor3 = Theme.Colors.MacroTitleBackground,
+		BackgroundColor3 = Theme.Color.Macro.Title.Background,
 
 		[OnEvent "MouseEnter"] = function()
 			transparency:set(0)
@@ -86,9 +86,9 @@ local function Title(
 
 				Text = props.Text,
 				TextSize = 16,
-				TextColor3 = Theme.Colors.InfoText,
+				TextColor3 = Theme.Color.Macro.Title.Text,
 				TextTruncate = Enum.TextTruncate.AtEnd,
-				FontFace = Theme.Font,
+				FontFace = Theme.Font.Regular,
 
 				BackgroundTransparency = 1,
 			},
@@ -184,7 +184,7 @@ local function Macro(
 		Visible = visible,
 
 		LayoutOrder = macro.Order,
-		BackgroundColor3 = Theme.Colors.MacroBackground,
+		BackgroundColor3 = Theme.Color.Macro.Background,
 
 		[Children] = {
 			Padding = inner:New "UIPadding" {

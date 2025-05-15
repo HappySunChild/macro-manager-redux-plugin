@@ -10,6 +10,7 @@ local Assets = require(pluginContainer.Plugin.Assets)
 local Fusion = require(pluginContainer.Packages.Fusion)
 local t = require(pluginContainer.Packages.t)
 
+local Label = require(pluginContainer.Components.Label)
 local RoundBorder = require(pluginContainer.Components.RoundBorder)
 local TextButton = require(pluginContainer.Components.TextButton)
 
@@ -37,8 +38,8 @@ local function ItemButton(
 	props: { Index: number, Text: string, Callback: () -> () }
 )
 	local baseColor = if props.Index % 2 == 0
-		then Theme.Colors.DropdownItemBackground
-		else Theme.Colors.DropdownItemBackgroundAlt
+		then Theme.Color.DropdownItem.Background
+		else Theme.Color.DropdownItem.BackgroundAlt
 
 	local state = scope:Value(Enum.GuiState.Idle)
 	local color = scope:Computed(function(use: Fusion.Scope)
@@ -47,9 +48,9 @@ local function ItemButton(
 
 		if currentState == Enum.GuiState.Hover then
 			-- outputColor = outputColor:Lerp(Color3.new(0, 0, 0), 0.3)
-			return use(Theme.Colors.ButtonHover)
+			return use(Theme.Color.Button.HoverBackground)
 		elseif currentState == Enum.GuiState.Press then
-			return use(Theme.Colors.ButtonPressed)
+			return use(Theme.Color.Button.PressedBackground)
 		end
 
 		return use(baseColor)
@@ -65,9 +66,9 @@ local function ItemButton(
 		Text = props.Text,
 		TextSize = 16,
 		TextXAlignment = Enum.TextXAlignment.Left,
-		TextColor3 = Theme.Colors.Text,
+		TextColor3 = Theme.Color.Text,
 		TextTruncate = Enum.TextTruncate.AtEnd,
-		FontFace = Theme.Font,
+		FontFace = Theme.Font.Regular,
 
 		[OnEvent "MouseButton1Click"] = props.Callback,
 		[Out "GuiState"] = state,
@@ -142,7 +143,7 @@ local function Dropdown(
 				BackgroundTransparency = 1,
 
 				Image = Assets.Images.DropdownArrow,
-				ImageColor3 = Theme.Colors.Text,
+				ImageColor3 = Theme.Color.Text,
 
 				Rotation = inner:Tween(
 					inner:Computed(function(use: Fusion.Use)
@@ -166,15 +167,15 @@ local function Dropdown(
 				CanvasSize = UDim2.fromScale(0, 0),
 				AutomaticCanvasSize = Enum.AutomaticSize.Y,
 
-				BackgroundColor3 = Theme.Colors.ButtonBackground,
+				BackgroundColor3 = Theme.Color.Button.Background,
 				ScrollBarThickness = 2,
-				ScrollBarImageColor3 = Theme.Colors.Text,
+				ScrollBarImageColor3 = Theme.Color.Text,
 
 				Visible = open,
 
 				[Children] = {
 					Border = inner:RoundBorder {
-						Color = Theme.Colors.ButtonBorder,
+						Color = Theme.Color.Button.Border,
 					},
 					Padding = inner:New "UIPadding" {
 						PaddingTop = UDim.new(0, 4),
@@ -201,7 +202,7 @@ local function DropdownMacroItem(
 		then macroItem.Items[1]
 		else macroItem.Value
 
-	local inner = scope:innerScope { Dropdown = Dropdown }
+	local inner = scope:innerScope { Dropdown = Dropdown, Label = Label }
 	local displayText =
 		inner:Value(macroItem.Name or macroItem.Text or "Dropdown")
 	local items = inner:Value(macroItem.Items)
@@ -237,6 +238,10 @@ local function DropdownMacroItem(
 		items:set(macroItem.Items)
 	end
 
+	function macroItem:SetValue(newValue: any)
+		setValueInternal(newValue)
+	end
+
 	return inner:New "Frame" {
 		Size = UDim2.new(1, 0, 0, 24),
 
@@ -250,17 +255,9 @@ local function DropdownMacroItem(
 				PaddingRight = UDim.new(0, 2),
 			},
 
-			Label = inner:New "TextLabel" {
+			Label = inner:Label {
 				Size = UDim2.fromScale(0.5, 1),
-
-				BackgroundTransparency = 1,
-
 				Text = displayText,
-				TextXAlignment = Enum.TextXAlignment.Left,
-				TextTruncate = Enum.TextTruncate.AtEnd,
-				TextSize = 16,
-				TextColor3 = Theme.Colors.BrightText,
-				FontFace = Theme.Font,
 			},
 			Dropdown = inner:Dropdown {
 				Position = UDim2.fromScale(0.5, 0),

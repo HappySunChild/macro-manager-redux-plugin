@@ -55,7 +55,7 @@ local function ItemsContainer(
 		Size = props.Size or UDim2.new(1, 0, 0, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
 
-		BackgroundColor3 = props.BackgroundColor or Theme.Colors.ItemBackground,
+		BackgroundColor3 = props.BackgroundColor or Theme.Color.Item.Background,
 		BackgroundTransparency = props.BackgroundTransparency,
 		-- ClipsDescendants = true,
 		Visible = props.Visible,

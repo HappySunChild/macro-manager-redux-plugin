@@ -2,11 +2,12 @@ local pluginContainer = script.Parent.Parent
 
 local Types = require(pluginContainer.Types)
 
-local Theme = require(pluginContainer.Utility.Theme)
 local updateItemValue = require(pluginContainer.Utility.updateItemValue)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 local t = require(pluginContainer.Packages.t)
+
+local Label = require(pluginContainer.Components.Label)
 
 local Children = Fusion.Children
 
@@ -20,7 +21,7 @@ local function Color3MacroItem(
 )
 	macroItem.Value = default(macroItem.Value)
 
-	local inner = scope:innerScope()
+	local inner = scope:innerScope { Label = Label }
 	local displayText =
 		inner:Value(macroItem.Text or macroItem.Name or "Color3")
 	local value = inner:Value(macroItem.Value)
@@ -67,17 +68,9 @@ local function Color3MacroItem(
 				PaddingRight = UDim.new(0, 2),
 			},
 
-			Label = inner:New "TextLabel" {
+			Label = inner:Label {
 				Size = UDim2.fromScale(0.5, 1),
-
-				BackgroundTransparency = 1,
-
 				Text = displayText,
-				TextXAlignment = Enum.TextXAlignment.Left,
-				TextTruncate = Enum.TextTruncate.AtEnd,
-				TextSize = 16,
-				TextColor3 = Theme.Colors.BrightText,
-				FontFace = Theme.Font,
 			},
 			InputElements = renderStyle(inner, {
 				Value = value,

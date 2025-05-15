@@ -43,7 +43,7 @@ local function ColorDisplay(
 		[Children] = {
 			Flex = inner:New "UIFlexItem" {},
 			Border = inner:RoundBorder {
-				Color = Theme.Colors.InputFieldBorder,
+				Color = Theme.Color.InputField.Border,
 			},
 		},
 	}

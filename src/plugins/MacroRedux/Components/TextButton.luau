@@ -41,22 +41,22 @@ local function TextButton(
 		local current = use(state) :: Enum.GuiState
 
 		if current == Enum.GuiState.Hover then
-			return use(props.HoverColor or Theme.Colors.ButtonHover)
+			return use(props.HoverColor or Theme.Color.Button.HoverBackground)
 		elseif current == Enum.GuiState.Press then
-			return use(props.PressColor or Theme.Colors.ButtonPressed)
+			return use(props.PressColor or Theme.Color.Button.PressedBackground)
 		end
 
-		return use(props.IdleColor or Theme.Colors.ButtonBackground)
+		return use(props.IdleColor or Theme.Color.Button.Background)
 	end)
 
 	local borderColor = inner:Computed(function(use)
 		local current = use(state)
 
 		if current == Enum.GuiState.Hover then
-			return use(props.BorderColor or Theme.Colors.AccentBorder)
+			return use(props.BorderColor or Theme.Color.AccentBorder)
 		end
 
-		return use(props.BorderColor or Theme.Colors.ButtonBorder)
+		return use(props.BorderColor or Theme.Color.Button.Border)
 	end)
 
 	return inner:New "TextButton" {
@@ -70,8 +70,8 @@ local function TextButton(
 		TextXAlignment = props.TextXAlignment,
 		TextYAlignment = props.TextYAlignment,
 		TextSize = props.TextSize,
-		TextColor3 = props.TextColor or Theme.Colors.ButtonText,
-		FontFace = Theme.Font,
+		TextColor3 = props.TextColor or Theme.Color.Button.Text,
+		FontFace = Theme.Font.Regular,
 		TextTruncate = Enum.TextTruncate.AtEnd,
 
 		BackgroundColor3 = inner:Tween(color, Theme.TweenInfo.Hover),

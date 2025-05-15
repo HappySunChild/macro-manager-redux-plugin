@@ -6,6 +6,7 @@ local Types = require(pluginContainer.Types)
 local Fusion = require(pluginContainer.Packages.Fusion)
 local t = require(pluginContainer.Packages.t)
 
+local Label = require(pluginContainer.Components.Label)
 local RoundBorder = require(pluginContainer.Components.RoundBorder)
 
 local Children, Ref, OnEvent = Fusion.Children, Fusion.Ref, Fusion.OnEvent
@@ -40,7 +41,7 @@ local function SliderTick(
 		Size = UDim2.new(0, 1, 1, 0),
 		Position = UDim2.fromScale(props.Alpha, 0),
 
-		BackgroundColor3 = Theme.Colors.SliderBorder,
+		BackgroundColor3 = Theme.Color.SliderBorder,
 	}
 end
 
@@ -54,8 +55,11 @@ local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
 		macroItem.Maximum
 	)
 
-	local inner =
-		scope:innerScope { RoundBorder = RoundBorder, SliderTick = SliderTick }
+	local inner = scope:innerScope {
+		RoundBorder = RoundBorder,
+		SliderTick = SliderTick,
+		Label = Label,
+	}
 	local displayText =
 		inner:Value(macroItem.Text or macroItem.Name or "Slider")
 	local valueState = inner:Value(macroItem.Value)
@@ -165,12 +169,8 @@ local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
 				PaddingRight = UDim.new(0, 2),
 			},
 
-			Label = inner:New "TextLabel" {
-				Size = UDim2.fromOffset(0, 16),
-				AutomaticSize = Enum.AutomaticSize.X,
-
-				BackgroundTransparency = 1,
-
+			Label = inner:Label {
+				Size = UDim2.new(0.5, 0, 0, 16),
 				Text = inner:Computed(function(use: Types.Use)
 					return string.format(
 						"%s: %.1f",
@@ -178,9 +178,6 @@ local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
 						use(valueState)
 					)
 				end),
-				TextColor3 = Theme.Colors.BrightText,
-				TextSize = 16,
-				FontFace = Theme.Font,
 			},
 			Slider = inner:New "Frame" {
 				Position = UDim2.fromOffset(0, 18),
@@ -257,8 +254,8 @@ local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
 							return string.format("%.1f", use(minimumState))
 						end),
 						TextSize = 16,
-						TextColor3 = Theme.Colors.DimmedText,
-						FontFace = Theme.Font,
+						TextColor3 = Theme.Color.DimmedText,
+						FontFace = Theme.Font.Regular,
 					},
 					MaximumLabel = inner:New "TextLabel" {
 						AnchorPoint = Vector2.new(1, 0),
@@ -271,26 +268,25 @@ local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
 							return string.format("%.1f", use(maximumState))
 						end),
 						TextSize = 16,
-						TextColor3 = Theme.Colors.DimmedText,
-						FontFace = Theme.Font,
+						TextColor3 = Theme.Color.DimmedText,
+						FontFace = Theme.Font.Regular,
 					},
 					Bar = inner:New "Frame" {
 						AnchorPoint = Vector2.new(0.5, 0.5),
 						Position = UDim2.fromScale(0.5, 0.5),
 						Size = UDim2.new(1, -70, 0, 4),
 
-						BackgroundColor3 = Theme.Colors.SliderBarBackground,
+						BackgroundColor3 = Theme.Color.Slider.Background,
 
 						[Ref] = barRef,
 						[Children] = {
 							Border = inner:RoundBorder {
-								Color = Theme.Colors.SliderBorder,
+								Color = Theme.Color.Slider.Border,
 							},
 
 							Ticks = snapTicks,
 							Handle = inner:New "Frame" {
 								AnchorPoint = Vector2.new(0.5, 0.5),
-								Size = UDim2.fromOffset(4, 16),
 								Position = inner:Computed(
 									function(use: Fusion.Use)
 										return UDim2.fromScale(
@@ -299,13 +295,14 @@ local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
 										)
 									end
 								),
+								Size = UDim2.fromOffset(4, 16),
 
 								ZIndex = 10,
 
-								BackgroundColor3 = Theme.Colors.SliderHandleBackground,
+								BackgroundColor3 = Theme.Color.Slider.Handle,
 								[Children] = {
 									Border = inner:RoundBorder {
-										Color = Theme.Colors.SliderBorder,
+										Color = Theme.Color.Slider.Border,
 									},
 								},
 							},

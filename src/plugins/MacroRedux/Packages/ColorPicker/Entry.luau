@@ -30,10 +30,10 @@ local function Entry(
 	local focused = inner:Value(false)
 	local borderColor = inner:Computed(function(use: Fusion.Use)
 		if use(focused) then
-			return use(Theme.Colors.AccentBorder)
+			return use(Theme.Color.AccentBorder)
 		end
 
-		return use(Theme.Colors.InputFieldBorder)
+		return use(Theme.Color.InputField.Border)
 	end)
 
 	local text = inner:Value(peek(props.Value) or "")
@@ -42,7 +42,7 @@ local function Entry(
 		Position = props.Position,
 		Size = props.Size,
 
-		BackgroundColor3 = Theme.Colors.InputFieldBackground,
+		BackgroundColor3 = Theme.Color.InputField.Background,
 		BorderColor3 = borderColor,
 		BorderSizePixel = 1,
 
@@ -64,7 +64,7 @@ local function Entry(
 				TextXAlignment = Enum.TextXAlignment.Left,
 				TextYAlignment = Enum.TextYAlignment.Top,
 				TextSize = 14,
-				TextColor3 = Theme.Colors.SubText,
+				TextColor3 = Theme.Color.SubText,
 			},
 			Entry = inner:New "TextBox" {
 				Size = UDim2.fromScale(1, 1),
@@ -75,7 +75,7 @@ local function Entry(
 				TextXAlignment = Enum.TextXAlignment.Left,
 				TextYAlignment = Enum.TextYAlignment.Top,
 				TextSize = 14,
-				TextColor3 = Theme.Colors.Text,
+				TextColor3 = Theme.Color.Text,
 
 				[Ref] = props.TextboxRef,
 				[Out "Text"] = text,
