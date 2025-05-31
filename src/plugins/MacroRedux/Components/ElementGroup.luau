@@ -1,6 +1,7 @@
 local pluginContainer = script.Parent.Parent
 
 local Fusion = require(pluginContainer.Packages.Fusion)
+
 local Children = Fusion.Children
 
 local function ElementGroup(
@@ -18,12 +19,12 @@ local function ElementGroup(
 		VerticalAlignment: Fusion.UsedAs<Enum.VerticalAlignment>?,
 		FlexAlignment: Fusion.UsedAs<Enum.UIFlexAlignment>?,
 
-		Render: (
+		Render: ((
 			scope: Fusion.Scope,
 			index: number,
 			label: string
-		) -> Fusion.Child,
-		Labels: Fusion.UsedAs<{ string }>,
+		) -> Fusion.Child)?,
+		Labels: Fusion.UsedAs<{ string }>?,
 		Refs: { Fusion.Value<Fusion.Child> }?,
 
 		[Fusion.SpecialKey<"Children">]: { Fusion.Child }?,
@@ -33,24 +34,26 @@ local function ElementGroup(
 	local refs = props.Refs or {}
 
 	local inner = scope:innerScope()
-	local elements = inner:ForPairs(
-		labels,
-		function(_, forScope: typeof(inner), index: number, label: string)
-			local element = props.Render(forScope, index, label)
+	local elements = if labels
+		then inner:ForPairs(
+			labels,
+			function(_, forScope: typeof(inner), index: number, label: string)
+				local element = props.Render(forScope, index, label)
 
-			if not element then
-				return index
+				if not element then
+					return index
+				end
+
+				local ref = refs[index]
+
+				if ref ~= nil then
+					ref:set(element)
+				end
+
+				return index, element
 			end
-
-			local ref = refs[index]
-
-			if ref ~= nil then
-				ref:set(element)
-			end
-
-			return index, element
-		end
-	)
+		)
+		else nil
 
 	return inner:New "Frame" {
 		AnchorPoint = props.AnchorPoint,
