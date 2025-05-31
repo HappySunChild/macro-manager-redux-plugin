@@ -1,6 +1,9 @@
 ---
 base: roblox
 globals:
+  require:
+    args:
+      - type: any
   math.lerp:
     args:
       - type: number

@@ -1,18 +1,16 @@
 local Studio = settings():GetService "Studio"
 
+local ContainerManager = require "../Utility/ContainerManager"
+local MacroManager = require "../Utility/MacroManager"
+local Theme = require "../Utility/Theme"
+
+local ColorPicker = require "../Packages/ColorPicker"
+
+local App = require "./App"
+local Assets = require "./Assets"
+local PluginShared = require "./Shared"
+
 local pluginContainer = script.Parent.Parent
-
-local ContainerManager = require(pluginContainer.Utility.ContainerManager)
-local MacroManager = require(pluginContainer.Utility.MacroManager)
-local Theme = require(pluginContainer.Utility.Theme)
-
-local ColorPicker = require(pluginContainer.Packages.ColorPicker)
-
-local Assets = require(pluginContainer.Plugin.Assets)
-local PluginShared = require(pluginContainer.Plugin.Shared)
-
-local PluginWidget = require(pluginContainer.Components.PluginWidget)
-
 local PLUGIN_VERSION = pluginContainer.Version.Value
 
 local Manager = {}
@@ -46,7 +44,7 @@ function Manager:Initialize(plugin: Plugin)
 end
 
 function Manager:SetupWidget(plugin: Plugin)
-	local scope = PluginShared.Scope:innerScope { PluginWidget = PluginWidget }
+	local scope = PluginShared.Scope:innerScope { PluginWidget = App }
 	local widget = scope:PluginWidget {
 		Plugin = plugin,
 		Title = `Macros {PLUGIN_VERSION}`,

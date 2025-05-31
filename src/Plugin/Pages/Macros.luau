@@ -1,12 +1,10 @@
-local pluginContainer = script.Parent.Parent.Parent
+local Types = require "@plugin/Types"
 
-local Types = require(pluginContainer.Types)
+local Fusion = require "@packages/Fusion"
 
-local Fusion = require(pluginContainer.Packages.Fusion)
-
-local ElementGroup = require(pluginContainer.Components.ElementGroup)
-local MacroContainer = require(pluginContainer.Components.MacroContainer)
-local TextButton = require(pluginContainer.Components.TextButton)
+local ElementGroup = require "@components/ElementGroup"
+local MacroContainer = require "@components/MacroContainer"
+local TextButton = require "@components/TextButton"
 
 local Children = Fusion.Children
 
@@ -56,6 +54,14 @@ local function MacrosPage(
 							Callback = function()
 								navigate "Settings"
 							end,
+						},
+						RefreshButton = inner:TextButton {
+							Size = UDim2.new(0, 90, 1, 0),
+
+							Text = "Refresh",
+							TextSize = 16,
+
+							Callback = function() end,
 						},
 					},
 				},

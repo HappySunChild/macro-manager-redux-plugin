@@ -13,7 +13,7 @@ local Children = Fusion.Children
 
 type PageIndex = keyof<typeof(Pages)>
 
-local function Widget(
+local function App(
 	scope: Fusion.Scope,
 	props: {
 		Plugin: Plugin,
@@ -72,4 +72,4 @@ local function Widget(
 	}
 end
 
-return Widget
+return App

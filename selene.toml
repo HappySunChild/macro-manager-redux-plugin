@@ -1,4 +1,4 @@
-std = "lerpfix"
+std = "fix"
 
 [lints]
 shadowing = "allow"

@@ -215,7 +215,7 @@ local function Macro(
 				end,
 			},
 
-			RoundBorder = inner:RoundBorder { Thickness = 0 },
+			-- RoundBorder = inner:RoundBorder { Thickness = 0 },
 
 			Items = itemContainer,
 		},

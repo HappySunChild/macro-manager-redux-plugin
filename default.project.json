@@ -2,12 +2,14 @@
 	"name": "plugin project",
 	"tree": {
 		"$className": "DataModel",
-		
 		"ServerStorage": {
 			"$ignoreUnknownInstances": true,
-			
 			"Plugins": {
-				"$path": "src/plugins"
+				"$className": "Folder",
+				"$ignoreUnknownInstances": true,
+				"MacroRedux": {
+					"$path": "src"
+				}
 			}
 		}
 	}

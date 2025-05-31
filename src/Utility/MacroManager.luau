@@ -15,8 +15,6 @@ MacroManager.ActiveMacros = PluginShared.Scope:Value(loadedMacros)
 
 function MacroManager:LoadMacro(macroModule: ModuleScript, reference: Instance?)
 	table.insert(loadedMacros, { Module = macroModule, Reference = reference })
-
-	MacroManager:UpdateMacros()
 end
 
 function MacroManager:LoadCurrentContainer()
@@ -78,6 +76,7 @@ function MacroManager:RefreshMacros()
 	table.clear(loadedMacros)
 
 	MacroManager:LoadCurrentContainer()
+	MacroManager:UpdateMacros()
 end
 
 function MacroManager:UpdateMacros()

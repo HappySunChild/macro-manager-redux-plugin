@@ -7,6 +7,7 @@ local Fusion = require(pluginContainer.Packages.Fusion)
 local Children = Fusion.Children
 
 local Macro = require(script.Macro)
+local RoundBorder = require(pluginContainer.Components.RoundBorder)
 
 local function MacroContainer(
 	scope: Fusion.Scope,
@@ -14,8 +15,7 @@ local function MacroContainer(
 		Macros: Fusion.UsedAs<{ Types.Macro }>,
 	}
 )
-	local inner =
-		scope:innerScope { Macro = Macro, ScrollingFrame = ScrollingFrame }
+	local inner = scope:innerScope { Macro = Macro, RoundBorder = RoundBorder }
 
 	return inner:New "ScrollingFrame" {
 		Size = UDim2.fromScale(1, 1),
@@ -37,10 +37,33 @@ local function MacroContainer(
 				SortOrder = Enum.SortOrder.LayoutOrder,
 			},
 
-			Macros = inner:ForPairs(
-				props.Macros,
-				function(_, forInner: typeof(inner), key: number, value: Macro)
-					return key, forInner:Macro(value)
+			Macros = inner:Computed(
+				function(use: Fusion.Use, scope: typeof(inner))
+					local macros = use(props.Macros)
+
+					if #macros == 0 then
+						return scope:New "TextLabel" {
+							Size = UDim2.new(1, 0, 0, 30),
+
+							BackgroundColor3 = Theme.Color.Macro.Background,
+
+							Text = "No macros detected :(",
+							TextSize = 18,
+							TextColor3 = Theme.Color.Text,
+
+							[Children] = inner:RoundBorder {
+								Thickness = 0,
+							},
+						}
+					end
+
+					local list = {}
+
+					for _, macro in macros do
+						table.insert(list, scope:Macro(macro))
+					end
+
+					return list
 				end
 			),
 		},
