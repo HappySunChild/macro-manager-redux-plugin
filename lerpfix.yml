@@ -1,0 +1,8 @@
+---
+base: roblox
+globals:
+  math.lerp:
+    args:
+      - type: number
+      - type: number
+      - type: number
