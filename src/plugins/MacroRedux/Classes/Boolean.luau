@@ -25,7 +25,7 @@ local function BooleanMacroItem(
 	local inner = scope:innerScope { TextButton = TextButton, Label = Label }
 	local value = inner:Value(macroItem.Value)
 	local displayText =
-		inner:Value(macroItem.Name or macroItem.Text or "Boolean")
+		inner:Value(macroItem.Text or "Boolean")
 
 	local function setValueInternal(newValue: boolean)
 		value:set(newValue)

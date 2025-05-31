@@ -28,8 +28,7 @@ local function Vector2ItemClass(
 		Label = Label,
 	}
 	local value = inner:Value(macroItem.Value or Vector2.zero)
-	local displayText =
-		inner:Value(macroItem.Name or macroItem.Text or "Vector2")
+	local displayText = inner:Value(macroItem.Text or "Vector2")
 
 	local xFieldRef = inner:Value()
 	local yFieldRef = inner:Value()

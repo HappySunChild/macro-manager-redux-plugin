@@ -29,7 +29,7 @@ local function NumberRangeMacroItem(
 	}
 	local value = inner:Value(macroItem.Value)
 	local displayText =
-		inner:Value(macroItem.Name or macroItem.Text or "NumberRange")
+		inner:Value( macroItem.Text or "NumberRange")
 
 	local maxFieldRef = inner:Value()
 	local minFieldRef = inner:Value()

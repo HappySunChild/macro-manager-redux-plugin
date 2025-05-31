@@ -23,7 +23,7 @@ local function NumberMacroItem(
 	local inner = scope:innerScope { TextEntry = TextEntry, Label = Label }
 	local value = inner:Value(macroItem.Value)
 	local displayText =
-		inner:Value(macroItem.Name or macroItem.Text or "Number")
+		inner:Value(macroItem.Text or "Number")
 
 	local function setValueInternal(newValue: number)
 		value:set(newValue)

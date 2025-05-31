@@ -22,8 +22,7 @@ local function StringItemClass(
 
 	local inner = scope:innerScope { TextEntry = TextEntry, Label = Label }
 	local value = scope:Value(macroItem.Value)
-	local displayText =
-		scope:Value(macroItem.Name or macroItem.Text or "String")
+	local displayText = scope:Value(macroItem.Text or "String")
 
 	local function setValueInternal(newValue: string)
 		value:set(newValue)

@@ -204,7 +204,7 @@ local function DropdownMacroItem(
 
 	local inner = scope:innerScope { Dropdown = Dropdown, Label = Label }
 	local displayText =
-		inner:Value(macroItem.Name or macroItem.Text or "Dropdown")
+		inner:Value(macroItem.Text or "Dropdown")
 	local items = inner:Value(macroItem.Items)
 	local value = inner:Value(macroItem.Value)
 

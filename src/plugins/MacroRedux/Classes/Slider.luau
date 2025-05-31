@@ -60,8 +60,7 @@ local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
 		SliderTick = SliderTick,
 		Label = Label,
 	}
-	local displayText =
-		inner:Value(macroItem.Text or macroItem.Name or "Slider")
+	local displayText = inner:Value(macroItem.Text or "Slider")
 	local valueState = inner:Value(macroItem.Value)
 
 	local minimumState = inner:Value(macroItem.Minimum)

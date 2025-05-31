@@ -22,8 +22,7 @@ local function Color3MacroItem(
 	macroItem.Value = default(macroItem.Value)
 
 	local inner = scope:innerScope { Label = Label }
-	local displayText =
-		inner:Value(macroItem.Text or macroItem.Name or "Color3")
+	local displayText = inner:Value(macroItem.Text or "Color3")
 	local value = inner:Value(macroItem.Value)
 
 	local function setInternalValue(newValue: Color3)
@@ -52,6 +51,7 @@ local function Color3MacroItem(
 
 	if not renderStyle then
 		renderStyle = RenderStyles.RGB
+
 		warn(`Color3 render style '{macroItem.Style}' does not exist.`)
 	end
 
