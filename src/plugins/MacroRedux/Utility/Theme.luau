@@ -143,7 +143,7 @@ local Theme = {
 		Highlight = TweenInfo.new(0.1),
 		Hover = TweenInfo.new(0.05),
 
-		Page = TweenInfo.new(0.26, Enum.EasingStyle.Quad),
+		Page = TweenInfo.new(0.26, Enum.EasingStyle.Circular),
 
 		DropdownRotation = TweenInfo.new(0.2),
 	},
