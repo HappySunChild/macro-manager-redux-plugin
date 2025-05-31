@@ -254,6 +254,7 @@ local function ColorPickerWidget(
 
 				[Children] = {
 					Display = inner:New "Frame" {
+						Position = UDim2.fromOffset(1, 0),
 						Size = UDim2.new(0, 60, 1, 0),
 
 						BackgroundColor3 = output,
