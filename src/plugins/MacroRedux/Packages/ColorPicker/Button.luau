@@ -39,7 +39,7 @@ local function Button(
 		BorderSizePixel = 1,
 
 		Text = props.Text,
-		TextColor3 = Theme.Color.ButtonText,
+		TextColor3 = Theme.Color.Button.Text,
 		TextSize = 16,
 
 		[Out "GuiState"] = state,
