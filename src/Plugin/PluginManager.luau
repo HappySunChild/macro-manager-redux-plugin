@@ -11,8 +11,7 @@ local PluginShared = require "@plugin/Shared"
 
 local App = require "./App"
 
-local pluginContainer = script.Parent.Parent
-local PLUGIN_VERSION = pluginContainer.Version.Value
+local PLUGIN_VERSION = require "@plugin/Version"
 
 local Manager = {}
 Manager.Active = false
