@@ -1,13 +1,11 @@
-local pluginContainer = script.Parent.Parent.Parent
-local ItemClasses = pluginContainer.Classes
+local Classes = require "@plugin/Classes"
+local Types = require "@plugin/Types"
 
-local Types = require(pluginContainer.Types)
+local Logging = require "@utility/Logging"
+local MacroManager = require "@utility/MacroManager"
 
-local Logging = require(pluginContainer.Utility.Logging)
-local MacroManager = require(pluginContainer.Utility.MacroManager)
-
-local Fusion = require(pluginContainer.Packages.Fusion)
-local t = require(pluginContainer.Packages.t)
+local Fusion = require "@packages/Fusion"
+local t = require "@packages/t"
 
 local Children = Fusion.Children
 
@@ -20,13 +18,10 @@ local function getMacroItemClass(name: string)
 		return customClass
 	end
 
-	local classModule = ItemClasses:FindFirstChild(name)
+	-- fixes the linting issue, but is still very much a hack
+	Classes.load()
 
-	if not classModule then
-		return
-	end
-
-	return require(classModule) :: any
+	return Classes[name]
 end
 
 local _RENDERED = {}

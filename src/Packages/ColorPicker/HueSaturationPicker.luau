@@ -1,6 +1,6 @@
 local pluginContainer = script.Parent.Parent.Parent
 
-local Assets = require(pluginContainer.Plugin.Assets)
+local Assets = require(pluginContainer.Assets)
 
 local Fusion = require(pluginContainer.Packages.Fusion)
 

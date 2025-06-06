@@ -1,11 +1,9 @@
 --!nocheck
 local Studio = settings():GetService "Studio"
 
-local pluginContainer = script.Parent.Parent
+local PluginShared = require "@plugin/Shared"
 
-local PluginShared = require(pluginContainer.Plugin.Shared)
-
-local Fusion = require(pluginContainer.Packages.Fusion)
+local Fusion = require "@packages/Fusion"
 local map = Fusion.map
 
 local scope = PluginShared.Scope
@@ -148,7 +146,7 @@ local Theme = {
 		DropdownRotation = TweenInfo.new(0.2),
 	},
 
-	Roundness = scope:Value(UDim.new(0, 4)),
+	Roundness = scope:Value(UDim.new(0, 0)),
 }
 
 function Theme:SetTheme(newTheme: StudioTheme)

@@ -1,22 +1,20 @@
 local ScriptEditorService = game:GetService "ScriptEditorService"
 local Selection = game:GetService "Selection"
 
-local pluginContainer = script.Parent.Parent.Parent
+local Assets = require "@plugin/Assets"
+local PluginShared = require "@plugin/Shared"
 
-local Assets = require(pluginContainer.Plugin.Assets)
-local PluginShared = require(pluginContainer.Plugin.Shared)
+local Logging = require "@utility/Logging"
+local Theme = require "@utility/Theme"
 
-local Logging = require(pluginContainer.Utility.Logging)
-local Theme = require(pluginContainer.Utility.Theme)
+local Types = require "@plugin/Types"
 
-local Types = require(pluginContainer.Types)
+local Fusion = require "@packages/Fusion"
+local t = require "@packages/t"
 
-local Fusion = require(pluginContainer.Packages.Fusion)
-local t = require(pluginContainer.Packages.t)
-
-local ItemsContainer = require(pluginContainer.Components.ItemsContainer)
-local RoundBorder = require(pluginContainer.Components.RoundBorder)
-local TextButton = require(pluginContainer.Components.TextButton)
+local ItemsContainer = require "@components/ItemsContainer"
+local RoundBorder = require "@components/RoundBorder"
+local TextButton = require "@components/TextButton"
 
 local Children, OnEvent = Fusion.Children, Fusion.OnEvent
 local peek = Fusion.peek

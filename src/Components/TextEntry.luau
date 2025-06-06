@@ -1,13 +1,12 @@
-local pluginContainer = script.Parent.Parent
+local Theme = require "@utility/Theme"
 
-local Theme = require(pluginContainer.Utility.Theme)
+local Fusion = require "@packages/Fusion"
 
-local Fusion = require(pluginContainer.Packages.Fusion)
+local RoundBorder = require "@components/RoundBorder"
+
+local peek = Fusion.peek
 local Children, Ref, OnEvent, Out =
 	Fusion.Children, Fusion.Ref, Fusion.OnEvent, Fusion.Out
-local peek = Fusion.peek
-
-local RoundBorder = require(pluginContainer.Components.RoundBorder)
 
 local function TextEntry(
 	scope: Fusion.Scope,

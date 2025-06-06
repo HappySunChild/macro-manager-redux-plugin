@@ -1,8 +1,6 @@
-local pluginContainer = script.Parent.Parent.Parent
+local Fusion = require "@packages/Fusion"
 
-local Fusion = require(pluginContainer.Packages.Fusion)
-
-local TextButton = require(pluginContainer.Components.TextButton)
+local TextButton = require "@components/TextButton"
 
 local function SettingsPage(
 	scope: Fusion.Scope,

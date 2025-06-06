@@ -1,19 +1,16 @@
-local pluginContainer = script.Parent.Parent
+local Types = require "@plugin/Types"
 
-local Types = require(pluginContainer.Types)
+local Fusion = require "@packages/Fusion"
+local RenderStyles = require "@self/Styles"
+local t = require "@packages/t"
 
-local updateItemValue = require(pluginContainer.Utility.updateItemValue)
+local Label = require "@components/Label"
 
-local Fusion = require(pluginContainer.Packages.Fusion)
-local t = require(pluginContainer.Packages.t)
-
-local Label = require(pluginContainer.Components.Label)
+local updateItemValue = require "@utility/updateItemValue"
 
 local Children = Fusion.Children
 
 local default = t.default(Color3.new(0, 0, 0), t.Color3)
-
-local RenderStyles = require(script.Styles)
 
 local function Color3MacroItem(
 	scope: Fusion.Scope,

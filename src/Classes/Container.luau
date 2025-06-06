@@ -1,11 +1,9 @@
-local pluginContainer = script.Parent.Parent
+local Types = require "@plugin/Types"
 
-local Types = require(pluginContainer.Types)
+local Fusion = require "@packages/Fusion"
+local t = require "@packages/t"
 
-local Fusion = require(pluginContainer.Packages.Fusion)
-local t = require(pluginContainer.Packages.t)
-
-local Label = require(pluginContainer.Components.Label)
+local Label = require "@components/Label"
 
 local peek = Fusion.peek
 local Children, Ref = Fusion.Children, Fusion.Ref

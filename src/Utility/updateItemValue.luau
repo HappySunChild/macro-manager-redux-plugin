@@ -1,8 +1,6 @@
-local pluginContainer = script.Parent.Parent
+local Types = require "@plugin/Types"
 
-local Types = require(pluginContainer.Types)
-
-local Logging = require(pluginContainer.Utility.Logging)
+local Logging = require "@utility/Logging"
 
 local MAX_RECURSION_DEPTH = 8
 local _RECURSION_DEPTH = {}

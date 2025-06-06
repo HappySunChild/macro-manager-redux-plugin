@@ -1,6 +1,4 @@
-local pluginContainer = script.Parent.Parent
-
-local Fusion = require(pluginContainer.Packages.Fusion)
+local Fusion = require "@packages/Fusion"
 
 local PluginShared = {}
 PluginShared.Scope = Fusion:scoped()

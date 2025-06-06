@@ -1,14 +1,15 @@
 local Studio = settings():GetService "Studio"
 
-local ContainerManager = require "../Utility/ContainerManager"
-local MacroManager = require "../Utility/MacroManager"
-local Theme = require "../Utility/Theme"
+local ContainerManager = require "@utility/ContainerManager"
+local MacroManager = require "@utility/MacroManager"
+local Theme = require "@utility/Theme"
 
-local ColorPicker = require "../Packages/ColorPicker"
+local ColorPicker = require "@packages/ColorPicker"
+
+local Assets = require "@plugin/Assets"
+local PluginShared = require "@plugin/Shared"
 
 local App = require "./App"
-local Assets = require "./Assets"
-local PluginShared = require "./Shared"
 
 local pluginContainer = script.Parent.Parent
 local PLUGIN_VERSION = pluginContainer.Version.Value

@@ -1,15 +1,13 @@
-local pluginContainer = script.Parent.Parent
+local Types = require "@plugin/Types"
 
-local Types = require(pluginContainer.Types)
+local Theme = require "@utility/Theme"
+local updateItemValue = require "@utility/updateItemValue"
 
-local Theme = require(pluginContainer.Utility.Theme)
-local updateItemValue = require(pluginContainer.Utility.updateItemValue)
+local Fusion = require "@packages/Fusion"
+local t = require "@packages/t"
 
-local Fusion = require(pluginContainer.Packages.Fusion)
-local t = require(pluginContainer.Packages.t)
-
-local Label = require(pluginContainer.Components.Label)
-local TextButton = require(pluginContainer.Components.TextButton)
+local Label = require "@components/Label"
+local TextButton = require "@components/TextButton"
 
 local map, peek = Fusion.map, Fusion.peek
 local Children = Fusion.Children
@@ -24,8 +22,7 @@ local function BooleanMacroItem(
 
 	local inner = scope:innerScope { TextButton = TextButton, Label = Label }
 	local value = inner:Value(macroItem.Value)
-	local displayText =
-		inner:Value(macroItem.Text or "Boolean")
+	local displayText = inner:Value(macroItem.Text or "Boolean")
 
 	local function setValueInternal(newValue: boolean)
 		value:set(newValue)

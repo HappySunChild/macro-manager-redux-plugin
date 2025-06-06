@@ -7,7 +7,7 @@ local pluginContainer = script.Parent.Parent
 local Fusion = require(pluginContainer.Packages.Fusion)
 local t = require(pluginContainer.Packages.t)
 
-local PluginShared = require(pluginContainer.Plugin.Shared)
+local PluginShared = require(pluginContainer.Shared)
 local scope = PluginShared.Scope
 
 local Widget = require(script.Widget)

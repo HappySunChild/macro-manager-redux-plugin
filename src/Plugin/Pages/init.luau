@@ -1,5 +1,5 @@
 return {
-	Settings = require(script.Settings),
-	Macros = require(script.Macros),
-	TheRockWithPancakes = require(script.TheRockWithPancakes),
+	Settings = require "@self/Settings",
+	Macros = require "@self/Macros",
+	TheRockWithPancakes = require "@self/TheRockWithPancakes",
 }

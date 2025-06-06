@@ -1,15 +1,13 @@
-local pluginContainer = script.Parent.Parent
+local Types = require "@plugin/Types"
 
-local Types = require(pluginContainer.Types)
+local updateItemValue = require "@utility/updateItemValue"
 
-local updateItemValue = require(pluginContainer.Utility.updateItemValue)
+local Fusion = require "@packages/Fusion"
+local t = require "@packages/t"
 
-local Fusion = require(pluginContainer.Packages.Fusion)
-local t = require(pluginContainer.Packages.t)
-
-local ElementGroup = require(pluginContainer.Components.ElementGroup)
-local Label = require(pluginContainer.Components.Label)
-local TextEntry = require(pluginContainer.Components.TextEntry)
+local ElementGroup = require "@components/ElementGroup"
+local Label = require "@components/Label"
+local TextEntry = require "@components/TextEntry"
 
 local Children = Fusion.Children
 local peek = Fusion.peek

@@ -1,6 +1,4 @@
-local pluginContainer = script.Parent.Parent.Parent
-
-local Fusion = require(pluginContainer.Packages.Fusion)
+local Fusion = require "@packages/Fusion"
 
 local peek = Fusion.peek
 local observe = Fusion.observe

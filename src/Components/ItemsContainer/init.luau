@@ -1,15 +1,14 @@
-local pluginContainer = script.Parent.Parent
+local Types = require "@plugin/Types"
 
-local Types = require(pluginContainer.Types)
+local Theme = require "@utility/Theme"
+local merge = require "@utility/merge"
 
-local Theme = require(pluginContainer.Utility.Theme)
-local merge = require(pluginContainer.Utility.merge)
+local Fusion = require "@packages/Fusion"
 
-local Fusion = require(pluginContainer.Packages.Fusion)
+local Item = require "@self/Item"
+local RoundBorder = require "@components/RoundBorder"
+
 local Children = Fusion.Children
-
-local Item = require(script.Item)
-local RoundBorder = require(pluginContainer.Components.RoundBorder)
 
 local function ItemsContainer(
 	scope: Fusion.Scope,

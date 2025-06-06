@@ -1,13 +1,11 @@
-local pluginContainer = script.Parent.Parent
+local MacroManager = require "@utility/MacroManager"
+local merge = require "@utility/merge"
 
-local Pages = require(pluginContainer.Plugin.Pages)
+local Fusion = require "@packages/Fusion"
 
-local MacroManager = require(pluginContainer.Utility.MacroManager)
-local merge = require(pluginContainer.Utility.merge)
+local Page = require "@components/Page"
 
-local Fusion = require(pluginContainer.Packages.Fusion)
-
-local Page = require(pluginContainer.Components.Page)
+local Pages = require "./Pages"
 
 local Children = Fusion.Children
 

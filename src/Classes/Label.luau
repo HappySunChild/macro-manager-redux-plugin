@@ -1,10 +1,8 @@
-local pluginContainer = script.Parent.Parent
+local Theme = require "@utility/Theme"
+local Types = require "@plugin/Types"
 
-local Theme = require(pluginContainer.Utility.Theme)
-local Types = require(pluginContainer.Types)
-
-local Fusion = require(pluginContainer.Packages.Fusion)
-local t = require(pluginContainer.Packages.t)
+local Fusion = require "@packages/Fusion"
+local t = require "@packages/t"
 
 local Children = Fusion.Children
 

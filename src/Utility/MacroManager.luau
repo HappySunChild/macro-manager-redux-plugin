@@ -1,11 +1,9 @@
-local pluginContainer = script.Parent.Parent
+local ContainerManager = require "./ContainerManager"
+local Logging = require "./Logging"
 
-local ContainerManager = require(pluginContainer.Utility.ContainerManager)
-local Logging = require(pluginContainer.Utility.Logging)
+local PluginShared = require "@plugin/Shared"
 
-local PluginShared = require(pluginContainer.Plugin.Shared)
-
-local t = require(pluginContainer.Packages.t)
+local t = require "@packages/t"
 
 local MacroManager = {}
 MacroManager.CustomItemClasses = {}

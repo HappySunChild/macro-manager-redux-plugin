@@ -1,4 +1,4 @@
-local messages = require(script.Parent.messages)
+local messages = require "./messages"
 
 export type MessageId = string | keyof<typeof(messages)>
 export type Error = {

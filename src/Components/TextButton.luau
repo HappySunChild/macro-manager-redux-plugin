@@ -1,12 +1,11 @@
-local pluginContainer = script.Parent.Parent
+local Theme = require "@utility/Theme"
 
-local Theme = require(pluginContainer.Utility.Theme)
+local Fusion = require "@packages/Fusion"
 
-local Fusion = require(pluginContainer.Packages.Fusion)
+local RoundBorder = require "@components/RoundBorder"
+
 local Children = Fusion.Children
 local OnEvent, Out = Fusion.OnEvent, Fusion.Out
-
-local RoundBorder = require(pluginContainer.Components.RoundBorder)
 
 local function TextButton(
 	scope: Fusion.Scope,

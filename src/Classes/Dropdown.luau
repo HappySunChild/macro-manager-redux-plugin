@@ -1,18 +1,16 @@
-local pluginContainer = script.Parent.Parent
+local Types = require "@plugin/Types"
 
-local Types = require(pluginContainer.Types)
+local Theme = require "@utility/Theme"
+local updateItemValue = require "@utility/updateItemValue"
 
-local Theme = require(pluginContainer.Utility.Theme)
-local updateItemValue = require(pluginContainer.Utility.updateItemValue)
+local Assets = require "@plugin/Assets"
 
-local Assets = require(pluginContainer.Plugin.Assets)
+local Fusion = require "@packages/Fusion"
+local t = require "@packages/t"
 
-local Fusion = require(pluginContainer.Packages.Fusion)
-local t = require(pluginContainer.Packages.t)
-
-local Label = require(pluginContainer.Components.Label)
-local RoundBorder = require(pluginContainer.Components.RoundBorder)
-local TextButton = require(pluginContainer.Components.TextButton)
+local Label = require "@components/Label"
+local RoundBorder = require "@components/RoundBorder"
+local TextButton = require "@components/TextButton"
 
 local Children = Fusion.Children
 local OnEvent, Out = Fusion.OnEvent, Fusion.Out
@@ -203,8 +201,7 @@ local function DropdownMacroItem(
 		else macroItem.Value
 
 	local inner = scope:innerScope { Dropdown = Dropdown, Label = Label }
-	local displayText =
-		inner:Value(macroItem.Text or "Dropdown")
+	local displayText = inner:Value(macroItem.Text or "Dropdown")
 	local items = inner:Value(macroItem.Items)
 	local value = inner:Value(macroItem.Value)
 

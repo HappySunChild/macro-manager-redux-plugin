@@ -2,8 +2,12 @@ local Types = require "@plugin/Types"
 
 local Fusion = require "@packages/Fusion"
 
+local MacroManager = require "@utility/MacroManager"
+local Theme = require "@utility/Theme"
+
 local ElementGroup = require "@components/ElementGroup"
 local MacroContainer = require "@components/MacroContainer"
+local RoundBorder = require "@components/RoundBorder"
 local TextButton = require "@components/TextButton"
 
 local Children = Fusion.Children
@@ -22,21 +26,30 @@ local function MacrosPage(
 		MacroContainer = MacroContainer,
 		TextButton = TextButton,
 		ElementGroup = ElementGroup,
+		RoundBorder = RoundBorder,
 	}
 
 	return {
+		Padding = inner:New "UIPadding" {
+			PaddingTop = UDim.new(0, 2),
+			PaddingBottom = UDim.new(0, 2),
+			PaddingLeft = UDim.new(0, 2),
+			PaddingRight = UDim.new(0, 2),
+		},
 		Topbar = inner:New "Frame" {
 			Size = UDim2.new(1, 0, 0, TOPBAR_HEIGHT),
 
-			BackgroundTransparency = 1,
+			BackgroundColor3 = Theme.Color.Macro.Background,
 
 			[Children] = {
 				Padding = inner:New "UIPadding" {
-					PaddingTop = UDim.new(0, 4),
+					PaddingTop = UDim.new(0, 2),
 					PaddingBottom = UDim.new(0, 2),
-					PaddingLeft = UDim.new(0, 4),
-					PaddingRight = UDim.new(0, 4),
+					PaddingLeft = UDim.new(0, 2),
+					PaddingRight = UDim.new(0, 2),
 				},
+				RoundBorder = inner:RoundBorder { Thickness = 0 },
+
 				Elements = inner:ElementGroup {
 					Size = UDim2.fromScale(1, 1),
 
@@ -56,12 +69,14 @@ local function MacrosPage(
 							end,
 						},
 						RefreshButton = inner:TextButton {
-							Size = UDim2.new(0, 90, 1, 0),
+							Size = UDim2.new(0, 60, 1, 0),
 
 							Text = "Refresh",
 							TextSize = 16,
 
-							Callback = function() end,
+							Callback = function()
+								MacroManager:RefreshMacros()
+							end,
 						},
 					},
 				},
@@ -69,7 +84,7 @@ local function MacrosPage(
 		},
 		Container = inner:New "Frame" {
 			Size = UDim2.new(1, 0, 1, -TOPBAR_HEIGHT),
-			Position = UDim2.new(0, 0, 0, TOPBAR_HEIGHT),
+			Position = UDim2.new(0, 0, 0, TOPBAR_HEIGHT + 4),
 
 			BackgroundTransparency = 1,
 

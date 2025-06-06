@@ -1,13 +1,12 @@
-local pluginContainer = script.Parent.Parent
+local Theme = require "@utility/Theme"
+local Types = require "@plugin/Types"
 
-local Theme = require(pluginContainer.Utility.Theme)
-local Types = require(pluginContainer.Types)
+local Fusion = require "@packages/Fusion"
 
-local Fusion = require(pluginContainer.Packages.Fusion)
+local Macro = require "@self/Macro"
+local RoundBorder = require "@components/RoundBorder"
+
 local Children = Fusion.Children
-
-local Macro = require(script.Macro)
-local RoundBorder = require(pluginContainer.Components.RoundBorder)
 
 local function MacroContainer(
 	scope: Fusion.Scope,
@@ -26,12 +25,6 @@ local function MacroContainer(
 		ScrollBarThickness = 0,
 
 		[Children] = {
-			Padding = inner:New "UIPadding" {
-				PaddingLeft = UDim.new(0, 2),
-				PaddingRight = UDim.new(0, 2),
-				PaddingTop = UDim.new(0, 2),
-				PaddingBottom = UDim.new(0, 2),
-			},
 			Layout = inner:New "UIListLayout" {
 				Padding = UDim.new(0, 4),
 				SortOrder = Enum.SortOrder.LayoutOrder,

@@ -1,11 +1,9 @@
-local pluginContainer = script.Parent.Parent
+local Types = require "@plugin/Types"
 
-local Types = require(pluginContainer.Types)
+local Fusion = require "@packages/Fusion"
+local t = require "@packages/t"
 
-local Fusion = require(pluginContainer.Packages.Fusion)
-local t = require(pluginContainer.Packages.t)
-
-local TextButton = require(pluginContainer.Components.TextButton)
+local TextButton = require "@components/TextButton"
 
 local Children = Fusion.Children
 
@@ -52,11 +50,13 @@ local function ButtonMacroItem(scope: Fusion.Scope, macroItem: ButtonMacroItem)
 				Text = displayText,
 				TextSize = 18,
 
-				Callback = if macroItem.Activate
-					then function()
-						macroItem:Activate()
+				Callback = function()
+					if not macroItem.Activate then
+						return
 					end
-					else nil,
+
+					macroItem:Activate()
+				end,
 			},
 		},
 	}

@@ -1,5 +1,5 @@
-local formatError = require(script.formatError)
-local parseError = require(script.parseError)
+local formatError = require "@self/formatError"
+local parseError = require "@self/parseError"
 
 local Logging = {
 	format = formatError,
