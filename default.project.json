@@ -10,6 +10,14 @@
 				"MacroRedux": {
 					"$path": "src"
 				}
+			},
+			"MACRO_PLUGIN": {
+				"$ignoreUnknownInstances": true,
+				"$className": "Folder",
+				"Macros": {
+					"$ignoreUnknownInstances": true,
+					"$path": "scripts"
+				}
 			}
 		}
 	}
