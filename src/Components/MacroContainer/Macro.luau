@@ -104,9 +104,9 @@ local function Macro(
 	local name = props.Module.Name
 	local displayName = name:gsub("(%l)([%u%d])", "%1 %2")
 
-	local macro: Types.Macro = {}
+	local macro: Types.Macro = {} :: any
 	local reqOk, reqErr = pcall(function()
-		macro = require(props.Module) :: unknown
+		macro = require(props.Module) :: any
 	end)
 
 	if not reqOk then
@@ -128,7 +128,7 @@ local function Macro(
 		TextButton = TextButton,
 	}
 
-	if macro.Setup then
+	if macro.Setup ~= nil then
 		xpcall(macro.Setup, function(err)
 			Logging.warn("macroMethodError", Logging.parse(err), "Setup", name)
 		end, macro, PluginShared.Plugin)
@@ -155,13 +155,13 @@ local function Macro(
 		end),
 	}
 
-	if macro.Init then
+	if macro.Init ~= nil then
 		xpcall(macro.Init, function(err)
 			Logging.warn("macroMethodError", Logging.parse(err), "Init", name)
 		end, macro, PluginShared.Plugin)
 	end
 
-	if macro.Cleanup then
+	if macro.Cleanup ~= nil then
 		table.insert(inner, function()
 			xpcall(macro.Cleanup, function(err)
 				Logging.warn(

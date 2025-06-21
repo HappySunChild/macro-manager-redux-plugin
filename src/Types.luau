@@ -8,6 +8,7 @@ export type Macro = {
 	Cleanup: (Macro, Plugin) -> (),
 
 	SetVisible: (Macro, visible: boolean) -> (),
+	SetMinimized: (Macro, minimized: boolean) -> (),
 }
 
 export type MacroItem = {
@@ -19,8 +20,6 @@ export type MacroItem = {
 	SectionDepth: number?,
 
 	SetVisible: (MacroItem, visible: boolean) -> (),
-
-	[string]: unknown,
 }
 
 export type ValueMacroItem<V> = MacroItem & {

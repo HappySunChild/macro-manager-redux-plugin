@@ -29,7 +29,7 @@ function ContainerManager:SetupContainer()
 	local container =
 		ServerStorage:FindFirstChild(ContainerManager.ContainerName)
 
-	if not container then
+	if container == nil then
 		container = Instance.new "Folder"
 		container.Name = ContainerManager.ContainerName
 		container.Parent = ServerStorage
@@ -55,7 +55,7 @@ function ContainerManager:SetupContainer()
 	-- but that's just the way it's going to have to be since I can't really think of any other ways.
 
 	for _, name in REQUIRED_SUBFOLDERS do
-		if not container:FindFirstChild(name) then
+		if container:FindFirstChild(name) == nil then
 			local subFolder = Instance.new "Folder"
 			subFolder.Name = name
 			subFolder.Parent = container
@@ -78,7 +78,7 @@ function ContainerManager:CreateTemporaryContainer()
 		ContainerManager:SetupContainer()
 	end
 
-	local temporary = current:Clone()
+	local temporary = (current :: Instance):Clone()
 	temporary.Archivable = false
 	temporary.Name ..= ".tmp"
 	temporary.Parent = ServerStorage
