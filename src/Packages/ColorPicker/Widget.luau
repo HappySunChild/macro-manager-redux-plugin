@@ -1,12 +1,11 @@
-local pluginContainer = script.Parent.Parent.Parent
+local Fusion = require "@packages/Fusion"
 
-local Fusion = require(pluginContainer.Packages.Fusion)
+local ElementGroup = require "@components/ElementGroup"
 
-local Button = require(script.Parent.Button)
-local ElementGroup = require(pluginContainer.Components.ElementGroup)
-local Entry = require(script.Parent.Entry)
-local HueSaturationPicker = require(script.Parent.HueSaturationPicker)
-local ValuePicker = require(script.Parent.ValuePicker)
+local Button = require "./Button"
+local Entry = require "./Entry"
+local HueSaturationPicker = require "./HueSaturationPicker"
+local ValuePicker = require "./ValuePicker"
 
 local Children = Fusion.Children
 

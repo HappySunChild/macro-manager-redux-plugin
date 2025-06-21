@@ -2,15 +2,13 @@
 -- bump this post RIGHT NOW!
 -- https://devforum.roblox.com/t/allow-plugins-to-use-color-picker/63257/
 
-local pluginContainer = script.Parent.Parent
+local Fusion = require "@packages/Fusion"
+local t = require "@packages/t"
 
-local Fusion = require(pluginContainer.Packages.Fusion)
-local t = require(pluginContainer.Packages.t)
-
-local PluginShared = require(pluginContainer.Shared)
+local PluginShared = require "@plugin/Shared"
 local scope = PluginShared.Scope
 
-local Widget = require(script.Widget)
+local Widget = require "@self/Widget"
 
 local peek = Fusion.peek
 

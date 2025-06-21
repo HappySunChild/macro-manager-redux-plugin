@@ -6,12 +6,15 @@ local Assets = {
 
 		DefaultMacroIcon = "rbxassetid://95866080",
 
-		ColorPickerHueSat = "rbxassetid://117908944470249",
-		ColorPickerVal = "rbxassetid://138329933807601",
-		ColorPickerArrow = "rbxassetid://79353367608217",
-		ColorPickerCrosshair = "rbxassetid://75007077378600",
-
-		DropdownArrow = "rbxassetid://4918373417",
+		ColorPicker = {
+			HueSat = "rbxassetid://117908944470249",
+			Crosshair = "rbxassetid://75007077378600",
+			Val = "rbxassetid://138329933807601",
+			Arrow = "rbxassetid://79353367608217",
+		},
+		Dropdown = {
+			Arrow = "rbxassetid://4918373417",
+		},
 	},
 }
 

@@ -1,8 +1,5 @@
-local pluginContainer = script.Parent.Parent.Parent
-
-local Assets = require(pluginContainer.Assets)
-
-local Fusion = require(pluginContainer.Packages.Fusion)
+local Assets = require "@plugin/Assets"
+local Fusion = require "@packages/Fusion"
 
 local OnEvent, Out = Fusion.OnEvent, Fusion.Out
 local Children = Fusion.Children
@@ -35,7 +32,7 @@ local function HueSaturationPicker(
 
 		ClipsDescendants = true,
 
-		Image = Assets.Images.ColorPickerHueSat,
+		Image = Assets.Images.ColorPicker.HueSat,
 
 		[Out "AbsoluteSize"] = absoluteSize,
 		[Out "AbsolutePosition"] = absolutePosition,
@@ -84,7 +81,7 @@ local function HueSaturationPicker(
 
 				BackgroundTransparency = 1,
 
-				Image = Assets.Images.ColorPickerCrosshair,
+				Image = Assets.Images.ColorPicker.Crosshair,
 				ResampleMode = Enum.ResamplerMode.Pixelated,
 			},
 		},

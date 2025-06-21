@@ -1,8 +1,5 @@
-local pluginContainer = script.Parent.Parent.Parent
-
-local Assets = require(pluginContainer.Assets)
-
-local Fusion = require(pluginContainer.Packages.Fusion)
+local Assets = require "@plugin/Assets"
+local Fusion = require "@packages/Fusion"
 
 local OnEvent, Out = Fusion.OnEvent, Fusion.Out
 local Children = Fusion.Children
@@ -33,7 +30,7 @@ local function ValuePicker(
 		Size = props.Size,
 		Position = props.Position,
 
-		Image = Assets.Images.ColorPickerVal,
+		Image = Assets.Images.ColorPicker.Val,
 
 		[Out "AbsoluteSize"] = absoluteSize,
 		[Out "AbsolutePosition"] = absolutePosition,
@@ -82,7 +79,7 @@ local function ValuePicker(
 
 				BackgroundTransparency = 1,
 
-				Image = Assets.Images.ColorPickerArrow,
+				Image = Assets.Images.ColorPicker.Arrow,
 				ResampleMode = Enum.ResamplerMode.Pixelated,
 			},
 		},
