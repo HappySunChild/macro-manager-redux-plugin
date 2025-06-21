@@ -10,6 +10,7 @@ local t = require "@packages/t"
 
 local Label = require "@components/Label"
 local RoundBorder = require "@components/RoundBorder"
+local ScrollingFrame = require "@components/ScrollingFrame"
 local TextButton = require "@components/TextButton"
 
 local Children = Fusion.Children
@@ -94,6 +95,7 @@ local function Dropdown(
 		TextButton = TextButton,
 		ItemButton = ItemButton,
 		RoundBorder = RoundBorder,
+		ScrollingFrame = ScrollingFrame,
 	}
 
 	local open = inner:Value(false)
@@ -140,7 +142,7 @@ local function Dropdown(
 
 				BackgroundTransparency = 1,
 
-				Image = Assets.Images.DropdownArrow,
+				Image = Assets.Images.Dropdown.Arrow,
 				ImageColor3 = Theme.Color.Text,
 
 				Rotation = inner:Tween(
@@ -150,7 +152,7 @@ local function Dropdown(
 					Theme.TweenInfo.DropdownRotation
 				),
 			},
-			Items = inner:New "ScrollingFrame" {
+			Items = inner:ScrollingFrame {
 				Position = UDim2.new(0, 0, 1, 3),
 				Size = inner:Computed(function(use: Fusion.Use)
 					return UDim2.new(
@@ -166,8 +168,6 @@ local function Dropdown(
 				AutomaticCanvasSize = Enum.AutomaticSize.Y,
 
 				BackgroundColor3 = Theme.Color.Button.Background,
-				ScrollBarThickness = 2,
-				ScrollBarImageColor3 = Theme.Color.Text,
 
 				Visible = open,
 
@@ -178,6 +178,7 @@ local function Dropdown(
 					Padding = inner:New "UIPadding" {
 						PaddingTop = UDim.new(0, 4),
 						PaddingBottom = UDim.new(0, 4),
+						PaddingRight = UDim.new(0, 4),
 					},
 					Layout = inner:New "UIListLayout" {
 						FillDirection = Enum.FillDirection.Vertical,

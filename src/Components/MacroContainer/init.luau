@@ -5,6 +5,7 @@ local Fusion = require "@packages/Fusion"
 
 local Macro = require "@self/Macro"
 local RoundBorder = require "@components/RoundBorder"
+local ScrollingFrame = require "@components/ScrollingFrame"
 
 local Children = Fusion.Children
 
@@ -14,9 +15,13 @@ local function MacroContainer(
 		Macros: Fusion.UsedAs<{ Types.Macro }>,
 	}
 )
-	local inner = scope:innerScope { Macro = Macro, RoundBorder = RoundBorder }
+	local inner = scope:innerScope {
+		Macro = Macro,
+		RoundBorder = RoundBorder,
+		ScrollingFrame = ScrollingFrame,
+	}
 
-	return inner:New "ScrollingFrame" {
+	return inner:ScrollingFrame {
 		Size = UDim2.fromScale(1, 1),
 		CanvasSize = UDim2.fromScale(0, 0),
 		AutomaticCanvasSize = Enum.AutomaticSize.Y,
