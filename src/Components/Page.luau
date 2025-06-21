@@ -1,6 +1,5 @@
-local Theme = require "@utility/Theme"
-
 local Fusion = require "@packages/Fusion"
+local Theme = require "@utility/Theme"
 
 local Children = Fusion.Children
 

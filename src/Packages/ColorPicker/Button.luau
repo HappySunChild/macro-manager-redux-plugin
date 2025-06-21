@@ -1,8 +1,5 @@
-local pluginContainer = script.Parent.Parent.Parent
-
-local Theme = require(pluginContainer.Utility.Theme)
-
-local Fusion = require(pluginContainer.Packages.Fusion)
+local Fusion = require "@packages/Fusion"
+local Theme = require "@utility/Theme"
 
 local OnEvent, Out = Fusion.OnEvent, Fusion.Out
 
