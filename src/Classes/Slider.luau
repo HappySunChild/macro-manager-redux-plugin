@@ -40,7 +40,7 @@ local function SliderTick(
 		Size = UDim2.new(0, 1, 1, 0),
 		Position = UDim2.fromScale(props.Alpha, 0),
 
-		BackgroundColor3 = Theme.Color.SliderBorder,
+		BackgroundColor3 = Theme.Color.Slider.Border,
 	}
 end
 
