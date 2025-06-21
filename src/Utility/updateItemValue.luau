@@ -27,9 +27,7 @@ local function updateItemValue(
 		end
 
 		macroItem[_RECURSION_DEPTH] = currentDepth + 1
-
 		macroItem:Changed(newValue, oldValue)
-
 		macroItem[_RECURSION_DEPTH] = nil
 	end
 end
