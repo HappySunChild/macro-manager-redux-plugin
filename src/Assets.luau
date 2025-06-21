@@ -15,6 +15,11 @@ local Assets = {
 		Dropdown = {
 			Arrow = "rbxassetid://4918373417",
 		},
+		ScrollBar = {
+			Top = "rbxassetid://6017290134",
+			Middle = "rbxassetid://6017289904",
+			Bottom = "rbxassetid://6017289712",
+		},
 	},
 }
 
