@@ -2,28 +2,30 @@ local Fusion = require "@packages/Fusion"
 
 local Children = Fusion.Children
 
+type UsedAs<V> = Fusion.UsedAs<V>
+
 local function ElementGroup(
 	scope: Fusion.Scope,
 	props: {
-		AnchorPoint: Fusion.UsedAs<Vector2>,
-		Position: Fusion.UsedAs<UDim2>?,
-		Size: Fusion.UsedAs<UDim2>?,
-		AutomaticSize: Fusion.UsedAs<Enum.AutomaticSize>?,
+		AnchorPoint: UsedAs<Vector2>,
+		Position: UsedAs<UDim2>?,
+		Size: UsedAs<UDim2>?,
+		AutomaticSize: UsedAs<Enum.AutomaticSize>?,
 
-		Padding: Fusion.UsedAs<UDim>?,
-		FillDirection: Fusion.UsedAs<Enum.FillDirection>?,
+		Padding: UsedAs<UDim>?,
+		FillDirection: UsedAs<Enum.FillDirection>?,
 
-		HorizontalAlignment: Fusion.UsedAs<Enum.HorizontalAlignment>?,
-		VerticalAlignment: Fusion.UsedAs<Enum.VerticalAlignment>?,
-		FlexAlignment: Fusion.UsedAs<Enum.UIFlexAlignment>?,
+		HorizontalAlignment: UsedAs<Enum.HorizontalAlignment>?,
+		VerticalAlignment: UsedAs<Enum.VerticalAlignment>?,
+		FlexAlignment: UsedAs<Enum.UIFlexAlignment>?,
 
 		Render: ((
 			scope: Fusion.Scope,
 			index: number,
 			label: string
 		) -> Fusion.Child)?,
-		Labels: Fusion.UsedAs<{ string }>?,
-		Refs: { Fusion.Value<Fusion.Child> }?,
+		Labels: UsedAs<{ string }>?,
+		Refs: { Fusion.Value<Instance> }?,
 
 		[Fusion.SpecialKey<"Children">]: { Fusion.Child }?,
 	}
