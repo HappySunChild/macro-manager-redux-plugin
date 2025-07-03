@@ -1,4 +1,6 @@
 --!nocheck
+-- O Nation, You Bleed From Glorious Bootstrapping, 2025
+
 local ServerStorage = game:GetService "ServerStorage"
 
 local pluginContainer = ServerStorage.Plugins.MacroRedux
