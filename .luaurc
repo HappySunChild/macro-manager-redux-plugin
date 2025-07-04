@@ -1,9 +1,0 @@
-{
-	"aliases": {
-		"plugin": "src",
-		"components": "src/Components",
-		"packages": "src/Packages",
-		"utility": "src/Utility"
-	},
-	"languageMode": "nonstrict"
-}

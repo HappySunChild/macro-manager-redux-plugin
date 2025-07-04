@@ -1,0 +1,9 @@
+{
+	"aliases": {
+		"plugin": ".",
+		"components": "Components",
+		"packages": "Packages",
+		"utility": "Utility"
+	},
+	"languageMode": "nonstrict"
+}
