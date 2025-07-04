@@ -1,7 +1,6 @@
 local Fusion = require "@packages/Fusion"
 
 local peek = Fusion.peek
-local observe = Fusion.observe
 
 local function TheRockWithPancakes(
 	scope: Fusion.Scope,
@@ -12,7 +11,7 @@ local function TheRockWithPancakes(
 )
 	local navigate = props.navigate
 
-	observe(props.active, function()
+	scope:Observer(props.active):onChange(function()
 		if peek(props.active) then
 			task.delay(5, navigate, "Macros")
 		end
