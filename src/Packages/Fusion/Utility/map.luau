@@ -1,9 +1,9 @@
-local package = script.Parent.Parent
+local Types = require "../Types"
 
-local Types = require(package.Types)
+local Computed = require "../State/Computed"
+local castToState = require "../State/castToState"
 
-local Computed = require(package.State.Computed)
-local castToState = require(package.State.castToState)
+-- TODO: maybe add support for mapping multiple values?
 
 local function map<V, O>(value: Types.UsedAs<V>, callback: (V) -> O?): Types.Computed<O> | O
 	if not castToState(value) then

@@ -1,5 +1,5 @@
 --!strict
-local sRGB = require(script.Parent.sRGB)
+local sRGB = require("./sRGB")
 
 local Oklab = {}
 

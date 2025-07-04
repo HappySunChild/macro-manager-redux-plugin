@@ -1,20 +1,17 @@
-local package = script.Parent.Parent.Parent
+local Types = require "../../Types"
 
-local Types = require(package.Types)
+local xtypeof = require "../../Utility/xtypeof"
 
-local xtypeof = require(package.Utility.xtypeof)
+local SpecialKey = require "./SpecialKey"
 
 local keyCache = {}
 
-local function Out(property: string): Types.SpecialKey
+local function Out(property: string): Types.SpecialKey<"Out">
 	local key = keyCache[property]
 
 	if not key then
-		key = table.freeze {
-			type = "Out",
-			kind = "key",
+		key = SpecialKey "Out" {
 			stage = "observer",
-
 			apply = function(
 				scope: Types.Scope,
 				applyTo: Instance,

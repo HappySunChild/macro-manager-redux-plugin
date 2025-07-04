@@ -1,8 +1,7 @@
-local package = script.Parent.Parent
+--!strict
+local Oklab = require "../Colour/Oklab"
 
-local Oklab = require(package.Colors.Oklab)
-
-local unpackMethods = {
+local UNPACK_METHODS = {
 	number = function(value: number)
 		return { value }
 	end,
@@ -20,6 +19,7 @@ local unpackMethods = {
 	end,
 	CFrame = function(value: CFrame)
 		local axis, angle = value:ToAxisAngle()
+
 		return { value.X, value.Y, value.Z, axis.X, axis.Y, axis.Z, angle }
 	end,
 	Color3 = function(value: Color3)
@@ -31,10 +31,10 @@ local unpackMethods = {
 
 local function unpackType(value: any)
 	local typeString = typeof(value)
-	local unpackMethod = unpackMethods[typeString]
+	local unpacker = UNPACK_METHODS[typeString]
 
-	if unpackMethod then
-		return unpackMethod(value)
+	if type(unpacker) == "function" then
+		return unpacker(value)
 	end
 
 	return {}

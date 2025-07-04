@@ -1,9 +1,7 @@
 --!strict
+local Types = require "../Types"
 
-local package = script.Parent.Parent
-
-local Types = require(package.Types)
-local deriveScope = require(package.Memory.deriveScope)
+local deriveScope = require "./deriveScope"
 
 local function innerScope<T>(
 	existing: Types.Scope<T>,

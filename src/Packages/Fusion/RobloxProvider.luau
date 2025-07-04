@@ -1,60 +1,60 @@
 local HttpService = game:GetService "HttpService"
 local RunService = game:GetService "RunService"
 
-local package = script.Parent
-
-local External = require(package.External)
-local Types = require(package.Types)
+local External = require "./External"
+local Types = require "./Types"
 
 local function performUpdateStep()
 	External.performUpdate(os.clock())
 end
 
-local RobloxProvider: Types.ExternalProvider = {}
-
-function RobloxProvider.doTaskImmediate(resume: (...any) -> (), ...)
-	task.spawn(resume, ...)
-end
-
-function RobloxProvider.doTaskDeferred(resume: (...any) -> (), ...)
-	task.defer(resume, ...)
-end
-
 local schedulerDisconnect
 
-function RobloxProvider.startScheduler()
-	if RunService:IsClient() then
-		local id = "FusionUpdateStep_" .. HttpService:GenerateGUID(false)
+local RobloxProvider: Types.ExternalProvider = table.freeze {
+	doTaskImmediate = function(resume: (...any) -> (), ...)
+		return task.spawn(resume, ...)
+	end,
+	doTaskDeferred = function(resume: (...any) -> (), ...)
+		return task.defer(resume, ...)
+	end,
+	cancelTask = function(thread: thread)
+		local success = pcall(task.cancel, thread)
 
-		RunService:BindToRenderStep(
-			id,
-			Enum.RenderPriority.First.Value,
-			performUpdateStep
-		)
+		return success
+	end,
 
-		schedulerDisconnect = function()
-			RunService:UnbindFromRenderStep(id)
+	startScheduler = function()
+		if RunService:IsClient() then
+			local id = "FusionUpdateStep_" .. HttpService:GenerateGUID(false)
+
+			RunService:BindToRenderStep(
+				id,
+				Enum.RenderPriority.First.Value,
+				performUpdateStep
+			)
+
+			schedulerDisconnect = function()
+				RunService:UnbindFromRenderStep(id)
+			end
+		else
+			local connection = RunService.Heartbeat:Connect(performUpdateStep)
+
+			schedulerDisconnect = function()
+				connection:Disconnect()
+			end
 		end
-	else
-		local connection = RunService.Heartbeat:Connect(performUpdateStep)
-
-		schedulerDisconnect = function()
-			connection:Disconnect()
+	end,
+	stopScheduler = function()
+		if schedulerDisconnect ~= nil then
+			schedulerDisconnect()
+			schedulerDisconnect = nil
 		end
-	end
-end
+	end,
 
-function RobloxProvider.stopScheduler()
-	if schedulerDisconnect ~= nil then
-		schedulerDisconnect()
-		schedulerDisconnect = nil
-	end
-end
-
-function RobloxProvider.logErrorNonFatal(message: string)
-	task.spawn(error, message, 0)
-end
-
-RobloxProvider.logWarn = warn
+	logErrorNonFatal = function(message: string)
+		task.spawn(error, message, 0)
+	end,
+	logWarn = warn,
+}
 
 return RobloxProvider

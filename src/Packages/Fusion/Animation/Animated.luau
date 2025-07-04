@@ -1,15 +1,14 @@
-local package = script.Parent.Parent
+--!strict
+local External = require("../External")
+local Types = require("../Types")
 
-local External = require(package.External)
-local Types = require(package.Types)
+local Timer = require("./Timer")
 
-local Timer = require(package.Animation.Timer)
+local depend = require("../Graph/depend")
+local evaluate = require("../Graph/evaluate")
 
-local depend = require(package.Graph.depend)
-local evaluate = require(package.Graph.evaluate)
-
-local castToState = require(package.State.castToState)
-local peek = require(package.State.peek)
+local castToState = require("../State/castToState")
+local peek = require("../State/peek")
 
 type Self<V> = Types.Animated<V> & {
 	_goal: Types.UsedAs<V>,
@@ -37,7 +36,7 @@ local function Animated<V>(
 	mover: Types.UsedAs<Types.AnimatedMover<V>>
 ): Types.Animated<V>
 	local timer = Timer(scope)
-	local newAnimated = setmetatable({
+	local newAnimated: Self<V> = setmetatable({
 		scope = scope,
 		createdAt = os.clock(),
 		_internalValue = peek(goal),
@@ -54,7 +53,7 @@ local function Animated<V>(
 		_activeStepper = nil,
 
 		_timer = timer,
-	}, METATABLE)
+	}, METATABLE) :: any
 
 	evaluate(newAnimated, true)
 
@@ -72,10 +71,10 @@ function class._evaluate<V>(self: Self<V>)
 	local timer = self._timer
 	
 	local nextGoal = peek(goal)
-	local nextMover = peek(mover)
+	local nextMover = peek(mover) :: Types.AnimatedMover<V>
 
 	if castToState(mover) then
-		depend(self, mover)
+		depend(self, mover :: any)
 	end
 
 	depend(self, timer)

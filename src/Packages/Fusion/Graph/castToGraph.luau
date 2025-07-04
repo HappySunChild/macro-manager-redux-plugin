@@ -1,4 +1,4 @@
-local function castToGraph(target)
+local function castToGraph(target: unknown)
 	if
 		typeof(target) == "table"
 		and target.createdAt ~= nil

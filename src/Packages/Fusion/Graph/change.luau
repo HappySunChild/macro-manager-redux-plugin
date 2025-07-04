@@ -1,12 +1,10 @@
-local package = script.Parent.Parent
+local External = require "../External"
+local Types = require "../Types"
 
-local External = require(package.External)
-local Types = require(package.Types)
+local castToGraph = require "../Graph/castToGraph"
+local evaluate = require "../Graph/evaluate"
 
-local castToGraph = require(package.Graph.castToGraph)
-local evaluate = require(package.Graph.evaluate)
-
-local xkindof = require(package.Utility.xkindof)
+local xkindof = require "../Utility/xkindof"
 
 local function collectObservers(
 	target: Types.GraphObject,

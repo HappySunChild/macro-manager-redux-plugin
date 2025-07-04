@@ -1,16 +1,15 @@
-local package = script.Parent.Parent
+local External = require "../External"
+local Types = require "../Types"
 
-local External = require(package.External)
-local Types = require(package.Types)
+local doCleanup = require "../Memory/doCleanup"
 
-local doCleanup = require(package.Memory.doCleanup)
+local Computed = require "./Computed"
+local Value = require "./Value"
 
-local Computed = require(package.State.Computed)
-local For = require(package.State.For)
-local ForTypes = require(package.State.For.ForTypes)
-local Value = require(package.State.Value)
+local For = require "./For"
+local ForTypes = require "./For/ForTypes"
 
-local parseError = require(package.Logging.parseError)
+local parseError = require "../Logging/parseError"
 
 local SUB_OBJECT_META = {
 	__index = {

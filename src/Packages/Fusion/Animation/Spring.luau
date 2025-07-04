@@ -1,13 +1,11 @@
-local package = script.Parent.Parent
+local Types = require "../Types"
 
-local Types = require(package.Types)
+local Animated = require "./Animated"
+local packType = require "./packType"
+local springCoefficients = require "./springCoefficients"
+local unpackType = require "./unpackType"
 
-local Animated = require(package.Animation.Animated)
-local packType = require(package.Animation.packType)
-local springCoefficients = require(package.Animation.springCoefficients)
-local unpackType = require(package.Animation.unpackType)
-
-local peek = require(package.State.peek)
+local peek = require "../State/peek"
 
 local EPSILON = 0.0001
 
@@ -15,8 +13,8 @@ local function springMover(speed: Types.UsedAs<number>, damping: Types.UsedAs<nu
 	local startP = {}
 	local startV = {}
 
-	local latestP = {}
-	local latestV = {}
+	local currentP = {}
+	local currentV = {}
 
 	local targetP = {}
 	local numSprings = 0
@@ -31,13 +29,13 @@ local function springMover(speed: Types.UsedAs<number>, damping: Types.UsedAs<nu
 
 		if discontinuous then
 			startP = table.clone(targetP)
-			latestP = table.clone(targetP)
+			currentP = table.clone(targetP)
 
 			startV = table.create(numSprings, 0)
-			latestV = table.create(numSprings, 0)
+			currentV = table.create(numSprings, 0)
 		else
-			startP = table.clone(latestP)
-			startV = table.clone(latestV)
+			startP = table.clone(currentP)
+			startV = table.clone(currentV)
 		end
 
 		activeType = typeof(target)
@@ -71,18 +69,18 @@ local function springMover(speed: Types.UsedAs<number>, damping: Types.UsedAs<nu
 
 					local newP = latestD + targetP
 
-					latestP[index] = newP
-					latestV[index] = newV
+					currentP[index] = newP
+					currentV[index] = newV
 				end
 
 				if not isMoving then
 					for index = 1, numSprings do
-						latestP[index] = targetP[index]
+						currentP[index] = targetP[index]
 					end
 				end
 
 				shouldSleep = not isMoving
-				newValue = packType(activeType, latestP)
+				newValue = packType(activeType, currentP)
 			end
 
 			return shouldSleep, newValue

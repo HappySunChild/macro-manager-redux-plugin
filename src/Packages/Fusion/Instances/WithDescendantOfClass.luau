@@ -1,11 +1,9 @@
-local package = script.Parent.Parent
+local External = require "../External"
+local Types = require "../Types"
 
-local External = require(package.External)
-local Types = require(package.Types)
+local applyProperties = require "./applyProperties"
 
-local applyProperties = require(package.Instance.applyProperties)
-
-local function DescendantOfClass(scope: Types.Scope, className: string)
+local function WithDescendantOfClass(scope: Types.Scope, className: string)
 	return function(props: Types.Properties)
 		return function(parent: Instance)
 			local child = parent:FindFirstChildWhichIsA(className, true)
@@ -28,4 +26,4 @@ local function DescendantOfClass(scope: Types.Scope, className: string)
 	end
 end
 
-return DescendantOfClass
+return WithDescendantOfClass

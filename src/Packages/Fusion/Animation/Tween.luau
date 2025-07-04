@@ -1,19 +1,17 @@
-local package = script.Parent.Parent
+local Types = require "../Types"
 
-local Types = require(package.Types)
+local Animated = require "./Animated"
+local getTweenAlpha = require "./getTweenAlpha"
+local getTweenDuration = require "./getTweenDuration"
+local lerp = require "./lerp"
 
-local Animated = require(package.Animation.Animated)
-local getTweenAlpha = require(package.Animation.getTweenAlpha)
-local getTweenDuration = require(package.Animation.getTweenDuration)
-local lerp = require(package.Animation.lerp)
-
-local peek = require(package.State.peek)
+local peek = require "../State/peek"
 
 local function tweenMover(info: Types.UsedAs<TweenInfo>)
 	return function(start: unknown, target: unknown)
 		local activeInfo = peek(info)
 		local duration = getTweenDuration(activeInfo)
-		
+
 		-- tween stepper
 		return function(elapsed: number)
 			local alpha = getTweenAlpha(activeInfo, elapsed)

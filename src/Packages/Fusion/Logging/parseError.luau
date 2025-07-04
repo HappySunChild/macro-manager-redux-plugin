@@ -1,3 +1,4 @@
+--!strict
 local function parseError(message: string)
 	return {
 		type = "Error",

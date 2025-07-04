@@ -1,20 +1,18 @@
-local package = script.Parent.Parent
+local Types = require "../Types"
 
-local Types = require(package.Types)
+local peek = require "../State/peek"
 
-local peek = require(package.State.peek)
+local change = require "../Graph/change"
+local depend = require "../Graph/depend"
 
-local change = require(package.Graph.change)
-local depend = require(package.Graph.depend)
+local destructor = require "../Memory/destructor"
 
-local destructor = require(package.Memory.destructor)
-
-local ExternalTime = require(package.Animation.ExternalTime)
+local ExternalTime = require "./ExternalTime"
 
 type Self = Types.Timer & {
 	_paused: boolean,
 	_start: number,
-	_timer: Types.StateObject<number>,
+	_timer: ExternalTime.ExternalTime,
 }
 
 local class = {
@@ -39,9 +37,9 @@ local function Timer(scope: Types.Scope): Types.Timer
 		_using = {},
 		_users = {},
 		_timer = externalTime,
-	}, METATABLE) :: any
+	}, METATABLE) :: Self
 
-	table.insert(scope, { destructor(newTimer) })
+	table.insert(scope, destructor(newTimer))
 
 	depend(newTimer, externalTime)
 
@@ -53,6 +51,7 @@ function class.unpause(self: Self)
 		return
 	end
 
+	self._timer:setActive(true)
 	self._paused = false
 
 	change(self)
@@ -63,6 +62,7 @@ function class.pause(self: Self)
 		return
 	end
 
+	self._timer:setActive(false)
 	self._paused = true
 
 	change(self)

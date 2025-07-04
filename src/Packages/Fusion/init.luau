@@ -7,8 +7,8 @@ GitHub Repository: https://github.com/HappySunChild/ConFusion
 Fusion: https://github.com/dphfox/Fusion
 --]]
 
-local External = require(script.External)
-local Types = require(script.Types)
+local External = require "@self/External"
+local Types = require "@self/Types"
 
 type Fusion = Types.Fusion
 
@@ -30,70 +30,62 @@ export type Observer = Types.Observer
 
 export type Child = Types.Child
 
-local Animation = script.Animation
-local Graph = script.Graph
-local State = script.State
-local Memory = script.Memory
-local Utility = script.Utility
-
-local Instance = script.Instance
-local Keys = Instance.Keys
-
 local Fusion = table.freeze {
 	-- Memory
-	scoped = require(Memory.scoped),
-	deriveScope = require(Memory.deriveScope),
-	innerScope = require(Memory.innerScope),
-	doCleanup = require(Memory.doCleanup),
+	scoped = require "@self/Memory/scoped",
+	deriveScope = require "@self/Memory/deriveScope",
+	innerScope = require "@self/Memory/innerScope",
+	doCleanup = require "@self/Memory/doCleanup",
 
 	-- State
-	Eventual = require(State.Eventual),
-	Computed = require(State.Computed),
-	Value = require(State.Value),
-	Table = require(State.Table),
-	ForPairs = require(State.ForPairs),
-	ForKeys = require(State.ForKeys),
-	ForValues = require(State.ForValues),
+	Eventual = require "@self/State/Eventual",
+	Computed = require "@self/State/Computed",
+	Value = require "@self/State/Value",
+	Table = require "@self/State/Table",
+	ForPairs = require "@self/State/ForPairs",
+	ForKeys = require "@self/State/ForKeys",
+	ForValues = require "@self/State/ForValues",
+	peek = require "@self/State/peek",
 
-	peek = require(State.peek),
-	map = require(Utility.map),
+	map = require "@self/Utility/map",
+	flatten = require "@self/Utility/flatten",
 
-	observe = require(Graph.observe),
+	Observer = require "@self/Graph/Observer",
 
 	-- Animation
-	Timer = require(Animation.Timer),
-	Animated = require(Animation.Animated),
-	Tween = require(Animation.Tween),
-	Spring = require(Animation.Spring),
-	Delay = require(Animation.Delay),
+	Timer = require "@self/Animation/Timer",
+	Animated = require "@self/Animation/Animated",
+	Tween = require "@self/Animation/Tween",
+	Spring = require "@self/Animation/Spring",
+	Delay = require "@self/Animation/Delay",
 
 	-- Instance
-	New = require(Instance.New),
-	Hydrate = require(Instance.Hydrate),
-	Child = require(Instance.Child),
-	ChildOfClass = require(Instance.ChildOfClass),
-	Descendant = require(Instance.Descendant),
-	DescendantOfClass = require(Instance.DescendantOfClass),
+	New = require "@self/Instances/New",
+	Hydrate = require "@self/Instances/Hydrate",
+	WithChild = require "@self/Instances/WithChild",
+	WithChildOfClass = require "@self/Instances/WithChildOfClass",
+	WithDescendant = require "@self/Instances/WithDescendant",
+	WithDescendantOfClass = require "@self/Instances/WithDescendantOfClass",
 
 	-- Instance Keys
-	Children = require(Keys.Children),
-	Startup = require(Keys.Startup),
-	Removal = require(Keys.Removal),
-	Ref = require(Keys.Ref),
-	Apply = require(Keys.Apply),
-	Attribute = require(Keys.Attribute),
-	AttributeChange = require(Keys.AttributeChange),
-	AttributeOut = require(Keys.AttributeOut),
-	Tag = require(Keys.Tag),
-	Out = require(Keys.Out),
-	OnEvent = require(Keys.OnEvent),
-	OnChange = require(Keys.OnChange),
+	Children = require "@self/Instances/Keys/Children",
+	OnStartup = require "@self/Instances/Keys/OnStartup",
+	OnRemoval = require "@self/Instances/Keys/OnRemoval",
+	Ref = require "@self/Instances/Keys/Ref",
+	Passthrough = require "@self/Instances/Keys/Passthrough",
+	Attribute = require "@self/Instances/Keys/Attribute",
+	AttributeChange = require "@self/Instances/Keys/AttributeChange",
+	AttributeOut = require "@self/Instances/Keys/AttributeOut",
+	Tag = require "@self/Instances/Keys/Tag",
+	Out = require "@self/Instances/Keys/Out",
+	OnEvent = require "@self/Instances/Keys/OnEvent",
+	OnChange = require "@self/Instances/Keys/OnChange",
 
 	-- External
 	setProvider = External.setProvider,
 }
 
-local RobloxProvider = require(script.RobloxProvider)
+local RobloxProvider = require "@self/RobloxProvider"
 External.setProvider(RobloxProvider)
 
 return Fusion :: Fusion

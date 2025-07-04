@@ -1,11 +1,9 @@
-local package = script.Parent.Parent
+local External = require "../External"
+local Types = require "../Types"
 
-local External = require(package.External)
-local Types = require(package.Types)
+local Animated = require "./Animated"
 
-local Animated = require(package.Animation.Animated)
-
-local peek = require(package.State.peek)
+local peek = require "../State/peek"
 
 local function delayMover<V>(delay: Types.UsedAs<number>)
 	local current = nil

@@ -1,8 +1,5 @@
 --!strict
-
-local package = script.Parent.Parent
-
-local Types = require(package.Types)
+local Types = require "../Types"
 
 local active = {}
 

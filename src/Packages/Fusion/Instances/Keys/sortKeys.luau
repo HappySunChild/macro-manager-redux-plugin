@@ -1,19 +1,18 @@
-local package = script.Parent.Parent.Parent
+local External = require "../../External"
+local Types = require "../../Types"
 
-local External = require(package.External)
-local Types = require(package.Types)
-
-local stageOrder = table.freeze {
+local STAGE_ORDER = table.freeze {
 	"self",
 	"descendants",
 	"properties",
 	"ancestor",
 	"observer",
+	"last",
 }
 
 local function sortKeys(a: Types.SpecialKey, b: Types.SpecialKey)
-	local aIndex = table.find(stageOrder, a.stage)
-	local bIndex = table.find(stageOrder, b.stage)
+	local aIndex = table.find(STAGE_ORDER, a.stage)
+	local bIndex = table.find(STAGE_ORDER, b.stage)
 
 	if not aIndex then
 		External.logWarn(

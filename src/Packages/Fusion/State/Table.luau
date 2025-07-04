@@ -1,14 +1,13 @@
-local package = script.Parent.Parent
+--!strict
+local Types = require "../Types"
 
-local Types = require(package.Types)
+local peek = require "./peek"
 
-local peek = require(package.State.peek)
+local change = require "../Graph/change"
 
-local change = require(package.Graph.change)
+local destructor = require "../Memory/destructor"
 
-local destructor = require(package.Memory.destructor)
-
-local isSimilar = require(package.Utility.isSimilar)
+local isSimilar = require "../Utility/isSimilar"
 
 type Self<K, V> = Types.Table<K, V>
 
@@ -22,13 +21,13 @@ local class = {
 local METATABLE = table.freeze { __index = class }
 
 local function Table<K, V>(scope: Types.Scope, initialValue: { [K]: V }): Types.Table<K, V>
-	local newTable = setmetatable({
+	local newTable: Self<K, V> = setmetatable({
 		scope = scope,
 		createdAt = os.clock(),
 		_internalValue = initialValue,
 
 		_users = {},
-	}, METATABLE)
+	}, METATABLE) :: any
 
 	table.insert(scope, destructor(newTable))
 
@@ -49,7 +48,7 @@ function class.setKey<K, V>(self: Self<K, V>, key: any, newValue: any)
 end
 
 function class.getKey<K, V>(self: Self<K, V>, key: any)
-	local list = peek(self)
+	local list = peek(self) :: any
 
 	return list[key]
 end

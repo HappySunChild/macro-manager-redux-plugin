@@ -1,13 +1,11 @@
-local package = script.Parent.Parent
+--!strict
+local Types = require "../Types"
 
-local Types = require(package.Types)
-
-local nameOf = require(package.Utility.nameOf)
-local nicknames = require(package.Utility.nicknames)
+local nameOf = require "../Utility/nameOf"
+local nicknames = require "../Utility/nicknames"
 
 local function destroy<V>(target: Types.GraphObject)
 	target.scope = nil
-	target._observers = nil
 
 	local using = target._using
 
@@ -29,8 +27,10 @@ local function destroy<V>(target: Types.GraphObject)
 end
 
 local function destructor(target: Types.GraphObject)
-	local destruct = function()
+	local function destruct()
 		destroy(target)
+
+		nicknames[destruct] = nil
 	end
 
 	nicknames[destruct] = nameOf(target, "unknown") .. "-destructor"

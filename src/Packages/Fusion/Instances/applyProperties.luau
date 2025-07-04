@@ -1,20 +1,18 @@
-local package = script.Parent.Parent
+local External = require "../External"
+local Types = require "../Types"
 
-local External = require(package.External)
-local Types = require(package.Types)
+local Parent = require "./Keys/_Parent"
+local sortKeys = require "./Keys/sortKeys"
 
-local Parent = require(package.Instance.Keys._Parent)
-local sortKeys = require(package.Instance.Keys.sortKeys)
+local castToState = require "../State/castToState"
+local peek = require "../State/peek"
 
-local castToState = require(package.State.castToState)
-local peek = require(package.State.peek)
+local Observer = require "../Graph/Observer"
 
-local observe = require(package.Graph.observe)
+local parseError = require "../Logging/parseError"
 
-local parseError = require(package.Logging.parseError)
-
-local xkindof = require(package.Utility.xkindof)
-local xtypeof = require(package.Utility.xtypeof)
+local xkindof = require "../Utility/xkindof"
+local xtypeof = require "../Utility/xtypeof"
 
 local function rawSetProperty(instance: Instance, property: string, value: any)
 	instance[property] = value
@@ -56,15 +54,15 @@ local function setProperty(instance: Instance, property: string, value: any)
 end
 
 local function applyProperty(
-	_: Types.Scope,
+	scope: Types.Scope,
 	instance: Instance,
 	property: string,
 	value: Types.UsedAs<any>
 )
 	if castToState(value) then
-		observe(value, function()
+		Observer(scope, value):onBind(function()
 			setProperty(instance, property, peek(value))
-		end, true)
+		end)
 
 		return
 	end

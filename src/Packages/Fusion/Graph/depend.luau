@@ -1,12 +1,10 @@
-local package = script.Parent.Parent
+local External = require "../External"
+local Types = require "../Types"
 
-local External = require(package.External)
-local Types = require(package.Types)
+local castToGraph = require "./castToGraph"
+local evaluate = require "./evaluate"
 
-local castToGraph = require(package.Graph.castToGraph)
-local evaluate = require(package.Graph.evaluate)
-
-local nameOf = require(package.Utility.nameOf)
+local nameOf = require "../Utility/nameOf"
 
 local function depend(user: Types.GraphObject, dependency: Types.GraphObject)
 	if castToGraph(dependency) then

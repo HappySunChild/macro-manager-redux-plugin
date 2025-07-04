@@ -1,19 +1,17 @@
 --!strict
-local package = script.Parent.Parent.Parent
+local External = require "../../External"
+local Types = require "../../Types"
 
-local External = require(package.External)
-local Types = require(package.Types)
+local ForTypes = require "./ForTypes"
 
-local ForTypes = require(package.State.For.ForTypes)
+local deriveScope = require "../../Memory/deriveScope"
+local destructor = require "../../Memory/destructor"
+local doCleanup = require "../../Memory/doCleanup"
 
-local deriveScope = require(package.Memory.deriveScope)
-local destructor = require(package.Memory.destructor)
-local doCleanup = require(package.Memory.doCleanup)
+local castToState = require "../../State/castToState"
+local peek = require "../../State/peek"
 
-local castToState = require(package.State.castToState)
-local peek = require(package.State.peek)
-
-local depend = require(package.Graph.depend)
+local depend = require "../../Graph/depend"
 
 type Self<S, IK, IV, OK, OV> = ForTypes.Disassembly<S, IK, IV, OK, OV> & {
 	_input: Types.UsedAs<{ [IK]: IV }>,
@@ -128,7 +126,7 @@ function class.populate<S, IK, IV, OK, OV>(
 end
 
 function class._evaluate<S, IK, IV, OK, OV>(self: Self<S, IK, IV, OK, OV>)
-	local outerScope = self.scope
+	local outerScope = self.scope :: Types.Scope
 
 	if castToState(self._input) then
 		depend(self, self._input)

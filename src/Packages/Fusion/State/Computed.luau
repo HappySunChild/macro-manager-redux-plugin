@@ -1,24 +1,22 @@
-local package = script.Parent.Parent
+local External = require "../External"
+local Types = require "../Types"
 
-local External = require(package.External)
-local Types = require(package.Types)
+local depend = require "../Graph/depend"
 
-local depend = require(package.Graph.depend)
+local castToState = require "./castToState"
+local peek = require "./peek"
 
-local castToState = require(package.State.castToState)
-local peek = require(package.State.peek)
+local deriveScope = require "../Memory/deriveScope"
+local destructor = require "../Memory/destructor"
+local doCleanup = require "../Memory/doCleanup"
 
-local deriveScope = require(package.Memory.deriveScope)
-local destructor = require(package.Memory.destructor)
-local doCleanup = require(package.Memory.doCleanup)
+local isSimilar = require "../Utility/isSimilar"
 
-local isSimilar = require(package.Utility.isSimilar)
+local parseError = require "../Logging/parseError"
 
-local parseError = require(package.Logging.parseError)
-
-type Self<S, V> = Types.Computed<V> & {
+type Self<T, S> = Types.Computed<T> & {
 	_innerScope: Types.Scope<S>?,
-	_processor: (use: Types.Use, scope: Types.Scope<S>) -> V,
+	_processor: (use: Types.Use, scope: Types.Scope<S>) -> T,
 }
 
 local class = {
@@ -29,11 +27,11 @@ local class = {
 
 local METATABLE = table.freeze { __index = class }
 
-local function Computed<S, VO>(
+local function Computed<T, S>(
 	scope: Types.Scope,
-	processor: (Types.Use, Types.Scope<S>) -> VO
-): Types.Computed<VO>
-	local newComputed = setmetatable({
+	processor: (Types.Use, Types.Scope<S>) -> T
+): Types.Computed<T>
+	local newComputed: Self<T, S> = setmetatable({
 		scope = scope,
 		createdAt = os.clock(),
 		_internalValue = nil,
@@ -43,12 +41,12 @@ local function Computed<S, VO>(
 
 		_innerScope = nil,
 		_processor = processor,
-	}, METATABLE)
+	}, METATABLE) :: any
 
 	table.insert(scope, {
 		destructor(newComputed),
 		function()
-			if newComputed._innerScope then
+			if newComputed._innerScope ~= nil then
 				doCleanup(newComputed._innerScope)
 
 				newComputed._innerScope = nil
@@ -59,7 +57,7 @@ local function Computed<S, VO>(
 	return newComputed
 end
 
-function class._evaluate<S, V>(self: Self<S, V>)
+function class._evaluate<T, S>(self: Self<T, S>): boolean
 	if self.scope == nil then
 		return false
 	end
@@ -67,7 +65,7 @@ function class._evaluate<S, V>(self: Self<S, V>)
 	local outerScope = self.scope
 	local innerScope = deriveScope(outerScope)
 
-	local function use<T>(target: Types.UsedAs<T>): T
+	local function use<V>(target: Types.UsedAs<V>): V
 		if castToState(target) then
 			depend(self, target)
 		end

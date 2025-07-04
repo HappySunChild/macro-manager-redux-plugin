@@ -1,15 +1,15 @@
 --!strict
+local Types = require "../Types"
 
-local package = script.Parent.Parent
+local merge = require "../Utility/merge"
 
-local Types = require(package.Types)
-local merge = require(package.Utility.merge)
-
-local function deriveScope<T>(
-	existing: Types.Scope<T>,
+local function deriveScope<S>(
+	existing: Types.Scope<S>,
 	methods: { [unknown]: unknown }?
 ): unknown
-	local metatable = getmetatable(existing)
+	-- the plague !strict has brought upon me
+	-- why? why must I bring unnecessary pain upon myself?
+	local metatable = getmetatable(existing :: any)
 
 	if methods ~= nil then
 		metatable = table.clone(metatable) :: { [unknown]: unknown }

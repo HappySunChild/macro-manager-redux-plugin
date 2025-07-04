@@ -1,11 +1,9 @@
-local package = script.Parent.Parent
+local External = require "../External"
+local Types = require "../Types"
 
-local External = require(package.External)
-local Types = require(package.Types)
+local applyProperties = require "./applyProperties"
 
-local applyProperties = require(package.Instance.applyProperties)
-
-local function Child(scope: Types.Scope, name: string)
+local function WithChild(scope: Types.Scope, name: string)
 	return function(props: Types.Properties)
 		return function(parent: Instance)
 			local child = parent:FindFirstChild(name)
@@ -23,4 +21,4 @@ local function Child(scope: Types.Scope, name: string)
 	end
 end
 
-return Child
+return WithChild

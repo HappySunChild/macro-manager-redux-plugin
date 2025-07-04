@@ -1,7 +1,7 @@
-local package = script.Parent.Parent.Parent
+local External = require "../../External"
+local Types = require "../../Types"
 
-local External = require(package.External)
-local Types = require(package.Types)
+local SpecialKey = require "./SpecialKey"
 
 local function getProperty(instance: Instance, key: string)
 	return instance[key]
@@ -9,15 +9,12 @@ end
 
 local keyCache = {}
 
-local function OnEvent(eventName: string): Types.SpecialKey
+local function OnEvent(eventName: string): Types.SpecialKey<"OnEvent">
 	local key = keyCache[eventName]
 
 	if not key then
-		key = table.freeze {
-			type = "OnEvent",
-			kind = "key",
+		key = SpecialKey "OnEvent" {
 			stage = "observer",
-
 			apply = function(scope: Types.Scope, applyTo: Instance, callback)
 				local ok, event = pcall(getProperty, applyTo, eventName)
 

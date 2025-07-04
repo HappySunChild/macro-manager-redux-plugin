@@ -1,21 +1,26 @@
-local package = script.Parent.Parent
+--!strict
+local nicknames = require "./nicknames"
 
-local nicknames = require(package.Utility.nicknames)
+local function nameOf(x: unknown, default: string)
+	local nickname = nicknames[x]
 
-local function nameOf(value: unknown, default: string)
-	local name = default
-
-	local nickname = nicknames[value]
-
-	if typeof(nickname) == "string" then
-		name = nickname
+	if type(nickname) == "string" then
+		return nickname
 	end
 
-	if typeof(value) == "table" then
-		name = value.name or value.type or value.kind
+	if type(x) == "table" then
+		x = x :: { [any]: any }
+
+		if type(x.name) == "string" then
+			return x.name
+		elseif type(x.kind) == "string" then
+			return x.kind
+		elseif type(x.type) == "string" then
+			return x.type
+		end
 	end
 
-	return name
+	return default
 end
 
 return nameOf

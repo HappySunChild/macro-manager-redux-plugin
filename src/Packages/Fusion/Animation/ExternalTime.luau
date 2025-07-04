@@ -1,16 +1,21 @@
-local package = script.Parent.Parent
+--!strict
+local External = require "../External"
+local Types = require "../Types"
 
-local External = require(package.External)
-local Types = require(package.Types)
+local change = require "../Graph/change"
 
-local change = require(package.Graph.change)
-local destructor = require(package.Memory.destructor)
+local destructor = require "../Memory/destructor"
 
-type ExternalTime = Types.StateObject<number> & {
+export type ExternalTime = Types.StateObject<number> & {
 	type: "ExternalTime",
+
+	setActive: (ExternalTime, active: boolean) -> (),
+	isActive: (ExternalTime) -> boolean,
 }
 
-type Self = ExternalTime
+type Self = ExternalTime & {
+	_active: boolean,
+}
 
 local class = {
 	type = "ExternalTime",
@@ -22,7 +27,7 @@ local class = {
 
 local METATABLE = table.freeze { __index = class }
 
-local activeTimers = {}
+local allTimers = {}
 
 local function ExternalTime(scope: Types.Scope): ExternalTime
 	local newExternalTime = setmetatable({
@@ -30,32 +35,43 @@ local function ExternalTime(scope: Types.Scope): ExternalTime
 		createdAt = os.clock(),
 
 		_users = {},
-	}, METATABLE)
+		_active = true,
+	}, METATABLE) :: Self
 
 	table.insert(scope, {
 		destructor(newExternalTime),
 		function()
-			local index = table.find(activeTimers, newExternalTime)
+			local index = table.find(allTimers, newExternalTime)
 
 			if index ~= nil then
-				table.remove(activeTimers, index)
+				table.remove(allTimers, index)
 			end
 		end,
 	})
-	table.insert(activeTimers, newExternalTime)
+	table.insert(allTimers, newExternalTime)
 
 	return newExternalTime
 end
 
-function class._evaluate()
+function class.setActive(self: Self, active: boolean)
+	self._active = active
+end
+
+function class.isActive(self: Self)
+	return self._active
+end
+
+function class._evaluate(): boolean
 	return true
 end
 
-External.bindToUpdate(function(now)
+External.bindToUpdate(function(now: number)
 	class._internalValue = now
 
-	for _, timer in activeTimers do
-		change(timer)
+	for _, timer in allTimers do
+		if timer:isActive() then
+			change(timer)
+		end
 	end
 end)
 

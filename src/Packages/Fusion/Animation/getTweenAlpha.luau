@@ -1,4 +1,5 @@
-local TweenService = game:GetService 'TweenService'
+-- TODO: make this not reliant on tween service, eventually
+local TweenService = game:GetService "TweenService"
 
 local function getTweenAlpha(info: TweenInfo, currentTime: number)
 	local cycleCount = info.RepeatCount + 1
@@ -28,7 +29,8 @@ local function getTweenAlpha(info: TweenInfo, currentTime: number)
 		tweenProgress = 2 - tweenProgress
 	end
 
-	local alpha = TweenService:GetValue(tweenProgress, info.EasingStyle, info.EasingDirection)
+	local alpha =
+		TweenService:GetValue(tweenProgress, info.EasingStyle, info.EasingDirection)
 
 	return alpha
 end

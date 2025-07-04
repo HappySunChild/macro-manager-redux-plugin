@@ -1,9 +1,7 @@
 --!strict
+local Types = require "../Types"
 
-local package = script.Parent.Parent
-
-local Types = require(package.Types)
-local merge = require(package.Utility.merge)
+local merge = require "../Utility/merge"
 
 local function scoped(
 	base: Types.Scope<{ [unknown]: unknown }>,

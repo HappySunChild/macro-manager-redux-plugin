@@ -1,8 +1,7 @@
-local package = script.Parent.Parent
+--!strict
+local Oklab = require "../Colour/Oklab"
 
-local Oklab = require(package.Colors.Oklab)
-
-local packMethods = {
+local PACK_METHODS = {
 	number = function(numbers: { number })
 		return numbers[1]
 	end,
@@ -31,18 +30,15 @@ local packMethods = {
 			)
 	end,
 	Color3 = function(numbers: { number })
-		return Oklab.toSRGB(
-			Vector3.new(numbers[1], numbers[2], numbers[3]),
-			false
-		)
+		return Oklab.toSRGB(Vector3.new(numbers[1], numbers[2], numbers[3]), false)
 	end,
 }
 
-local function packType(typeString: string, numbers: { number })
-	local packMethod = packMethods[typeString]
+local function packType(dataType: string, packed: { number })
+	local packer = PACK_METHODS[dataType]
 
-	if packMethod then
-		return packMethod(numbers)
+	if type(packer) == "function" then
+		return packer(packed)
 	end
 
 	return nil
