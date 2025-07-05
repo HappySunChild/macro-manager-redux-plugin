@@ -129,7 +129,7 @@ t.ColorSequenceKeypoint = t.typeof "ColorSequenceKeypoint"
 t.InstanceIsA = function(className: string)
 	assert(t.string(className))
 
-	return function(value: Instance?)
+	return function(value: Instance)
 		local success, message = t.Instance(value)
 
 		if success == false then
