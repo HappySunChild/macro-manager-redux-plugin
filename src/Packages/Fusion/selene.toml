@@ -1,4 +1,0 @@
-std = "reqfix"
-
-[lints]
-shadowing = "allow"

@@ -1,3 +1,3 @@
-[submodule "src/Packages/Fusion"]
-	path = src/Packages/Fusion
+[submodule "src/Packages/ConFusion"]
+	path = src/Packages/ConFusion
 	url = https://github.com/HappySunChild/ConFusion.git

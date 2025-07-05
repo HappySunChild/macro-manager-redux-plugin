@@ -1,6 +1,0 @@
-quote_style = "AutoPreferDouble"
-call_parentheses = "None"
-column_width = 90
-
-[sort_requires]
-enabled = true
