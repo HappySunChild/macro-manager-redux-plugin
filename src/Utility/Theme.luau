@@ -82,6 +82,10 @@ return table.freeze {
 				Light = Color3.fromRGB(255, 255, 255),
 				Dark = Color3.fromRGB(50, 50, 50),
 			},
+			Border = ColorSet {
+				Light = Color3.fromRGB(216, 216, 216),
+				Dark = Color3.fromRGB(34, 34, 34),
+			},
 		},
 
 		Button = {

@@ -39,7 +39,7 @@ local function TitleLabel(
 
 		[Children] = {
 			Border = inner:RoundBorder {
-				Color = Theme.Color.Macro.Background,
+				Color = Theme.Color.Section.Border,
 				Thickness = 2,
 			},
 			Padding = inner:New "UIPadding" {
@@ -137,7 +137,7 @@ local function SectionMacroItem(
 
 				[Children] = {
 					Border = inner:RoundBorder {
-						Color = Theme.Color.MacroBackground,
+						Color = Theme.Color.Section.Border,
 						Thickness = 2,
 					},
 					TitleLabel = inner:Computed(
