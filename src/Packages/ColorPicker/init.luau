@@ -6,71 +6,77 @@ local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
 
 local PluginShared = require "@plugin/Shared"
-local scope = PluginShared.Scope
 
 local Widget = require "@self/Widget"
 
 local peek = ConFusion.peek
 
-local validate = t.optional(t.Color3)
+local validate = t.strict(t.optional(t.Color3))
 
-local isEnabled = scope:Value(false)
-local currentValue = scope:Value(Color3.new(1, 1, 1))
+local pickerScope = PluginShared.Scope:innerScope {
+	Widget = Widget,
+}
+
+local isEnabled = pickerScope:Value(false)
+local currentValue = pickerScope:Value(Color3.new(1, 1, 1))
+local currentStatus = pickerScope:Value(nil)
 local currentThread = nil
 
-local ColorPicker = {}
-
-function ColorPicker:Initialize(plugin: Plugin)
-	local inner = scope:innerScope { Widget = Widget }
-
-	inner:Widget {
-		Plugin = plugin,
-		OutputColor = currentValue,
-		Enabled = isEnabled,
-
-		ConfirmCallback = function()
-			isEnabled:set(false)
-			coroutine.resume(currentThread, peek(currentValue))
-		end,
-		CancelCallback = function()
-			isEnabled:set(false)
-			coroutine.resume(currentThread)
-		end,
-	}
-end
-
-function ColorPicker:Prompt(startingColor: Color3?): Color3?
-	if ColorPicker:IsActive() then
-		return
-	end
-
-	assert(validate(startingColor))
-
-	if startingColor then
-		currentValue:set(startingColor)
-	end
-
-	isEnabled:set(true)
-
-	currentThread = coroutine.running()
-
-	return coroutine.yield(currentThread)
-end
-
-function ColorPicker:Cancel(defaultColor: Color3?)
-	if ColorPicker:IsActive() then
-		return
-	end
-
-	assert(validate(defaultColor))
-
-	isEnabled:set(false)
-
-	coroutine.resume(currentThread, defaultColor)
-end
-
-function ColorPicker:IsActive()
+local function isActive()
 	return peek(isEnabled) and currentThread ~= nil
 end
 
-return ColorPicker
+local function _confirm()
+	isEnabled:set(false)
+	coroutine.resume(currentThread, peek(currentValue))
+end
+
+local function _cancel()
+	isEnabled:set(false)
+	coroutine.resume(currentThread)
+end
+
+return table.freeze {
+	isActive = isActive,
+	initialize = function(plugin: Plugin)
+		pickerScope:Widget {
+			plugin = plugin,
+			output = currentValue,
+
+			status = currentStatus,
+			enabled = isEnabled,
+
+			confirm = _confirm,
+			cancel = _cancel,
+		}
+	end,
+	prompt = function(startingColor: Color3?, status: string?): Color3?
+		if isActive() then
+			return
+		end
+
+		validate(startingColor)
+
+		if startingColor then
+			currentValue:set(startingColor)
+		end
+
+		currentStatus:set(status)
+		isEnabled:set(true)
+
+		currentThread = coroutine.running()
+
+		return coroutine.yield(currentThread)
+	end,
+	cancel = function(defaultColor: Color3?)
+		if isActive() then
+			return
+		end
+
+		validate(defaultColor)
+
+		isEnabled:set(false)
+
+		coroutine.resume(currentThread, defaultColor)
+	end,
+}
