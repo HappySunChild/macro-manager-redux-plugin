@@ -11,6 +11,23 @@ local ScrollingFrame = require "@components/ScrollingFrame"
 
 local Children = ConFusion.Children
 
+local function NoMacrosLabel(scope: ConFusion.Scope)
+	return scope:New "TextLabel" {
+		Size = UDim2.new(1, 0, 0, 80),
+
+		BackgroundColor3 = Theme.Color.Macro.Background,
+
+		RichText = true,
+		Text = `No macros detected :(<br/><br/>Add ModuleScripts into {ContainerManager.ContainerName}.Macros<br/>for them to appear here!`,
+		TextSize = 18,
+		TextColor3 = Theme.Color.DimmedText,
+
+		[Children] = RoundBorder(scope, {
+			Thickness = 0,
+		}),
+	}
+end
+
 local function MacroContainer(
 	scope: ConFusion.Scope,
 	props: {
@@ -32,24 +49,16 @@ local function MacroContainer(
 
 		[Children] = {
 			Layout = inner:New "UIListLayout" {
-				Padding = UDim.new(0, 4),
+				Padding = UDim.new(0, 2),
 				SortOrder = Enum.SortOrder.LayoutOrder,
 			},
 
 			Macros = inner:Computed(
-				function(use: Fusion.Use, scope: typeof(inner))
+				function(use: ConFusion.Use, scope: typeof(inner))
 					local macros = use(props.Macros)
 
 					if #macros == 0 then
-							Size = UDim2.new(1, 0, 0, 30),
-
-							TextSize = 18,
-							TextColor3 = Theme.Color.Text,
-
-							[Children] = inner:RoundBorder {
-								Thickness = 0,
-							},
-						}
+						return NoMacrosLabel(scope)
 					end
 
 					local list = {}
