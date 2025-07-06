@@ -1,11 +1,10 @@
 --!nocheck
 local Studio = settings():GetService "Studio"
 
+local ConFusion = require "@packages/ConFusion"
 local PluginShared = require "@plugin/Shared"
 
-local Fusion = require "@packages/Fusion"
-local map = Fusion.map
-
+local map = ConFusion.map
 local scope = PluginShared.Scope
 
 local currentTheme = scope:Value(Studio.Theme)
@@ -15,7 +14,7 @@ local MISSING_COLOR = Color3.new(1, 0, 1)
 local function StudioColor(
 	styleGuideColor: Enum.StudioStyleGuideColor,
 	modifier: Enum.StudioStyleGuideModifier?
-): Fusion.Computed<Color3>
+): ConFusion.Computed<Color3>
 	return map(currentTheme, function(theme: StudioTheme)
 		if not theme then
 			return MISSING_COLOR
@@ -25,7 +24,7 @@ local function StudioColor(
 	end)
 end
 
-local function ColorSet(set: { [string]: Color3 }): Fusion.Computed<Color3>
+local function ColorSet(set: { [string]: Color3 }): ConFusion.Computed<Color3>
 	return map(currentTheme, function(theme: StudioTheme)
 		if not theme then
 			return MISSING_COLOR

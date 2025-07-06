@@ -1,11 +1,11 @@
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 
-local Children = Fusion.Children
+local Children = ConFusion.Children
 
-type UsedAs<V> = Fusion.UsedAs<V>
+type UsedAs<V> = ConFusion.UsedAs<V>
 
 local function ElementGroup(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		AnchorPoint: UsedAs<Vector2>,
 		Position: UsedAs<UDim2>?,
@@ -20,14 +20,14 @@ local function ElementGroup(
 		FlexAlignment: UsedAs<Enum.UIFlexAlignment>?,
 
 		Render: ((
-			scope: Fusion.Scope,
+			scope: ConFusion.Scope,
 			index: number,
 			label: string
-		) -> Fusion.Child)?,
+		) -> ConFusion.Child)?,
 		Labels: UsedAs<{ string }>?,
-		Refs: { Fusion.Value<Instance> }?,
+		Refs: { ConFusion.Value<Instance> }?,
 
-		[Fusion.SpecialKey<"Children">]: { Fusion.Child }?,
+		[ConFusion.SpecialKey<"Children">]: { ConFusion.Child }?,
 	}
 )
 	local labels = props.Labels

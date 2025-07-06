@@ -1,18 +1,18 @@
 local MacroManager = require "@utility/MacroManager"
 local merge = require "@utility/merge"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 
 local Page = require "@components/Page"
 
 local Pages = require "./Pages"
 
-local Children = Fusion.Children
+local Children = ConFusion.Children
 
 type PageIndex = keyof<typeof(Pages)>
 
 local function App(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		Plugin: Plugin,
 		Title: string,
@@ -39,7 +39,7 @@ local function App(
 			error(`Unknown page '{name}'`, 2)
 		end
 
-		local active = inner:Computed(function(use: Fusion.Use)
+		local active = inner:Computed(function(use: ConFusion.Use)
 			return use(currentPage) == name
 		end)
 

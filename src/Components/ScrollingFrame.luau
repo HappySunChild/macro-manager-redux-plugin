@@ -1,35 +1,35 @@
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 
 local Theme = require "@utility/Theme"
 
 local Assets = require "@plugin/Assets"
 
-local Children, Out = Fusion.Children, Fusion.Out
+local Children, Out = ConFusion.Children, ConFusion.Out
 
 local DEFAULT_SCROLLBAR_WIDTH = 9
 
 local function ScrollingFrame(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
-		Position: Fusion.UsedAs<UDim2>?,
-		Size: Fusion.UsedAs<UDim2>?,
-		CanvasSize: Fusion.UsedAs<UDim2>?,
-		AutomaticSize: Fusion.UsedAs<Enum.AutomaticSize>?,
-		AutomaticCanvasSize: Fusion.UsedAs<Enum.AutomaticSize>?,
+		Position: ConFusion.UsedAs<UDim2>?,
+		Size: ConFusion.UsedAs<UDim2>?,
+		CanvasSize: ConFusion.UsedAs<UDim2>?,
+		AutomaticSize: ConFusion.UsedAs<Enum.AutomaticSize>?,
+		AutomaticCanvasSize: ConFusion.UsedAs<Enum.AutomaticSize>?,
 
 		ScrollBarThickness: number,
 
-		Visible: Fusion.UsedAs<boolean>?,
-		BackgroundColor3: Fusion.UsedAs<Color3>?,
-		ZIndex: Fusion.UsedAs<number>?,
+		Visible: ConFusion.UsedAs<boolean>?,
+		BackgroundColor3: ConFusion.UsedAs<Color3>?,
+		ZIndex: ConFusion.UsedAs<number>?,
 
-		[Fusion.SpecialKey<"Children">]: Fusion.Child?,
+		[ConFusion.SpecialKey<"Children">]: ConFusion.Child?,
 	}
 )
 	local inner = scope:innerScope()
 	local windowSize = inner:Value(Vector2.zero)
 	local canvasSize = inner:Value(Vector2.zero)
-	local scrollBarVisible = inner:Computed(function(use: Fusion.Use)
+	local scrollBarVisible = inner:Computed(function(use: ConFusion.Use)
 		return use(canvasSize).Y > use(windowSize).Y
 	end)
 
@@ -55,7 +55,7 @@ local function ScrollingFrame(
 		[Out "AbsoluteCanvasSize"] = canvasSize,
 		[Children] = {
 			ScrollbarPadding = inner:Computed(
-				function(use: Fusion.Use, scope: Fusion.Scope)
+				function(use: ConFusion.Use, scope: ConFusion.Scope)
 					if not use(scrollBarVisible) then
 						return nil
 					end

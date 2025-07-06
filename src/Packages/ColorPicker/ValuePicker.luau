@@ -1,19 +1,19 @@
 local Assets = require "@plugin/Assets"
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 
-local OnEvent, Out = Fusion.OnEvent, Fusion.Out
-local Children = Fusion.Children
+local OnEvent, Out = ConFusion.OnEvent, ConFusion.Out
+local Children = ConFusion.Children
 
-local peek = Fusion.peek
+local peek = ConFusion.peek
 
 local function ValuePicker(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		AnchorPoint: Vector2?,
 		Position: UDim2?,
 		Size: UDim2?,
 
-		OutputColor: Fusion.UsedAs<Color3>,
+		OutputColor: ConFusion.UsedAs<Color3>,
 		Callback: (Color3) -> (),
 	}
 )
@@ -70,7 +70,7 @@ local function ValuePicker(
 		[Children] = {
 			Arrow = inner:New "ImageLabel" {
 				AnchorPoint = Vector2.new(0.5, 0.5),
-				Position = inner:Computed(function(use: Fusion.Use)
+				Position = inner:Computed(function(use: ConFusion.Use)
 					local _, _, val = use(output):ToHSV()
 
 					return UDim2.new(1, 5, 1 - val, 0)

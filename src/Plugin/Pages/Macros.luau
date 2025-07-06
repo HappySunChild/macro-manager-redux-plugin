@@ -1,6 +1,6 @@
 local Types = require "@plugin/Types"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 
 local MacroManager = require "@utility/MacroManager"
 local Theme = require "@utility/Theme"
@@ -10,18 +10,16 @@ local MacroContainer = require "@components/MacroContainer"
 local RoundBorder = require "@components/RoundBorder"
 local TextButton = require "@components/TextButton"
 
-local Children = Fusion.Children
+local Children = ConFusion.Children
 
 local TOPBAR_HEIGHT = 24
 
 local function MacrosPage(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
-		macros: Fusion.UsedAs<{ Types.Macro }>,
-		navigate: (string) -> (),
+		macros: ConFusion.UsedAs<{ Types.Macro }>,
 	}
 )
-	local navigate = props.navigate
 	local inner = scope:innerScope {
 		MacroContainer = MacroContainer,
 		TextButton = TextButton,
@@ -32,7 +30,7 @@ local function MacrosPage(
 	return {
 		Padding = inner:New "UIPadding" {
 			PaddingTop = UDim.new(0, 2),
-			PaddingBottom = UDim.new(0, 2),
+			PaddingBottom = UDim.new(0, 4),
 			PaddingLeft = UDim.new(0, 2),
 			PaddingRight = UDim.new(0, 2),
 		},
@@ -84,7 +82,7 @@ local function MacrosPage(
 		},
 		Container = inner:New "Frame" {
 			Size = UDim2.new(1, 0, 1, -TOPBAR_HEIGHT),
-			Position = UDim2.new(0, 0, 0, TOPBAR_HEIGHT + 4),
+			Position = UDim2.new(0, 0, 0, TOPBAR_HEIGHT + 2),
 
 			BackgroundTransparency = 1,
 

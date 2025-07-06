@@ -1,15 +1,15 @@
 local Types = require "@plugin/Types"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
 
 local Label = require "@components/Label"
 
-local peek = Fusion.peek
-local Children, Ref = Fusion.Children, Fusion.Ref
+local peek = ConFusion.peek
+local Children, Ref = ConFusion.Children, ConFusion.Ref
 
 local function ContainerMacroItem(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	macroItem: Types.MacroItem
 )
 	local inner = scope:innerScope { Label = Label }

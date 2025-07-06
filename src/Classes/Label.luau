@@ -1,14 +1,17 @@
 local Theme = require "@utility/Theme"
 local Types = require "@plugin/Types"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
 
-local Children = Fusion.Children
+local Children = ConFusion.Children
 
 local default = t.default("Label", t.string)
 
-local function LabelMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
+local function LabelMacroItem(
+	scope: ConFusion.Scope,
+	macroItem: Types.MacroItem
+)
 	macroItem.Text = default(macroItem.Text)
 
 	local inner = scope:innerScope()

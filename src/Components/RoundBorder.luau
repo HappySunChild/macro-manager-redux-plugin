@@ -1,11 +1,11 @@
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local Theme = require "@utility/Theme"
 
 local function Corners(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
-		Roundness: Fusion.UsedAs<UDim>?,
-		Color: Fusion.UsedAs<Color3>?,
+		Roundness: ConFusion.UsedAs<UDim>?,
+		Color: ConFusion.UsedAs<Color3>?,
 		Thickness: number?,
 	}
 )

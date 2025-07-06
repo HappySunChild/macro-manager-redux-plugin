@@ -1,25 +1,25 @@
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local Theme = require "@utility/Theme"
 
-local Children = Fusion.Children
+local Children = ConFusion.Children
 
 local function Page(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
-		active: Fusion.UsedAs<boolean>,
-		content: Fusion.Child?,
+		active: ConFusion.UsedAs<boolean>,
+		content: ConFusion.Child?,
 	}
 )
 	local inner = scope:innerScope()
 	local alpha = inner:Tween(
-		inner:Computed(function(use: Fusion.Use)
+		inner:Computed(function(use: ConFusion.Use)
 			return use(props.active) == true and 1 or 0
 		end),
 		Theme.TweenInfo.Page
-	) :: Fusion.Animated<number>
+	) :: ConFusion.Animated<number>
 
 	return inner:New "Frame" {
-		Position = inner:Computed(function(use: Fusion.Use)
+		Position = inner:Computed(function(use: ConFusion.Use)
 			local sign = use(props.active) and 1 or -1
 			local value = 1 - use(alpha)
 

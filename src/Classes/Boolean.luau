@@ -3,19 +3,19 @@ local Types = require "@plugin/Types"
 local Theme = require "@utility/Theme"
 local updateItemValue = require "@utility/updateItemValue"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
 
 local Label = require "@components/Label"
 local TextButton = require "@components/TextButton"
 
-local map, peek = Fusion.map, Fusion.peek
-local Children = Fusion.Children
+local map, peek = ConFusion.map, ConFusion.peek
+local Children = ConFusion.Children
 
 local default = t.default(false, t.boolean)
 
 local function BooleanMacroItem(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	macroItem: Types.ValueMacroItem<boolean>
 )
 	macroItem.Value = default(macroItem.Value)

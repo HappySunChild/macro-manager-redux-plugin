@@ -2,18 +2,19 @@ local Types = require "@plugin/Types"
 
 local Theme = require "@utility/Theme"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
 
 local Label = require "@components/Label"
 local RoundBorder = require "@components/RoundBorder"
 
-local Children, Ref, OnEvent = Fusion.Children, Fusion.Ref, Fusion.OnEvent
-local peek = Fusion.peek
+local Children, Ref, OnEvent =
+	ConFusion.Children, ConFusion.Ref, ConFusion.OnEvent
+local peek = ConFusion.peek
 
-local snapType = t.union(t.integer, t.numberMin(0))
+local snapValidate = t.union(t.integer, t.numberMin(0))
+local snapDefault = t.default(0, snapValidate)
 local default = t.default(0, t.number)
-local defaultSnap = t.default(0, snapType)
 
 type SliderMacroItem = Types.ValueMacroItem<number> & {
 	Minimum: number,
@@ -30,7 +31,7 @@ local function snap(value: number, resolution: number)
 end
 
 local function SliderTick(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		Alpha: number,
 	}
@@ -44,10 +45,13 @@ local function SliderTick(
 	}
 end
 
-local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
+local function SliderMacroItem(
+	scope: ConFusion.Scope,
+	macroItem: SliderMacroItem
+)
 	macroItem.Minimum = default(macroItem.Minimum)
 	macroItem.Maximum = default(macroItem.Maximum)
-	macroItem.Snapping = defaultSnap(macroItem.Snapping)
+	macroItem.Snapping = snapDefault(macroItem.Snapping)
 	macroItem.Value = math.clamp(
 		default(macroItem.Value),
 		macroItem.Minimum,
@@ -66,7 +70,7 @@ local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
 	local maximumState = inner:Value(macroItem.Maximum)
 	local snappingState = inner:Value(macroItem.Snapping)
 
-	local alphaState = inner:Computed(function(use: Types.Use)
+	local alphaState = inner:Computed(function(use: ConFusion.Use)
 		local min = use(minimumState) :: number
 		local max = use(maximumState) :: number
 		local current = use(valueState) :: number
@@ -125,7 +129,7 @@ local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
 	end
 
 	function macroItem:SetSnapping(newSnap: number)
-		assert(snapType(newSnap))
+		assert(snapValidate(newSnap))
 
 		macroItem.Snapping = newSnap
 
@@ -135,7 +139,7 @@ local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
 	macroItem.Set = macroItem.SetValue
 
 	local snapTicks = inner:Computed(
-		function(use: Fusion.Use, scope: typeof(inner))
+		function(use: ConFusion.Use, scope: typeof(inner))
 			local snapping = math.floor(use(snappingState))
 
 			if snapping < 2 then
@@ -169,7 +173,7 @@ local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
 
 			Label = inner:Label {
 				Size = UDim2.new(0.5, 0, 0, 16),
-				Text = inner:Computed(function(use: Types.Use)
+				Text = inner:Computed(function(use: ConFusion.Use)
 					return string.format(
 						"%s: %.1f",
 						use(displayText),
@@ -248,7 +252,7 @@ local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
 
 						BackgroundTransparency = 1,
 
-						Text = inner:Computed(function(use: Fusion.Use)
+						Text = inner:Computed(function(use: ConFusion.Use)
 							return string.format("%.1f", use(minimumState))
 						end),
 						TextSize = 16,
@@ -262,7 +266,7 @@ local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
 
 						BackgroundTransparency = 1,
 
-						Text = inner:Computed(function(use: Fusion.Use)
+						Text = inner:Computed(function(use: ConFusion.Use)
 							return string.format("%.1f", use(maximumState))
 						end),
 						TextSize = 16,
@@ -286,7 +290,7 @@ local function SliderMacroItem(scope: Fusion.Scope, macroItem: SliderMacroItem)
 							Handle = inner:New "Frame" {
 								AnchorPoint = Vector2.new(0.5, 0.5),
 								Position = inner:Computed(
-									function(use: Fusion.Use)
+									function(use: ConFusion.Use)
 										return UDim2.fromScale(
 											use(alphaState),
 											0.5

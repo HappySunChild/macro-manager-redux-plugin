@@ -4,10 +4,10 @@ local Types = require "@plugin/Types"
 local Logging = require "@utility/Logging"
 local MacroManager = require "@utility/MacroManager"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
 
-local Children = Fusion.Children
+local Children = ConFusion.Children
 
 local validate = t.optional(t.InstanceIsA "GuiBase2d")
 
@@ -26,7 +26,7 @@ end
 
 local _RENDERED = {}
 
-local function Item(scope: Fusion.Scope, macroItem: Types.MacroItem)
+local function Item(scope: ConFusion.Scope, macroItem: Types.MacroItem)
 	local targetType = macroItem.Type
 	local constructor = getMacroItemClass(targetType)
 
@@ -93,7 +93,7 @@ local function Item(scope: Fusion.Scope, macroItem: Types.MacroItem)
 		-- Size = UDim2.new(1, 0, 0, 0),
 		-- AutomaticSize = Enum.AutomaticSize.Y,
 
-		Size = inner:Computed(function(use: Fusion.Use)
+		Size = inner:Computed(function(use: ConFusion.Use)
 			return UDim2.new(1, 0, 0, use(size).Y)
 		end),
 

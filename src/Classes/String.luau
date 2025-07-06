@@ -2,18 +2,18 @@ local Types = require "@plugin/Types"
 
 local updateItemValue = require "@utility/updateItemValue"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
 
 local Label = require "@components/Label"
 local TextEntry = require "@components/TextEntry"
 
-local Children = Fusion.Children
+local Children = ConFusion.Children
 
 local default = t.default("", t.string)
 
 local function StringItemClass(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	macroItem: Types.ValueMacroItem<string>
 )
 	macroItem.Value = default(macroItem.Value)

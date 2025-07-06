@@ -1,23 +1,24 @@
 local Theme = require "@utility/Theme"
 local Types = require "@plugin/Types"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
+
+local ContainerManager = require "@utility/ContainerManager"
 
 local Macro = require "@self/Macro"
 local RoundBorder = require "@components/RoundBorder"
 local ScrollingFrame = require "@components/ScrollingFrame"
 
-local Children = Fusion.Children
+local Children = ConFusion.Children
 
 local function MacroContainer(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
-		Macros: Fusion.UsedAs<{ Types.Macro }>,
+		Macros: ConFusion.UsedAs<{ Types.Macro }>,
 	}
 )
 	local inner = scope:innerScope {
 		Macro = Macro,
-		RoundBorder = RoundBorder,
 		ScrollingFrame = ScrollingFrame,
 	}
 
@@ -40,12 +41,8 @@ local function MacroContainer(
 					local macros = use(props.Macros)
 
 					if #macros == 0 then
-						return scope:New "TextLabel" {
 							Size = UDim2.new(1, 0, 0, 30),
 
-							BackgroundColor3 = Theme.Color.Macro.Background,
-
-							Text = "No macros detected :(",
 							TextSize = 18,
 							TextColor3 = Theme.Color.Text,
 

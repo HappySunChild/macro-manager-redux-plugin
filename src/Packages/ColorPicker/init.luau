@@ -2,7 +2,7 @@
 -- bump this post RIGHT NOW!
 -- https://devforum.roblox.com/t/allow-plugins-to-use-color-picker/63257/
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
 
 local PluginShared = require "@plugin/Shared"
@@ -10,7 +10,7 @@ local scope = PluginShared.Scope
 
 local Widget = require "@self/Widget"
 
-local peek = Fusion.peek
+local peek = ConFusion.peek
 
 local validate = t.optional(t.Color3)
 

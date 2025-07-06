@@ -1,23 +1,21 @@
-local pluginContainer = script.Parent.Parent.Parent
+local Theme = require "@utility/Theme"
 
-local Theme = require(pluginContainer.Utility.Theme)
+local ColorPicker = require "@packages/ColorPicker"
+local ConFusion = require "@packages/ConFusion"
 
-local ColorPicker = require(pluginContainer.Packages.ColorPicker)
-local Fusion = require(pluginContainer.Packages.Fusion)
+local ElementGroup = require "@components/ElementGroup"
+local RoundBorder = require "@components/RoundBorder"
+local TextEntry = require "@components/TextEntry"
 
-local ElementGroup = require(pluginContainer.Components.ElementGroup)
-local RoundBorder = require(pluginContainer.Components.RoundBorder)
-local TextEntry = require(pluginContainer.Components.TextEntry)
-
-local Children, Ref = Fusion.Children, Fusion.Ref
-local OnEvent = Fusion.OnEvent
-local peek = Fusion.peek
+local Children, Ref, OnEvent =
+	ConFusion.Children, ConFusion.Ref, ConFusion.OnEvent
+local peek = ConFusion.peek
 
 local function ColorDisplay(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
-		Color: Fusion.UsedAs<Color3>,
-		Callback: (Color3) -> (),
+		color: ConFusion.UsedAs<Color3>,
+		setColor: (Color3) -> (),
 	}
 )
 	local inner = scope:innerScope { RoundBorder = RoundBorder }
@@ -25,20 +23,20 @@ local function ColorDisplay(
 	return inner:New "Frame" {
 		Size = UDim2.fromOffset(20, 20),
 
-		BackgroundColor3 = props.Color,
+		BackgroundColor3 = props.color,
 
 		[OnEvent "InputBegan"] = function(input: InputObject)
 			if input.UserInputType ~= Enum.UserInputType.MouseButton1 then
 				return
 			end
 
-			local newColor = ColorPicker:Prompt(peek(props.Color))
+			local newColor = ColorPicker.prompt(peek(props.color))
 
 			if not newColor then
 				return
 			end
 
-			props.Callback(newColor)
+			props.setColor(newColor)
 		end,
 		[Children] = {
 			Flex = inner:New "UIFlexItem" {},
@@ -50,12 +48,12 @@ local function ColorDisplay(
 end
 
 type StyleProperties = {
-	Value: Fusion.Value<Color3>,
-	Callback: (Color3) -> (),
+	color: ConFusion.Value<Color3>,
+	setColor: (Color3) -> (),
 }
 
-return {
-	Hex = function(scope: Fusion.Scope, props: StyleProperties)
+return table.freeze {
+	Hex = function(scope: ConFusion.Scope, props: StyleProperties)
 		local inner = scope:innerScope {
 			ColorDisplay = ColorDisplay,
 			ElementGroup = ElementGroup,
@@ -87,26 +85,26 @@ return {
 
 			[Children] = {
 				Entry = inner:TextEntry {
-					Text = inner:Computed(function(use: Fusion.Use)
-						return `#{use(props.Value):ToHex()}`
+					Text = inner:Computed(function(use: ConFusion.Use)
+						return `#{use(props.color):ToHex()}`
 					end),
 					PlaceholderText = "Hex",
 					Size = UDim2.fromScale(1, 1),
 
 					Callback = function()
-						props.Callback(getInputValue())
+						props.setColor(getInputValue())
 					end,
 
 					[Ref] = hexFieldRef,
 				},
 				Display = inner:ColorDisplay {
-					Color = props.Value,
-					Callback = props.Callback,
+					color = props.color,
+					setColor = props.setColor,
 				},
 			},
 		}
 	end,
-	HSV = function(scope: Fusion.Scope, props: StyleProperties)
+	HSV = function(scope: ConFusion.Scope, props: StyleProperties)
 		local inner = scope:innerScope {
 			ColorDisplay = ColorDisplay,
 			ElementGroup = ElementGroup,
@@ -147,8 +145,8 @@ return {
 				return scope:TextEntry {
 					Size = UDim2.fromScale(1, 1),
 
-					Text = scope:Computed(function(use: Fusion.Use)
-						local components = { use(props.Value):ToHSV() }
+					Text = scope:Computed(function(use: ConFusion.Use)
+						local components = { use(props.color):ToHSV() }
 						local value = components[index]
 
 						if index == 1 then
@@ -160,7 +158,7 @@ return {
 					PlaceholderText = label,
 
 					Callback = function()
-						props.Callback(getInputValue())
+						props.setColor(getInputValue())
 					end,
 				}
 			end,
@@ -169,13 +167,13 @@ return {
 
 			[Children] = {
 				Display = inner:ColorDisplay {
-					Color = props.Value,
-					Callback = props.Callback,
+					color = props.color,
+					setColor = props.setColor,
 				},
 			},
 		}
 	end,
-	RGB = function(scope: Fusion.Scope, props: StyleProperties)
+	RGB = function(scope: ConFusion.Scope, props: StyleProperties)
 		local inner = scope:innerScope {
 			ColorDisplay = ColorDisplay,
 			ElementGroup = ElementGroup,
@@ -208,13 +206,14 @@ return {
 				return scope:TextEntry {
 					Size = UDim2.fromScale(1, 1),
 
-					Text = inner:Computed(function(use: Fusion.Use)
-						return math.floor(use(props.Value)[label] * 255)
+					Text = inner:Computed(function(use: ConFusion.Use)
+						local component = use(props.color)[label] :: number
+						return math.floor(component * 255)
 					end),
 					PlaceholderText = label,
 
 					Callback = function()
-						props.Callback(getInputValue())
+						props.setColor(getInputValue())
 					end,
 				}
 			end,
@@ -223,10 +222,10 @@ return {
 
 			[Children] = {
 				Display = inner:ColorDisplay {
-					Color = props.Value,
-					Callback = props.Callback,
+					color = props.color,
+					setColor = props.setColor,
 				},
 			},
 		}
 	end,
-}
+} :: { [string]: (scope: ConFusion.Scope, props: StyleProperties) -> () }

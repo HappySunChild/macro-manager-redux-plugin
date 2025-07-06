@@ -1,4 +1,4 @@
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 
 local ElementGroup = require "@components/ElementGroup"
 
@@ -7,9 +7,9 @@ local Entry = require "./Entry"
 local HueSaturationPicker = require "./HueSaturationPicker"
 local ValuePicker = require "./ValuePicker"
 
-local Children = Fusion.Children
+local Children = ConFusion.Children
 
-local peek = Fusion.peek
+local peek, map = ConFusion.peek, ConFusion.map
 
 local function getHSVComponent(color: Color3, index: number)
 	local hue, sat, val = color:ToHSV()
@@ -22,10 +22,10 @@ local function getRGBComponent(color: Color3, index: number)
 end
 
 local function RGBEntries(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		Position: UDim2,
-		OutputColor: Fusion.Value<Color3>,
+		OutputColor: ConFusion.Value<Color3>,
 	}
 )
 	local inner = scope:innerScope {
@@ -67,7 +67,7 @@ local function RGBEntries(
 
 				Label = label,
 				Range = NumberRange.new(0, 255),
-				Value = scope:Computed(function(use: Fusion.Use)
+				Value = scope:Computed(function(use: ConFusion.Use)
 					return getRGBComponent(use(props.OutputColor), index)
 				end),
 				Callback = function()
@@ -80,10 +80,10 @@ local function RGBEntries(
 end
 
 local function HSVEntries(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		Position: UDim2,
-		OutputColor: Fusion.Value<Color3>,
+		OutputColor: ConFusion.Value<Color3>,
 	}
 )
 	local inner = scope:innerScope {
@@ -125,7 +125,7 @@ local function HSVEntries(
 
 				Label = label,
 				Range = NumberRange.new(0, index == 1 and 360 or 255),
-				Value = scope:Computed(function(use: Fusion.Use)
+				Value = scope:Computed(function(use: ConFusion.Use)
 					return getHSVComponent(use(props.OutputColor), index)
 				end),
 				Callback = function()
@@ -138,10 +138,10 @@ local function HSVEntries(
 end
 
 local function HexEntry(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		Position: UDim2,
-		OutputColor: Fusion.Value<Color3>,
+		OutputColor: ConFusion.Value<Color3>,
 	}
 )
 	local inner = scope:innerScope { Entry = Entry }
@@ -162,7 +162,7 @@ local function HexEntry(
 		TextboxRef = hexFieldRef,
 
 		Label = "Hex",
-		Value = inner:Computed(function(use: Fusion.Use)
+		Value = inner:Computed(function(use: ConFusion.Use)
 			return "#" .. use(props.OutputColor):ToHex()
 		end),
 		Callback = function()
@@ -172,7 +172,7 @@ local function HexEntry(
 end
 
 local function ColorPickerWidget(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		Plugin: Plugin,
 		Enabled: Fusion.UsedAs<boolean>,
@@ -289,8 +289,8 @@ local function ColorPickerWidget(
 						Text = label,
 
 						Callback = if label == "OK"
-							then props.ConfirmCallback
-							else props.CancelCallback,
+							then props.confirm
+							else props.cancel,
 					}
 				end,
 				Labels = { "OK", "Cancel" },

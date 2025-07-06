@@ -1,10 +1,10 @@
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local Theme = require "@utility/Theme"
 
-local OnEvent, Out = Fusion.OnEvent, Fusion.Out
+local OnEvent, Out = ConFusion.OnEvent, ConFusion.Out
 
 local function Button(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		Position: UDim2,
 		Size: UDim2,
@@ -15,7 +15,7 @@ local function Button(
 )
 	local inner = scope:innerScope()
 	local state = scope:Value(Enum.GuiState.Idle)
-	local color = scope:Computed(function(use: Fusion.Use)
+	local color = scope:Computed(function(use: ConFusion.Use)
 		local currentState = use(state)
 
 		if currentState == Enum.GuiState.Hover then

@@ -1,4 +1,4 @@
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local Theme = require "@utility/Theme"
 
 local RoundBorder = require "@components/RoundBorder"

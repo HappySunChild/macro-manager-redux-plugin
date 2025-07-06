@@ -2,13 +2,13 @@ local Types = require "@plugin/Types"
 
 local Theme = require "@utility/Theme"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
 
-local ItemsContainer = require("@components/ItemsContainer")
-local RoundBorder = require("@components/RoundBorder")
+local ItemsContainer = require "@components/ItemsContainer"
+local RoundBorder = require "@components/RoundBorder"
 
-local Children = Fusion.Children
+local Children = ConFusion.Children
 
 local default = t.default(1, t.number)
 
@@ -19,10 +19,10 @@ type SectionMacroItem = Types.MacroItem & {
 }
 
 local function TitleLabel(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
-		Text: Fusion.UsedAs<string>,
-		BackgroundColor: Fusion.UsedAs<Color3>,
+		Text: ConFusion.UsedAs<string>,
+		BackgroundColor: ConFusion.UsedAs<Color3>,
 	}
 )
 	local inner = scope:innerScope {
@@ -71,7 +71,7 @@ local function TitleLabel(
 end
 
 local function SectionMacroItem(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	macroItem: SectionMacroItem
 )
 	local currentDepth = default(macroItem.SectionDepth)
@@ -83,7 +83,7 @@ local function SectionMacroItem(
 	}
 	local displayText =
 		inner:Value(macroItem.Name or macroItem.Text or "Section")
-	local hasTitle = inner:Computed(function(use: Fusion.Use)
+	local hasTitle = inner:Computed(function(use: ConFusion.Use)
 		if use(displayText) == "" then
 			return false
 		end
@@ -116,7 +116,7 @@ local function SectionMacroItem(
 			Padding = inner:New "UIPadding" {
 				PaddingLeft = UDim.new(0, 4),
 				PaddingRight = UDim.new(0, 4),
-				PaddingTop = inner:Computed(function(use: Fusion.Use)
+				PaddingTop = inner:Computed(function(use: ConFusion.Use)
 					if use(hasTitle) then
 						return UDim.new(0, 10)
 					end
@@ -141,7 +141,7 @@ local function SectionMacroItem(
 						Thickness = 2,
 					},
 					TitleLabel = inner:Computed(
-						function(use: Fusion.Use, scope: typeof(inner))
+						function(use: ConFusion.Use, scope: typeof(inner))
 							if use(hasTitle) then
 								return scope:TitleLabel {
 									Text = displayText,
@@ -160,7 +160,7 @@ local function SectionMacroItem(
 							SectionDepth = currentDepth + 1,
 						},
 
-						Position = inner:Computed(function(use: Fusion.Use)
+						Position = inner:Computed(function(use: ConFusion.Use)
 							if use(hasTitle) then
 								return UDim2.fromOffset(0, 6)
 							end

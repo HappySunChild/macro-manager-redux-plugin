@@ -5,7 +5,7 @@ local updateItemValue = require "@utility/updateItemValue"
 
 local Assets = require "@plugin/Assets"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
 
 local Label = require "@components/Label"
@@ -13,9 +13,9 @@ local RoundBorder = require "@components/RoundBorder"
 local ScrollingFrame = require "@components/ScrollingFrame"
 local TextButton = require "@components/TextButton"
 
-local Children = Fusion.Children
-local OnEvent, Out = Fusion.OnEvent, Fusion.Out
-local peek = Fusion.peek
+local Children = ConFusion.Children
+local OnEvent, Out = ConFusion.OnEvent, ConFusion.Out
+local peek = ConFusion.peek
 
 local default = t.default({ "Default" }, t.table)
 local tostring = function(value: any)
@@ -33,7 +33,7 @@ type DropdownMacroItem = {
 } & Types.ValueMacroItem<any>
 
 local function ItemButton(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: { Index: number, Text: string, Callback: () -> () }
 )
 	local baseColor = if props.Index % 2 == 0
@@ -41,7 +41,7 @@ local function ItemButton(
 		else Theme.Color.DropdownItem.BackgroundAlt
 
 	local state = scope:Value(Enum.GuiState.Idle)
-	local color = scope:Computed(function(use: Fusion.Scope)
+	local color = scope:Computed(function(use: ConFusion.Scope)
 		local currentState = use(state)
 		-- local outputColor = use(baseColor)
 
@@ -81,13 +81,13 @@ local function ItemButton(
 end
 
 local function Dropdown(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		Position: UDim2,
 		Size: UDim2,
 
-		Value: Fusion.UsedAs<any>,
-		Items: Fusion.UsedAs<{ any }>,
+		Value: ConFusion.UsedAs<any>,
+		Items: ConFusion.UsedAs<{ any }>,
 		SelectedCallback: (any) -> (),
 	}
 )
@@ -125,7 +125,7 @@ local function Dropdown(
 			Button = inner:TextButton {
 				Size = UDim2.fromScale(1, 1),
 
-				Text = inner:Computed(function(use: Fusion.Use)
+				Text = inner:Computed(function(use: ConFusion.Use)
 					return tostring(use(props.Value))
 				end),
 				TextSize = 16,
@@ -146,7 +146,7 @@ local function Dropdown(
 				ImageColor3 = Theme.Color.Text,
 
 				Rotation = inner:Tween(
-					inner:Computed(function(use: Fusion.Use)
+					inner:Computed(function(use: ConFusion.Use)
 						return if use(open) then 90 else 180
 					end),
 					Theme.TweenInfo.DropdownRotation
@@ -154,7 +154,7 @@ local function Dropdown(
 			},
 			Items = inner:ScrollingFrame {
 				Position = UDim2.new(0, 0, 1, 3),
-				Size = inner:Computed(function(use: Fusion.Use)
+				Size = inner:Computed(function(use: ConFusion.Use)
 					return UDim2.new(
 						1,
 						0,
@@ -193,7 +193,7 @@ local function Dropdown(
 end
 
 local function DropdownMacroItem(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	macroItem: DropdownMacroItem
 )
 	macroItem.Items = default(macroItem.Items)

@@ -1,7 +1,7 @@
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 
 local PluginShared = {}
-PluginShared.Scope = Fusion:scoped()
+PluginShared.Scope = ConFusion:scoped()
 PluginShared.Plugin = nil :: Plugin?
 
 return PluginShared

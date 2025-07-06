@@ -2,14 +2,14 @@ local Types = require "@plugin/Types"
 
 local Theme = require "@utility/Theme"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
 
-local Children = Fusion.Children
+local Children = ConFusion.Children
 
 local default = t.default("Title", t.string)
 
-local function Title(scope: Fusion.Scope, macroItem: Types.MacroItem)
+local function Title(scope: ConFusion.Scope, macroItem: Types.MacroItem)
 	macroItem.Text = default(macroItem.Text)
 
 	local inner = scope:innerScope()

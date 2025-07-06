@@ -1,11 +1,11 @@
 local Types = require "@plugin/Types"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
 
 local TextButton = require "@components/TextButton"
 
-local Children = Fusion.Children
+local Children = ConFusion.Children
 
 local default = t.default("Button", t.string)
 
@@ -14,7 +14,10 @@ type ButtonMacroItem = Types.MacroItem & {
 	Activated: (ButtonMacroItem) -> (),
 }
 
-local function ButtonMacroItem(scope: Fusion.Scope, macroItem: ButtonMacroItem)
+local function ButtonMacroItem(
+	scope: ConFusion.Scope,
+	macroItem: ButtonMacroItem
+)
 	macroItem.Text = default(macroItem.Text)
 
 	local inner = scope:innerScope { TextButton = TextButton }

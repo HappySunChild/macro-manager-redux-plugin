@@ -1,19 +1,19 @@
 local Assets = require "@plugin/Assets"
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 
-local OnEvent, Out = Fusion.OnEvent, Fusion.Out
-local Children = Fusion.Children
+local OnEvent, Out = ConFusion.OnEvent, ConFusion.Out
+local Children = ConFusion.Children
 
-local peek = Fusion.peek
+local peek = ConFusion.peek
 
 local function HueSaturationPicker(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		AnchorPoint: Vector2?,
 		Position: UDim2?,
 		Size: UDim2?,
 
-		OutputColor: Fusion.Value<Color3>,
+		OutputColor: ConFusion.Value<Color3>,
 		Callback: (Color3) -> (),
 	}
 )
@@ -72,7 +72,7 @@ local function HueSaturationPicker(
 		[Children] = {
 			Crosshair = inner:New "ImageLabel" {
 				AnchorPoint = Vector2.new(0.5, 0.5),
-				Position = inner:Computed(function(use: Fusion.Use)
+				Position = inner:Computed(function(use: ConFusion.Use)
 					local hue, sat, _ = use(output):ToHSV()
 
 					return UDim2.fromScale(1 - hue, 1 - sat)

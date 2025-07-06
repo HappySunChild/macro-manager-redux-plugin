@@ -1,20 +1,25 @@
 local Types = require "@plugin/Types"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local RenderStyles = require "@self/Styles"
 local t = require "@packages/t"
 
 local Label = require "@components/Label"
 
+local logging = require "@utility/Logging"
 local updateItemValue = require "@utility/updateItemValue"
 
-local Children = Fusion.Children
+local Children = ConFusion.Children
 
 local default = t.default(Color3.new(0, 0, 0), t.Color3)
 
+type Color3MacroItem = Types.ValueMacroItem<Color3> & {
+	Style: string,
+}
+
 local function Color3MacroItem(
-	scope: Fusion.Scope,
-	macroItem: Types.ValueMacroItem<Color3>
+	scope: ConFusion.Scope,
+	macroItem: Color3MacroItem
 )
 	macroItem.Value = default(macroItem.Value)
 
@@ -70,8 +75,8 @@ local function Color3MacroItem(
 				Text = displayText,
 			},
 			InputElements = renderStyle(inner, {
-				Value = value,
-				Callback = setInternalValue,
+				color = value,
+				setColor = setInternalValue,
 			}),
 		},
 	}

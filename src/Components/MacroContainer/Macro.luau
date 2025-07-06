@@ -9,18 +9,18 @@ local Theme = require "@utility/Theme"
 
 local Types = require "@plugin/Types"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
 
 local ItemsContainer = require "@components/ItemsContainer"
 local RoundBorder = require "@components/RoundBorder"
 local TextButton = require "@components/TextButton"
 
-local Children, OnEvent = Fusion.Children, Fusion.OnEvent
-local peek = Fusion.peek
+local Children, OnEvent = ConFusion.Children, ConFusion.OnEvent
+local peek = ConFusion.peek
 
 local function Title(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		Text: string,
 		Icon: string?,
@@ -115,11 +115,17 @@ local function Macro(
 
 	local typeOk = t.table(macro)
 
-	if not typeOk then
+	if t.table(macro) == false then
 		Logging.warn("macroInvalidType", nil, name, type(macro))
 
 		return
 	end
+
+	if macro.Items == nil then
+		Logging.warn("macroMissingItems", nil, name)
+	end
+
+	macro.Name = name
 
 	local inner = scope:innerScope {
 		Title = Title,
@@ -128,11 +134,7 @@ local function Macro(
 		TextButton = TextButton,
 	}
 
-	if macro.Setup ~= nil then
-		xpcall(macro.Setup, function(err)
-			Logging.warn("macroMethodError", Logging.parse(err), "Setup", name)
-		end, macro, PluginShared.Plugin)
-	end
+	_callMacroMethod(macro, "Setup", PluginShared.Plugin)
 
 	local visible = inner:Value(true)
 	local minimized = inner:Value(false)
@@ -155,22 +157,11 @@ local function Macro(
 		end),
 	}
 
-	if macro.Init ~= nil then
-		xpcall(macro.Init, function(err)
-			Logging.warn("macroMethodError", Logging.parse(err), "Init", name)
-		end, macro, PluginShared.Plugin)
-	end
+	_callMacroMethod(macro, "Init", PluginShared.Plugin)
 
 	if macro.Cleanup ~= nil then
 		table.insert(inner, function()
-			xpcall(macro.Cleanup, function(err)
-				Logging.warn(
-					"macroMethodError",
-					Logging.parse(err),
-					"Cleanup",
-					name
-				)
-			end, macro, PluginShared.Plugin)
+			_callMacroMethod(macro, "Cleanup", PluginShared.Plugin)
 		end)
 	end
 
@@ -203,7 +194,7 @@ local function Macro(
 				Position = UDim2.fromScale(1, 0),
 				Size = UDim2.fromOffset(16, 16),
 
-				Text = inner:Computed(function(use: Fusion.Use)
+				Text = inner:Computed(function(use: ConFusion.Use)
 					return if use(minimized) then "+" else "-"
 				end),
 				TextSize = 20,

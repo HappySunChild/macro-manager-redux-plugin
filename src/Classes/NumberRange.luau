@@ -2,20 +2,20 @@ local Types = require "@plugin/Types"
 
 local updateItemValue = require "@utility/updateItemValue"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
 
 local ElementGroup = require "@components/ElementGroup"
 local Label = require "@components/Label"
 local TextEntry = require "@components/TextEntry"
 
-local Children = Fusion.Children
-local peek = Fusion.peek
+local Children = ConFusion.Children
+local peek = ConFusion.peek
 
 local default = t.default(NumberRange.new(0, 1), t.NumberRange)
 
 local function NumberRangeMacroItem(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	macroItem: Types.ValueMacroItem<NumberRange>
 )
 	macroItem.Value = default(macroItem.Value)
@@ -88,7 +88,7 @@ local function NumberRangeMacroItem(
 					return scope:TextEntry {
 						Size = UDim2.fromScale(1, 1),
 
-						Text = scope:Computed(function(use: Fusion.Use)
+						Text = scope:Computed(function(use: ConFusion.Use)
 							return use(value)[label]
 						end),
 						PlaceholderText = label,

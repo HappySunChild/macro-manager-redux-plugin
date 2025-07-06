@@ -1,13 +1,13 @@
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local Theme = require "@utility/Theme"
 
-local Children, Ref = Fusion.Children, Fusion.Ref
-local OnEvent, Out = Fusion.OnEvent, Fusion.Out
+local Children, Ref = ConFusion.Children, ConFusion.Ref
+local OnEvent, Out = ConFusion.OnEvent, ConFusion.Out
 
-local peek = Fusion.peek
+local peek = ConFusion.peek
 
 local function Entry(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		AnchorPoint: Vector2?,
 		Position: UDim2?,
@@ -15,17 +15,17 @@ local function Entry(
 
 		Label: string,
 
-		Value: Fusion.UsedAs<string>?,
+		Value: ConFusion.UsedAs<string>?,
 		Range: NumberRange?,
 
 		Callback: (string) -> (),
 
-		TextboxRef: Fusion.Value<unknown>?,
+		TextboxRef: ConFusion.Value<unknown>?,
 	}
 )
 	local inner = scope:innerScope()
 	local focused = inner:Value(false)
-	local borderColor = inner:Computed(function(use: Fusion.Use)
+	local borderColor = inner:Computed(function(use: ConFusion.Use)
 		if use(focused) then
 			return use(Theme.Color.AccentBorder)
 		end

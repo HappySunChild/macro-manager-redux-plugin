@@ -2,14 +2,17 @@ local Types = require "@plugin/Types"
 
 local Theme = require "@utility/Theme"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
 
-local Children = Fusion.Children
+local Children = ConFusion.Children
 
 local default = t.default("", t.string)
 
-local function DividerMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
+local function DividerMacroItem(
+	scope: ConFusion.Scope,
+	macroItem: Types.MacroItem
+)
 	macroItem.Text = default(macroItem.Text)
 
 	local inner = scope:innerScope()
@@ -32,7 +35,7 @@ local function DividerMacroItem(scope: Fusion.Scope, macroItem: Types.MacroItem)
 
 		[Children] = {
 			Label = inner:Computed(
-				function(use: Fusion.Use, scope: typeof(inner))
+				function(use: ConFusion.Use, scope: typeof(inner))
 					if use(displayText) == "" then
 						return
 					end

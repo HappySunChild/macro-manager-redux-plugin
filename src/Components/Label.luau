@@ -1,13 +1,13 @@
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local Theme = require "@utility/Theme"
 
 local function Label(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		Position: UDim2,
 		Size: UDim2,
 
-		Text: Fusion.UsedAs<string>,
+		Text: ConFusion.UsedAs<string>,
 	}
 )
 	return scope:New "TextLabel" {

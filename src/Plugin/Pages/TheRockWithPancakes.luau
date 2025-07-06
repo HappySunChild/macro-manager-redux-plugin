@@ -1,12 +1,12 @@
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 
-local peek = Fusion.peek
+local peek = ConFusion.peek
 
 local function TheRockWithPancakes(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		navigate: (string) -> (),
-		active: Fusion.UsedAs<boolean>,
+		active: ConFusion.UsedAs<boolean>,
 	}
 )
 	local navigate = props.navigate

@@ -1,19 +1,19 @@
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 local Theme = require "@utility/Theme"
 
 local RoundBorder = require "@components/RoundBorder"
 
-local peek = Fusion.peek
+local peek = ConFusion.peek
 local Children, Ref, OnEvent, Out =
-	Fusion.Children, Fusion.Ref, Fusion.OnEvent, Fusion.Out
+	ConFusion.Children, ConFusion.Ref, ConFusion.OnEvent, ConFusion.Out
 
 local function TextEntry(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
-		AnchorPoint: Fusion.UsedAs<Vector2>?,
-		Position: Fusion.UsedAs<UDim2>?,
-		Size: Fusion.UsedAs<UDim2>?,
-		SizeConstraint: Fusion.UsedAs<Enum.SizeConstraint>?,
+		AnchorPoint: ConFusion.UsedAs<Vector2>?,
+		Position: ConFusion.UsedAs<UDim2>?,
+		Size: ConFusion.UsedAs<UDim2>?,
+		SizeConstraint: ConFusion.UsedAs<Enum.SizeConstraint>?,
 
 		PlaceholderText: string?,
 		Text: string?,
@@ -21,7 +21,7 @@ local function TextEntry(
 
 		Callback: (string) -> (),
 
-		[Fusion.SpecialKey<"Ref">]: Fusion.Value<unknown>?,
+		[ConFusion.SpecialKey<"Ref">]: ConFusion.Value<unknown>?,
 	}
 )
 	local inner = scope:innerScope { RoundBorder = RoundBorder }

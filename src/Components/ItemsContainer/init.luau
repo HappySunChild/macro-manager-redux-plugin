@@ -3,24 +3,24 @@ local Types = require "@plugin/Types"
 local Theme = require "@utility/Theme"
 local merge = require "@utility/merge"
 
-local Fusion = require "@packages/Fusion"
+local ConFusion = require "@packages/ConFusion"
 
 local Item = require "@self/Item"
 local RoundBorder = require "@components/RoundBorder"
 
-local Children = Fusion.Children
+local Children = ConFusion.Children
 
 local function ItemsContainer(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		Items: { Types.MacroItem },
 		ItemProperties: { [string]: any }?,
 
-		Position: Fusion.UsedAs<UDim2>?,
-		Size: Fusion.UsedAs<UDim2>?,
-		BackgroundColor: Fusion.UsedAs<Color3>?,
-		BackgroundTransparency: Fusion.UsedAs<number>?,
-		Visible: Fusion.UsedAs<boolean>?,
+		Position: ConFusion.UsedAs<UDim2>?,
+		Size: ConFusion.UsedAs<UDim2>?,
+		BackgroundColor: ConFusion.UsedAs<Color3>?,
+		BackgroundTransparency: ConFusion.UsedAs<number>?,
+		Visible: ConFusion.UsedAs<boolean>?,
 	}
 )
 	if props.Items == nil or #props.Items == 0 then

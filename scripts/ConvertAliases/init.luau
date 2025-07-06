@@ -15,7 +15,7 @@ packageAliasConverter:bulkRegisterAliases {
 	utility = pluginFolder.Utility,
 }
 
-local IGNORE = { pluginFolder.Packages.Fusion }
+local IGNORE = { pluginFolder.Packages.ConFusion }
 
 local function getPackageScripts(): { LuaSourceContainer }
 	local sourceContainers = {}
