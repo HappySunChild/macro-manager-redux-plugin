@@ -49,13 +49,15 @@ local function Color3MacroItem(
 
 	macroItem.Set = macroItem.SetValue
 
-	local renderStyle = RenderStyles[macroItem.Style or "RGB"]
+	local styleIndex = macroItem.Style or "RGB"
+	local renderStyle = RenderStyles[styleIndex]
 
 	if not renderStyle then
 		renderStyle = RenderStyles.RGB
 
-		warn(`Color3 render style '{macroItem.Style}' does not exist.`)
 		-- TODO: replace this with a `logging` message
+		-- warn(`Color3 render style '{macroItem.Style}' does not exist.`)
+		logging.warn("color3UnknownStyle", nil, styleIndex)
 	end
 
 	return inner:New "Frame" {

@@ -11,6 +11,8 @@ local messages = {
 	classRequireError = "An error occured while loading MacroItem class '%s'\nERROR_MESSAGE",
 	classInvalidType = "Expected MacroItem class '%s' to return value of type function, got %s.\nYou may have to remove/modify existing classes!",
 	classCannotFind = "Unable to find MacroItem class '%s'.",
+
+	color3UnknownStyle = "Unable to find Color3 Style '%s'.",
 }
 
 return messages
