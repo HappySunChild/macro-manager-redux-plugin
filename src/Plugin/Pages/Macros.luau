@@ -73,7 +73,7 @@ local function MacrosPage(
 							TextSize = 16,
 
 							Callback = function()
-								MacroManager:RefreshMacros()
+								MacroManager.refreshMacros()
 							end,
 						},
 					},
