@@ -223,6 +223,8 @@ local function ColorPickerWidget(
 	widget.Title = "Select Color"
 	widget.Name = "MacroColorPicker"
 
+	widget:BindToClose(props.cancel)
+
 	return inner:Hydrate(widget) {
 		Enabled = props.enabled,
 		Title = map(props.status, function(status: string?)
