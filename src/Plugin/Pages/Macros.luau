@@ -48,24 +48,17 @@ local function MacrosPage(
 				},
 				RoundBorder = inner:RoundBorder { Thickness = 0 },
 
-				Elements = inner:ElementGroup {
-					Size = UDim2.fromScale(1, 1),
+				RightAligned = inner:ElementGroup {
+					AnchorPoint = Vector2.new(1, 0),
+					Position = UDim2.fromScale(1, 0),
+					Size = UDim2.fromScale(0, 1),
+					AutomaticSize = Enum.AutomaticSize.X,
 
 					Padding = UDim.new(0, 3),
 					FlexAlignment = Enum.UIFlexAlignment.None,
-					HorizontalAlignment = Enum.HorizontalAlignment.Left,
+					HorizontalAlignment = Enum.HorizontalAlignment.Right,
 
 					[Children] = {
-						SettingsButton = inner:TextButton {
-							Size = UDim2.new(0, 90, 1, 0),
-
-							Text = "Open Settings",
-							TextSize = 16,
-
-							Callback = function()
-								navigate "Settings"
-							end,
-						},
 						RefreshButton = inner:TextButton {
 							Size = UDim2.new(0, 60, 1, 0),
 

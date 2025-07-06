@@ -57,10 +57,6 @@ local function App(
 		[Children] = {
 			MacrosPage = createPage("Macros", {
 				macros = MacroManager.ActiveMacros,
-				navigate = navigate,
-			}),
-			SettingsPage = createPage("Settings", {
-				navigate = navigate,
 			}),
 			TheRockWithPancakesPage = createPage(
 				"TheRockWithPancakes",
