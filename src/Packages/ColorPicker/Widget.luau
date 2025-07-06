@@ -152,7 +152,15 @@ local function HexEntry(
 		local hexField = peek(hexFieldRef) :: TextBox
 		local hex = hexField.Text
 
-		return Color3.fromHex(hex)
+		-- i don't understand why Roblox made this error when it receives an invalid hex input
+		-- return Color3.fromHex(hex)
+		local success, color = pcall(Color3.fromHex, hex)
+
+		if not success then
+			return Color3.new()
+		end
+
+		return color
 	end
 
 	return inner:Entry {
