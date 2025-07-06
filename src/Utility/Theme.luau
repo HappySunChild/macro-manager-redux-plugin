@@ -34,8 +34,10 @@ local function ColorSet(set: { [string]: Color3 }): ConFusion.Computed<Color3>
 	end)
 end
 
-local Theme = {
-	Current = currentTheme,
+return table.freeze {
+	setTheme = function(newTheme: StudioTheme)
+		currentTheme:set(newTheme)
+	end,
 
 	Font = {
 		Regular = Font.fromName "SourceSansPro",
@@ -45,7 +47,6 @@ local Theme = {
 		Text = StudioColor(Enum.StudioStyleGuideColor.MainText),
 		BrightText = StudioColor(Enum.StudioStyleGuideColor.BrightText),
 		SubText = StudioColor(Enum.StudioStyleGuideColor.SubText),
-		InfoText = StudioColor(Enum.StudioStyleGuideColor.InfoText),
 		DimmedText = StudioColor(Enum.StudioStyleGuideColor.DimmedText),
 
 		Border = StudioColor(Enum.StudioStyleGuideColor.Border),
@@ -140,16 +141,14 @@ local Theme = {
 		Highlight = TweenInfo.new(0.1),
 		Hover = TweenInfo.new(0.05),
 
-		Page = TweenInfo.new(0.26, Enum.EasingStyle.Circular),
+		Page = TweenInfo.new(
+			0.2,
+			Enum.EasingStyle.Cubic,
+			Enum.EasingDirection.Out
+		),
 
 		DropdownRotation = TweenInfo.new(0.2),
 	},
 
-	Roundness = scope:Value(UDim.new(0, 0)),
+	Roundness = scope:Value(UDim.new(0, 4)),
 }
-
-function Theme:SetTheme(newTheme: StudioTheme)
-	currentTheme:set(newTheme)
-end
-
-return Theme

@@ -5,23 +5,17 @@ local PluginShared = require "@plugin/Shared"
 
 local t = require "@packages/t"
 
-local MacroManager = {}
-MacroManager.CustomItemClasses = {}
-
 local loadedMacros = {}
-MacroManager.ActiveMacros = PluginShared.Scope:Value(loadedMacros)
+local customItemClasses = {}
 
-function MacroManager:LoadMacro(macroModule: ModuleScript, reference: Instance?)
+local function loadMacro(macroModule: ModuleScript, reference: Instance?)
 	table.insert(loadedMacros, { Module = macroModule, Reference = reference })
 end
 
-function MacroManager:LoadCurrentContainer()
-	local tempContainer = ContainerManager:CreateTemporaryContainer()
+local function loadCurrentContainer()
+	local tempContainer = ContainerManager.createTemporaryContainer()
 
-	if not tempContainer then
-		return
-	end
-
+	-- load custom classes
 	local classesFolder = tempContainer:FindFirstChild "MacroItemClasses"
 
 	for _, classModule in classesFolder:GetChildren() do
@@ -50,10 +44,11 @@ function MacroManager:LoadCurrentContainer()
 			continue
 		end
 
-		MacroManager.CustomItemClasses[index] = constructor
+		customItemClasses[index] = constructor
 	end
 
-	local container = ContainerManager.CurrentContainer
+	-- load macros
+	local container = ContainerManager.getCurrentContainer()
 	local macrosFolder = tempContainer:FindFirstChild "Macros"
 
 	for _, macroModule in macrosFolder:GetChildren() do
@@ -61,7 +56,7 @@ function MacroManager:LoadCurrentContainer()
 			continue
 		end
 
-		MacroManager:LoadMacro(
+		loadMacro(
 			macroModule,
 			container.Macros:FindFirstChild(macroModule.Name)
 		)
@@ -70,15 +65,26 @@ function MacroManager:LoadCurrentContainer()
 	tempContainer.Parent = nil
 end
 
-function MacroManager:RefreshMacros()
+local _activeMacros = PluginShared.Scope:Value(loadedMacros)
+
+local function _updateMacros()
+	_activeMacros:set(loadedMacros)
+end
+
+local function _refreshMacros()
 	table.clear(loadedMacros)
 
-	MacroManager:LoadCurrentContainer()
-	MacroManager:UpdateMacros()
+	loadCurrentContainer()
+	_updateMacros()
 end
 
-function MacroManager:UpdateMacros()
-	MacroManager.ActiveMacros:set(loadedMacros)
-end
+return table.freeze {
+	CustomItemClasses = customItemClasses,
+	ActiveMacros = _activeMacros,
 
-return MacroManager
+	loadMacro = loadMacro,
+	loadCurrentContainer = loadCurrentContainer,
+
+	refreshMacros = _refreshMacros,
+	updateMacros = _updateMacros,
+}
