@@ -186,8 +186,8 @@ t.withValues = function(values: { any })
 		return true
 	end
 end
-t.withPairs = function(pairs: { [any]: CheckCallback })
-	assert(t.table(pairs))
+t.struct = function(struct: { [any]: CheckCallback })
+	assert(t.table(struct))
 
 	return function(tab: { [any]: any })
 		local tabSuccess, tabMessage = t.table(tab)
@@ -196,7 +196,7 @@ t.withPairs = function(pairs: { [any]: CheckCallback })
 			return false, tabMessage
 		end
 
-		for key, check in pairs do
+		for key, check in struct do
 			local value = tab[key]
 			local success, message = check(value)
 
