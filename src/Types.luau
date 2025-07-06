@@ -1,4 +1,5 @@
 export type Macro = {
+	Name: string,
 	Order: number?,
 	Icon: string?,
 	Items: { MacroItem }?,
