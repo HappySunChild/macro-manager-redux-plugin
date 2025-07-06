@@ -61,7 +61,7 @@ return table.freeze {
 			Title = {
 				Text = StudioColor(Enum.StudioStyleGuideColor.InfoText),
 				Background = ColorSet {
-					Light = Color3.fromRGB(138, 138, 138),
+					Light = Color3.fromRGB(195, 195, 195),
 					Dark = Color3.fromRGB(17, 17, 17),
 				},
 			},
