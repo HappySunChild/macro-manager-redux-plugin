@@ -2,6 +2,7 @@ local messages = {
 	macroRequireError = "An error occured while requiring Macro '%s'\nERROR_MESSAGE",
 	macroMethodError = "An error occured while running :%s for Macro '%s'\nERROR_MESSAGE",
 	macroInvalidType = "Expected Macro '%s' to return value of type table, got %s.",
+	macroMissingItems = "Macro '%s' is missing an Items array!",
 
 	itemConstructorError = "An error occured while adding MacroItem '%s'\nERROR_MESSAGE",
 	itemAlreadyRendered = "MacroItem '%s' has already been rendered.",
