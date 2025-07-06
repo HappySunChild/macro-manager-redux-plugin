@@ -55,6 +55,7 @@ local function Color3MacroItem(
 		renderStyle = RenderStyles.RGB
 
 		warn(`Color3 render style '{macroItem.Style}' does not exist.`)
+		-- TODO: replace this with a `logging` message
 	end
 
 	return inner:New "Frame" {
