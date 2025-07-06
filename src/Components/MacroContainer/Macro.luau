@@ -19,6 +19,20 @@ local TextButton = require "@components/TextButton"
 local Children, OnEvent = ConFusion.Children, ConFusion.OnEvent
 local peek = ConFusion.peek
 
+local function _callMacroMethod(macro: Types.Macro, method: string, ...: any)
+	local func = macro[method]
+
+	if not func then
+		return
+	end
+
+	local function errHandler(err: string)
+		Logging.warn("macroMethodError", Logging.parse(err), method, macro.Name)
+	end
+
+	xpcall(func, errHandler, macro, ...)
+end
+
 local function Title(
 	scope: ConFusion.Scope,
 	props: {
@@ -95,7 +109,7 @@ local function Title(
 end
 
 local function Macro(
-	scope: Fusion.Scope,
+	scope: ConFusion.Scope,
 	props: {
 		Module: ModuleScript,
 		Reference: Instance?,
@@ -112,8 +126,6 @@ local function Macro(
 	if not reqOk then
 		Logging.warn("macroRequireError", reqErr, name)
 	end
-
-	local typeOk = t.table(macro)
 
 	if t.table(macro) == false then
 		Logging.warn("macroInvalidType", nil, name, type(macro))
