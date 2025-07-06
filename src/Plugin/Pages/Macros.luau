@@ -79,7 +79,9 @@ local function MacrosPage(
 
 			BackgroundTransparency = 1,
 
-			[Children] = inner:MacroContainer { Macros = props.macros },
+			[Children] = inner:MacroContainer {
+				macros = props.macros,
+			},
 		},
 	}
 end

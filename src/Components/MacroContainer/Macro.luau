@@ -111,16 +111,15 @@ end
 local function Macro(
 	scope: ConFusion.Scope,
 	props: {
-		Module: ModuleScript,
-		Reference: Instance?,
+		reference: Types.MacroReference,
 	}
 )
-	local name = props.Module.Name
+	local name = props.reference.Module.Name
 	local displayName = name:gsub("(%l)([%u%d])", "%1 %2")
 
 	local macro: Types.Macro = {} :: any
 	local reqOk, reqErr = pcall(function()
-		macro = require(props.Module) :: any
+		macro = require(props.reference.Module) :: any
 	end)
 
 	if not reqOk then
@@ -198,7 +197,7 @@ local function Macro(
 			Title = inner:Title {
 				Text = displayName,
 				Icon = macro.Icon,
-				Document = props.Reference,
+				Document = props.reference.Reference,
 			},
 
 			MinimizeButton = inner:TextButton {

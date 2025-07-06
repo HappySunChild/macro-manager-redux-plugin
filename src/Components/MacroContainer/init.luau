@@ -31,10 +31,11 @@ end
 local function MacroContainer(
 	scope: ConFusion.Scope,
 	props: {
-		Macros: ConFusion.UsedAs<{ Types.Macro }>,
+		macros: ConFusion.UsedAs<{ Types.MacroReference }>,
 	}
 )
 	local inner = scope:innerScope {
+		NoMacrosLabel = NoMacrosLabel,
 		Macro = Macro,
 		ScrollingFrame = ScrollingFrame,
 	}
@@ -55,16 +56,21 @@ local function MacroContainer(
 
 			Macros = inner:Computed(
 				function(use: ConFusion.Use, scope: typeof(inner))
-					local macros = use(props.Macros)
+					local macros = use(props.macros)
 
 					if #macros == 0 then
-						return NoMacrosLabel(scope)
+						return scope:NoMacrosLabel()
 					end
 
 					local list = {}
 
-					for _, macro in macros do
-						table.insert(list, scope:Macro(macro))
+					for _, macroReference in macros do
+						table.insert(
+							list,
+							scope:Macro {
+								reference = macroReference,
+							}
+						)
 					end
 
 					return list

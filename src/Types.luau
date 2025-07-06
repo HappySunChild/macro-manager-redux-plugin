@@ -1,3 +1,8 @@
+export type MacroReference = {
+	Module: ModuleScript,
+	Reference: Instance?,
+}
+
 export type Macro = {
 	Name: string,
 	Order: number?,
