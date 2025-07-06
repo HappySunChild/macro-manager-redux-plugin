@@ -11,7 +11,7 @@ local PluginShared = require "@plugin/Shared"
 
 local App = require "./App"
 
-local PLUGIN_VERSION = require "@plugin/version"
+local PLUGIN_VERSION = require "@plugin/Version"
 
 local isActive = false
 
@@ -31,6 +31,8 @@ local function activate()
 	isActive = true
 	buttonWidget:SetActive(true)
 	widget.Enabled = true
+
+	MacroManager.refreshMacros()
 end
 
 local function deactivate()
@@ -128,6 +130,4 @@ return function(plugin: Plugin)
 	_onThemeChange(Studio.Theme)
 
 	ColorPicker.initialize(plugin)
-
-	MacroManager.refreshMacros()
 end
