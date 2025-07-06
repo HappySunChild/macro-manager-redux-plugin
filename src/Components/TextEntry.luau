@@ -4,8 +4,10 @@ local Theme = require "@utility/Theme"
 local RoundBorder = require "@components/RoundBorder"
 
 local peek = ConFusion.peek
-local Children, Ref, OnEvent, Out =
-	ConFusion.Children, ConFusion.Ref, ConFusion.OnEvent, ConFusion.Out
+
+local Children, Ref = ConFusion.Children, ConFusion.Ref
+local OnEvent, OnChange, Out =
+	ConFusion.OnEvent, ConFusion.OnChange, ConFusion.Out
 
 local function TextEntry(
 	scope: ConFusion.Scope,
@@ -18,8 +20,11 @@ local function TextEntry(
 		PlaceholderText: string?,
 		Text: string?,
 		TextSize: number?,
+		TextXAlignment: Enum.TextXAlignment,
+		TextYAlignment: Enum.TextYAlignment,
 
 		Callback: (string) -> (),
+		TypingCallback: (string) -> (),
 
 		[ConFusion.SpecialKey<"Ref">]: ConFusion.Value<unknown>?,
 	}
@@ -52,18 +57,32 @@ local function TextEntry(
 		TextTruncate = Enum.TextTruncate.AtEnd,
 		FontFace = Theme.Font.Regular,
 
+		TextXAlignment = props.TextXAlignment,
+		TextYAlignment = props.TextYAlignment,
+
 		[Out "Text"] = text,
+		[OnChange "Text"] = props.TypingCallback,
 		[OnEvent "Focused"] = function()
 			isFocused:set(true)
 		end,
 		[OnEvent "FocusLost"] = function()
 			isFocused:set(false)
 
-			props.Callback(peek(text))
+			if props.Callback then
+				props.Callback(peek(text))
+			end
 		end,
 
-		[Children] = inner:RoundBorder {
-			Color = inner:Tween(borderColor, Theme.TweenInfo.Highlight),
+		[Children] = {
+			Padding = inner:New "UIPadding" {
+				PaddingLeft = UDim.new(0, 2),
+				PaddingRight = UDim.new(0, 2),
+				PaddingTop = UDim.new(0, 2),
+				PaddingBottom = UDim.new(0, 2),
+			},
+			Border = inner:RoundBorder {
+				Color = inner:Tween(borderColor, Theme.TweenInfo.Highlight),
+			},
 		},
 		[Ref] = props[Ref],
 	}
