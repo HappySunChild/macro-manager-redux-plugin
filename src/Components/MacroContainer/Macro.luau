@@ -112,6 +112,7 @@ local function Macro(
 	scope: ConFusion.Scope,
 	props: {
 		reference: Types.MacroReference,
+		shouldShow: (macro: Types.Macro, use: ConFusion.Use) -> boolean,
 	}
 )
 	local name = props.reference.Module.Name
@@ -181,7 +182,9 @@ local function Macro(
 		Size = UDim2.new(1, 0, 0, 20),
 		AutomaticSize = Enum.AutomaticSize.Y,
 
-		Visible = visible,
+		Visible = inner:Computed(function(use: ConFusion.Use)
+			return props.shouldShow(macro, use) and use(visible)
+		end),
 
 		LayoutOrder = macro.Order,
 		BackgroundColor3 = Theme.Color.Macro.Background,

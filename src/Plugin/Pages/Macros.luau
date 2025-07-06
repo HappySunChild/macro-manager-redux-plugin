@@ -9,6 +9,7 @@ local ElementGroup = require "@components/ElementGroup"
 local MacroContainer = require "@components/MacroContainer"
 local RoundBorder = require "@components/RoundBorder"
 local TextButton = require "@components/TextButton"
+local TextEntry = require "@components/TextEntry"
 
 local Children = ConFusion.Children
 
@@ -23,9 +24,12 @@ local function MacrosPage(
 	local inner = scope:innerScope {
 		MacroContainer = MacroContainer,
 		TextButton = TextButton,
+		TextEntry = TextEntry,
 		ElementGroup = ElementGroup,
 		RoundBorder = RoundBorder,
 	}
+
+	local filter = inner:Value ""
 
 	return {
 		Padding = inner:New "UIPadding" {
@@ -48,17 +52,23 @@ local function MacrosPage(
 				},
 				RoundBorder = inner:RoundBorder { Thickness = 0 },
 
-				RightAligned = inner:ElementGroup {
-					AnchorPoint = Vector2.new(1, 0),
-					Position = UDim2.fromScale(1, 0),
-					Size = UDim2.fromScale(0, 1),
-					AutomaticSize = Enum.AutomaticSize.X,
+				Container = inner:ElementGroup {
+					Size = UDim2.fromScale(1, 1),
 
 					Padding = UDim.new(0, 3),
-					FlexAlignment = Enum.UIFlexAlignment.None,
-					HorizontalAlignment = Enum.HorizontalAlignment.Right,
 
 					[Children] = {
+						Search = inner:TextEntry {
+							Size = UDim2.new(1, -60, 1, 0),
+
+							TextSize = 16,
+							TextXAlignment = Enum.TextXAlignment.Left,
+							PlaceholderText = "Filter...",
+
+							TypingCallback = function(text: string)
+								filter:set(text:lower())
+							end,
+						},
 						RefreshButton = inner:TextButton {
 							Size = UDim2.new(0, 60, 1, 0),
 
@@ -80,6 +90,7 @@ local function MacrosPage(
 			BackgroundTransparency = 1,
 
 			[Children] = inner:MacroContainer {
+				filter = filter,
 				macros = props.macros,
 			},
 		},

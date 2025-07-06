@@ -31,6 +31,7 @@ end
 local function MacroContainer(
 	scope: ConFusion.Scope,
 	props: {
+		filter: ConFusion.UsedAs<string>,
 		macros: ConFusion.UsedAs<{ Types.MacroReference }>,
 	}
 )
@@ -39,6 +40,12 @@ local function MacroContainer(
 		Macro = Macro,
 		ScrollingFrame = ScrollingFrame,
 	}
+
+	local function shouldShowMacro(macro: Types.Macro, use: ConFusion.Use)
+		local filter = use(props.filter)
+
+		return macro.Name:lower():match(filter) ~= nil
+	end
 
 	return inner:ScrollingFrame {
 		Size = UDim2.fromScale(1, 1),
@@ -69,6 +76,7 @@ local function MacroContainer(
 							list,
 							scope:Macro {
 								reference = macroReference,
+								shouldShow = shouldShowMacro,
 							}
 						)
 					end
