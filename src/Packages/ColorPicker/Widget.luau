@@ -182,20 +182,21 @@ end
 local function ColorPickerWidget(
 	scope: ConFusion.Scope,
 	props: {
-		Plugin: Plugin,
-		Enabled: Fusion.UsedAs<boolean>,
-		OutputColor: Fusion.Value<Color3>,
+		plugin: Plugin,
+		output: ConFusion.Value<Color3>,
 
-		ConfirmCallback: () -> (),
-		CancelCallback: () -> (),
+		status: ConFusion.UsedAs<string>,
+		enabled: ConFusion.UsedAs<boolean>,
+
+		confirm: () -> (),
+		cancel: () -> (),
 	}
 )
-	local plugin = props.Plugin
+	local plugin = props.plugin
 
 	assert(plugin, "Missing Plugin!")
 
-	local output = props.OutputColor
-
+	local output = props.output
 	local inner = scope:innerScope {
 		ElementGroup = ElementGroup,
 		Button = Button,
@@ -223,7 +224,14 @@ local function ColorPickerWidget(
 	widget.Name = "MacroColorPicker"
 
 	return inner:Hydrate(widget) {
-		Enabled = props.Enabled,
+		Enabled = props.enabled,
+		Title = map(props.status, function(status: string?)
+			if not status then
+				return "Select Color"
+			end
+
+			return `Select Color - {status}`
+		end),
 
 		[Children] = {
 			Padding = inner:New "UIPadding" {
