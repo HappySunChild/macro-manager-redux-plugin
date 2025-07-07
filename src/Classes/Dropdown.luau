@@ -122,83 +122,81 @@ local function Dropdown(
 	return inner:Button {
 		position = props.position,
 		size = props.size,
+
+		contents = {
+			text = inner:New "TextLabel" {
+				Size = UDim2.new(1, -14, 1, 0),
+
+				BackgroundTransparency = 1,
+
+				Text = inner:Computed(function(use: ConFusion.Use)
+					return tostring(use(props.value))
+				end),
+				TextSize = 16,
+				TextColor3 = Theme.Color.Button.Text,
+				FontFace = Theme.Font.Regular,
+				TextXAlignment = Enum.TextXAlignment.Left,
+				TextTruncate = Enum.TextTruncate.AtEnd,
+			},
+			arrow = inner:New "ImageLabel" {
+				AnchorPoint = Vector2.new(1, 0.5),
+				Position = UDim2.new(1, -4, 0.5, 0),
+				Size = UDim2.fromOffset(8, 8),
+
+				BackgroundTransparency = 1,
+
+				Image = Assets.Images.Dropdown.Arrow,
+				ImageColor3 = Theme.Color.Text,
+
+				Rotation = inner:Tween(
+					inner:Computed(function(use: ConFusion.Use)
+						return if use(open) then 90 else 180
+					end),
+					Theme.TweenInfo.DropdownRotation
+				),
+			},
+			items = inner:ScrollingFrame {
+				position = UDim2.new(0, 0, 1, 3),
+				size = inner:Computed(function(use: ConFusion.Use)
+					return UDim2.new(
+						1,
+						0,
+						0,
+						math.min(#use(props.items), 8) * 18 + 8
+					)
+				end),
+				zIndex = 100,
+
+				canvasSize = UDim2.fromScale(0, 0),
+				automaticCanvasSize = Enum.AutomaticSize.Y,
+
+				backgroundColor3 = Theme.Color.Button.Background,
+
+				visible = open,
+
+				[Children] = {
+					layout = inner:New "UIListLayout" {
+						FillDirection = Enum.FillDirection.Vertical,
+						Padding = UDim.new(0, 0),
+					},
+					padding = inner:New "UIPadding" {
+						PaddingTop = UDim.new(0, 4),
+						PaddingBottom = UDim.new(0, 4),
+						PaddingRight = UDim.new(0, 4),
+					},
+					border = inner:RoundBorder {
+						color = Theme.Color.Button.Border,
+					},
+
+					items = items,
+				},
+			},
+		},
+
+		callback = function()
+			open:set(not peek(open))
+		end,
 	}
-
-	-- return inner:New "Frame" {
-	-- 	Position = props.position,
-	-- 	Size = props.size,
-
-	-- 	BackgroundTransparency = 1,
-
-	-- 	[Children] = {
-	-- 		button = inner:TextButton {
-	-- 			size = UDim2.new(1, -14, 1, 0),
-
-	-- 			text = inner:Computed(function(use: ConFusion.Use)
-	-- 				return tostring(use(props.value))
-	-- 			end),
-	-- 			textSize = 16,
-	-- 			textXAlignment = Enum.TextXAlignment.Left,
-
-	-- 			callback = function()
-	-- 				open:set(not peek(open))
-	-- 			end,
-	-- 		},
-	-- 		arrow = inner:New "ImageLabel" {
-	-- 			AnchorPoint = Vector2.new(1, 0.5),
-	-- 			Position = UDim2.new(1, -6, 0.5, 0),
-	-- 			Size = UDim2.fromOffset(8, 8),
-
-	-- 			BackgroundTransparency = 1,
-
-	-- 			Image = Assets.Images.Dropdown.Arrow,
-	-- 			ImageColor3 = Theme.Color.Text,
-
-	-- 			Rotation = inner:Tween(
-	-- 				inner:Computed(function(use: ConFusion.Use)
-	-- 					return if use(open) then 90 else 180
-	-- 				end),
-	-- 				Theme.TweenInfo.DropdownRotation
-	-- 			),
-	-- 		},
-	-- 		items = inner:ScrollingFrame {
-	-- 			position = UDim2.new(0, 0, 1, 3),
-	-- 			size = inner:Computed(function(use: ConFusion.Use)
-	-- 				return UDim2.new(
-	-- 					1,
-	-- 					0,
-	-- 					0,
-	-- 					math.min(#use(props.items), 8) * 18 + 8
-	-- 				)
-	-- 			end),
-	-- 			zIndex = 100,
-
-	-- 			canvasSize = UDim2.fromScale(0, 0),
-	-- 			automaticCanvasSize = Enum.AutomaticSize.Y,
-
-	-- 			backgroundColor3 = Theme.Color.Button.Background,
-
-	-- 			visible = open,
-
-	-- 			[Children] = {
-	-- 				layout = inner:New "UIListLayout" {
-	-- 					FillDirection = Enum.FillDirection.Vertical,
-	-- 					Padding = UDim.new(0, 0),
-	-- 				},
-	-- 				padding = inner:New "UIPadding" {
-	-- 					PaddingTop = UDim.new(0, 4),
-	-- 					PaddingBottom = UDim.new(0, 4),
-	-- 					PaddingRight = UDim.new(0, 4),
-	-- 				},
-	-- 				border = inner:RoundBorder {
-	-- 					color = Theme.Color.Button.Border,
-	-- 				},
-
-	-- 				items = items,
-	-- 			},
-	-- 		},
-	-- 	},
-	-- }
 end
 
 local function DropdownMacroItem(
