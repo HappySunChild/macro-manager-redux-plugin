@@ -36,6 +36,11 @@ local function Item(scope: ConFusion.Scope, macroItem: Types.MacroItem)
 		return
 	end
 
+	-- added this to prevent weird duplicate rerenders
+	-- usually this would happen if you accidently inserted the same item twice into
+	-- an items array. but i mainly added this so that you couldn't
+	-- as easily crash studio by putting a section inside of its own items array
+	-- which would recursively create itself until the script or studio crashed.
 	if macroItem[_RENDERED] == true then
 		Logging.warn("itemAlreadyRendered", nil, targetType)
 
