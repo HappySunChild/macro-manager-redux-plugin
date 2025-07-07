@@ -9,18 +9,18 @@ local peek = ConFusion.peek
 local function Entry(
 	scope: ConFusion.Scope,
 	props: {
-		AnchorPoint: Vector2?,
-		Position: UDim2?,
-		Size: UDim2?,
+		anchorPoint: Vector2?,
+		position: UDim2?,
+		size: UDim2?,
 
-		Label: string,
+		label: string,
 
-		Value: ConFusion.UsedAs<string>?,
-		Range: NumberRange?,
+		value: ConFusion.UsedAs<string>?,
+		range: NumberRange?, -- unused
 
-		Callback: (string) -> (),
+		callback: (string) -> (),
 
-		TextboxRef: ConFusion.Value<unknown>?,
+		textboxRef: ConFusion.Value<unknown>?,
 	}
 )
 	local inner = scope:innerScope()
@@ -33,23 +33,23 @@ local function Entry(
 		return use(Theme.Color.InputField.Border)
 	end)
 
-	local text = inner:Value(peek(props.Value) or "")
+	local text = inner:Value(peek(props.value) or "")
 
 	return inner:New "Frame" {
-		Position = props.Position,
-		Size = props.Size,
+		Position = props.position,
+		Size = props.size,
 
 		BackgroundColor3 = Theme.Color.InputField.Background,
 		BorderColor3 = borderColor,
 		BorderSizePixel = 1,
 
 		[Children] = {
-			Padding = inner:New "UIPadding" {
+			padding = inner:New "UIPadding" {
 				PaddingTop = UDim.new(0, 2),
 				PaddingBottom = UDim.new(0, 2),
 			},
 
-			Label = inner:New "TextLabel" {
+			label = inner:New "TextLabel" {
 				AnchorPoint = Vector2.new(1, 0),
 				Position = UDim2.fromOffset(-4, 0),
 				Size = UDim2.fromScale(0, 1),
@@ -57,24 +57,24 @@ local function Entry(
 
 				BackgroundTransparency = 1,
 
-				Text = props.Label .. ": ",
+				Text = props.label .. ": ",
 				TextXAlignment = Enum.TextXAlignment.Left,
 				TextYAlignment = Enum.TextYAlignment.Top,
 				TextSize = 14,
 				TextColor3 = Theme.Color.SubText,
 			},
-			Entry = inner:New "TextBox" {
+			entry = inner:New "TextBox" {
 				Size = UDim2.fromScale(1, 1),
 
 				BackgroundTransparency = 1,
 
-				Text = props.Value,
+				Text = props.value,
 				TextXAlignment = Enum.TextXAlignment.Left,
 				TextYAlignment = Enum.TextYAlignment.Top,
 				TextSize = 14,
 				TextColor3 = Theme.Color.Text,
 
-				[Ref] = props.TextboxRef,
+				[Ref] = props.textboxRef,
 				[Out "Text"] = text,
 				[OnEvent "Focused"] = function()
 					focused:set(true)
@@ -82,10 +82,10 @@ local function Entry(
 				[OnEvent "FocusLost"] = function()
 					focused:set(false)
 
-					props.Callback(peek(text))
+					props.callback(peek(text))
 				end,
 				[Children] = {
-					Padding = inner:New "UIPadding" {
+					padding = inner:New "UIPadding" {
 						PaddingLeft = UDim.new(0, 2),
 						PaddingRight = UDim.new(0, 2),
 					},

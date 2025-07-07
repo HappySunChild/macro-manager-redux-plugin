@@ -52,33 +52,33 @@ local function BooleanMacroItem(
 		BackgroundTransparency = 1,
 
 		[Children] = {
-			Padding = inner:New "UIPadding" {
+			padding = inner:New "UIPadding" {
 				PaddingLeft = UDim.new(0, 2),
 				PaddingRight = UDim.new(0, 2),
 				PaddingTop = UDim.new(0, 2),
 				PaddingBottom = UDim.new(0, 2),
 			},
 
-			Label = inner:Label {
-				Size = UDim2.fromScale(0.5, 1),
-				Text = displayText,
+			label = inner:Label {
+				size = UDim2.fromScale(0.5, 1),
+				text = displayText,
 			},
-			Checkbox = inner:TextButton {
-				AnchorPoint = Vector2.new(1, 0),
-				Position = UDim2.fromScale(1, 0),
-				Size = UDim2.fromScale(1, 1),
-				SizeConstraint = Enum.SizeConstraint.RelativeYY,
+			checkbox = inner:TextButton {
+				anchorPoint = Vector2.new(1, 0),
+				position = UDim2.fromScale(1, 0),
+				size = UDim2.fromScale(1, 1),
+				sizeConstraint = Enum.SizeConstraint.RelativeYY,
 
-				IdleColor = Theme.Color.InputField.Background,
-				BorderColor = Theme.Color.InputField.Border,
+				idleColor = Theme.Color.InputField.Background,
+				borderColor = Theme.Color.InputField.Border,
 
-				Text = map(value, function(v: boolean)
+				text = map(value, function(v: boolean)
 					return if v then "✓" else ""
 				end),
-				TextSize = 24,
-				TextColor = Theme.Color.BrightText,
+				textSize = 24,
+				textColor = Theme.Color.BrightText,
 
-				Callback = function()
+				callback = function()
 					local newValue = not peek(value)
 
 					setValueInternal(newValue)

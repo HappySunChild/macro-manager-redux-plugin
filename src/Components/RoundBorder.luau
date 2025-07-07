@@ -4,19 +4,20 @@ local Theme = require "@utility/Theme"
 local function Corners(
 	scope: ConFusion.Scope,
 	props: {
-		Roundness: ConFusion.UsedAs<UDim>?,
-		Color: ConFusion.UsedAs<Color3>?,
-		Thickness: number?,
+		roundness: ConFusion.UsedAs<UDim>?,
+		color: ConFusion.UsedAs<Color3>?,
+		thickness: number?,
 	}
 )
-	local thickness = props.Thickness or 1
+	local thickness = props.thickness or 1
+
 	return {
-		Corner = scope:New "UICorner" {
-			CornerRadius = props.Roundness or Theme.Roundness,
+		corner = scope:New "UICorner" {
+			CornerRadius = props.roundness or Theme.Roundness,
 		},
-		Border = if thickness > 0
+		border = if thickness > 0
 			then scope:New "UIStroke" {
-				Color = props.Color,
+				Color = props.color,
 				ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
 				Thickness = thickness,
 			}

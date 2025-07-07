@@ -48,25 +48,25 @@ local function StringItemClass(
 		BackgroundTransparency = 1,
 
 		[Children] = {
-			Padding = inner:New "UIPadding" {
+			padding = inner:New "UIPadding" {
 				PaddingLeft = UDim.new(0, 2),
 				PaddingRight = UDim.new(0, 2),
 				PaddingTop = UDim.new(0, 2),
 				PaddingBottom = UDim.new(0, 2),
 			},
 
-			Label = inner:Label {
-				Size = UDim2.fromScale(0.5, 1),
-				Text = displayText,
+			label = inner:Label {
+				size = UDim2.fromScale(0.5, 1),
+				text = displayText,
 			},
-			Input = inner:TextEntry {
-				Position = UDim2.fromScale(0.5, 0),
-				Size = UDim2.fromScale(0.5, 1),
+			input = inner:TextEntry {
+				position = UDim2.fromScale(0.5, 0),
+				size = UDim2.fromScale(0.5, 1),
 
-				Text = value,
-				PlaceholderText = displayText,
+				text = value,
+				placeholderText = displayText,
 
-				Callback = function(text: string)
+				callback = function(text: string)
 					setValueInternal(text)
 				end,
 			},

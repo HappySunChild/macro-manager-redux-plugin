@@ -6,11 +6,11 @@ local OnEvent, Out = ConFusion.OnEvent, ConFusion.Out
 local function Button(
 	scope: ConFusion.Scope,
 	props: {
-		Position: UDim2,
-		Size: UDim2,
+		position: UDim2,
+		size: UDim2,
 
-		Text: string,
-		Callback: () -> (),
+		text: string,
+		callback: () -> (),
 	}
 )
 	local inner = scope:innerScope()
@@ -28,21 +28,19 @@ local function Button(
 	end)
 
 	return inner:New "TextButton" {
-		Position = props.Position,
-		Size = props.Size,
+		Position = props.position,
+		Size = props.size,
 
 		BackgroundColor3 = color,
 		BorderColor3 = Theme.Color.Button.Border,
 		BorderSizePixel = 1,
 
-		Text = props.Text,
+		Text = props.text,
 		TextColor3 = Theme.Color.Button.Text,
 		TextSize = 16,
 
 		[Out "GuiState"] = state,
-		[OnEvent "MouseButton1Click"] = function()
-			props.Callback()
-		end,
+		[OnEvent "MouseButton1Click"] = props.callback,
 	}
 end
 

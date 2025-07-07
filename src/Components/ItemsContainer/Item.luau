@@ -102,7 +102,7 @@ local function Item(scope: ConFusion.Scope, macroItem: Types.MacroItem)
 		Visible = visible,
 
 		[Children] = {
-			ItemContents = itemContents,
+			contents = itemContents,
 		},
 	}
 end

@@ -1,5 +1,6 @@
 local Assets = require "@plugin/Assets"
 local ConFusion = require "@packages/ConFusion"
+local Theme = require "@utility/Theme"
 
 local OnEvent, Out = ConFusion.OnEvent, ConFusion.Out
 local Children = ConFusion.Children
@@ -9,28 +10,28 @@ local peek = ConFusion.peek
 local function HueSaturationPicker(
 	scope: ConFusion.Scope,
 	props: {
-		AnchorPoint: Vector2?,
-		Position: UDim2?,
-		Size: UDim2?,
+		position: UDim2?,
+		size: UDim2?,
 
-		OutputColor: ConFusion.Value<Color3>,
-		Callback: (Color3) -> (),
+		output: ConFusion.Value<Color3>,
 	}
 )
 	local inner = scope:innerScope()
 	local absolutePosition = scope:Value(Vector2.zero)
 	local absoluteSize = scope:Value(Vector2.zero)
 
-	local output = props.OutputColor
+	local output = props.output
 
 	local mouseDown = false
 
 	return inner:New "ImageLabel" {
-		AnchorPoint = props.AnchorPoint,
-		Position = props.Position,
-		Size = props.Size,
+		Position = props.position,
+		Size = props.size,
 
 		ClipsDescendants = true,
+
+		BorderSizePixel = 1,
+		BorderColor3 = Theme.Color.InputField.Border,
 
 		Image = Assets.Images.ColorPicker.HueSat,
 
@@ -70,7 +71,7 @@ local function HueSaturationPicker(
 			output:set(Color3.fromHSV(hue, sat, val))
 		end,
 		[Children] = {
-			Crosshair = inner:New "ImageLabel" {
+			crosshair = inner:New "ImageLabel" {
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				Position = inner:Computed(function(use: ConFusion.Use)
 					local hue, sat, _ = use(output):ToHSV()

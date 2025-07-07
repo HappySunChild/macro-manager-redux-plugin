@@ -47,30 +47,31 @@ local function ButtonGroupMacroItem(
 		BackgroundTransparency = 1,
 
 		[Children] = {
-			Padding = inner:New "UIPadding" {
+			padding = inner:New "UIPadding" {
 				PaddingLeft = UDim.new(0, 2),
 				PaddingRight = UDim.new(0, 2),
 				PaddingTop = UDim.new(0, 2),
 				PaddingBottom = UDim.new(0, 2),
 			},
 
-			Buttons = inner:ElementGroup {
-				Size = UDim2.fromScale(1, 1),
+			buttons = inner:ElementGroup {
+				size = UDim2.fromScale(1, 1),
+				padding = UDim.new(0, 4),
 
-				Padding = UDim.new(0, 4),
+				labels = buttons,
 
-				Render = function(
+				render = function(
 					scope: typeof(inner),
 					index: number,
 					label: string
 				)
 					return scope:TextButton {
-						Size = UDim2.fromScale(0, 1),
-						LayoutOrder = index,
+						size = UDim2.fromScale(0, 1),
+						layoutOrder = index,
 
-						Text = label,
-						TextSize = 18,
-						Callback = function()
+						text = label,
+						textSize = 18,
+						callback = function()
 							if not macroItem.Activate then
 								return
 							end
@@ -79,9 +80,6 @@ local function ButtonGroupMacroItem(
 						end,
 					}
 				end,
-
-				Labels = buttons,
-				Refs = {},
 			},
 		},
 	}

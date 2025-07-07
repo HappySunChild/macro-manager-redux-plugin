@@ -34,7 +34,7 @@ local function DividerMacroItem(
 		Size = UDim2.new(1, 0, 0, 26),
 
 		[Children] = {
-			Label = inner:Computed(
+			label = inner:Computed(
 				function(use: ConFusion.Use, scope: typeof(inner))
 					if use(displayText) == "" then
 						return
@@ -55,7 +55,7 @@ local function DividerMacroItem(
 						FontFace = Theme.Font.Regular,
 
 						[Children] = {
-							Padding = inner:New "UIPadding" {
+							padding = scope:New "UIPadding" {
 								PaddingLeft = UDim.new(0, 2),
 								PaddingRight = UDim.new(0, 2),
 							},
@@ -63,7 +63,7 @@ local function DividerMacroItem(
 					}
 				end
 			),
-			Line = inner:New "Frame" {
+			line = inner:New "Frame" {
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				Position = UDim2.fromScale(0.5, 0.5),
 				Size = UDim2.new(0.95, 0, 0, 1),

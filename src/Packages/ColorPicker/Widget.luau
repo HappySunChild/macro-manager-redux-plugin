@@ -1,4 +1,5 @@
 local ConFusion = require "@packages/ConFusion"
+local Theme = require "@utility/Theme"
 
 local ElementGroup = require "@components/ElementGroup"
 
@@ -11,21 +12,21 @@ local Children = ConFusion.Children
 
 local peek, map = ConFusion.peek, ConFusion.map
 
-local function getHSVComponent(color: Color3, index: number)
+local function getHSVComponent(color: Color3, index: number): number
 	local hue, sat, val = color:ToHSV()
 
 	return math.floor(select(index, hue * 360, sat * 255, val * 255))
 end
 
-local function getRGBComponent(color: Color3, index: number)
+local function getRGBComponent(color: Color3, index: number): number
 	return math.floor(select(index, color.R, color.G, color.B) * 255)
 end
 
 local function RGBEntries(
 	scope: ConFusion.Scope,
 	props: {
-		Position: UDim2,
-		OutputColor: ConFusion.Value<Color3>,
+		position: UDim2,
+		output: ConFusion.Value<Color3>,
 	}
 )
 	local inner = scope:innerScope {
@@ -52,38 +53,38 @@ local function RGBEntries(
 	local refs = { redFieldRef, greenFieldRef, blueFieldRef }
 
 	return inner:ElementGroup {
-		Position = props.Position,
-		Size = UDim2.fromOffset(40, 0),
-		AutomaticSize = Enum.AutomaticSize.Y,
+		position = props.position,
+		size = UDim2.fromOffset(40, 0),
+		automaticSize = Enum.AutomaticSize.Y,
 
-		FillDirection = Enum.FillDirection.Vertical,
-		Padding = UDim.new(0, 8),
+		fillDirection = Enum.FillDirection.Vertical,
+		padding = UDim.new(0, 8),
 
-		Render = function(scope: typeof(inner), index: number, label: string)
+		labels = { "Red", "Green", "Blue" },
+		render = function(scope: typeof(inner), index: number, label: string)
 			return scope:Entry {
-				Size = UDim2.new(1, 0, 0, 20),
+				size = UDim2.new(1, 0, 0, 20),
 
-				TextboxRef = refs[index],
+				textboxRef = refs[index],
 
-				Label = label,
-				Range = NumberRange.new(0, 255),
-				Value = scope:Computed(function(use: ConFusion.Use)
-					return getRGBComponent(use(props.OutputColor), index)
+				label = label,
+				range = NumberRange.new(0, 255),
+				value = scope:Computed(function(use: ConFusion.Use)
+					return getRGBComponent(use(props.output), index)
 				end),
-				Callback = function()
-					props.OutputColor:set(getInputValue())
+				callback = function()
+					props.output:set(getInputValue())
 				end,
 			}
 		end,
-		Labels = { "Red", "Green", "Blue" },
 	}
 end
 
 local function HSVEntries(
 	scope: ConFusion.Scope,
 	props: {
-		Position: UDim2,
-		OutputColor: ConFusion.Value<Color3>,
+		position: UDim2,
+		output: ConFusion.Value<Color3>,
 	}
 )
 	local inner = scope:innerScope {
@@ -110,38 +111,38 @@ local function HSVEntries(
 	local refs = { hueFieldRef, satFieldRef, valFieldRef }
 
 	return inner:ElementGroup {
-		Position = props.Position,
-		Size = UDim2.fromOffset(40, 0),
-		AutomaticSize = Enum.AutomaticSize.Y,
+		position = props.position,
+		size = UDim2.fromOffset(40, 0),
+		automaticSize = Enum.AutomaticSize.Y,
 
-		FillDirection = Enum.FillDirection.Vertical,
-		Padding = UDim.new(0, 8),
+		fillDirection = Enum.FillDirection.Vertical,
+		padding = UDim.new(0, 8),
 
-		Render = function(scope: typeof(inner), index: number, label: string)
+		labels = { "Hue", "Sat", "Val" },
+		render = function(scope: typeof(inner), index: number, label: string)
 			return scope:Entry {
-				Size = UDim2.new(1, 0, 0, 20),
+				size = UDim2.new(1, 0, 0, 20),
 
-				TextboxRef = refs[index],
+				textboxRef = refs[index],
 
-				Label = label,
-				Range = NumberRange.new(0, index == 1 and 360 or 255),
-				Value = scope:Computed(function(use: ConFusion.Use)
-					return getHSVComponent(use(props.OutputColor), index)
+				label = label,
+				range = NumberRange.new(0, index == 1 and 360 or 255),
+				value = scope:Computed(function(use: ConFusion.Use)
+					return getHSVComponent(use(props.output), index)
 				end),
-				Callback = function()
-					props.OutputColor:set(getInputValue())
+				callback = function()
+					props.output:set(getInputValue())
 				end,
 			}
 		end,
-		Labels = { "Hue", "Sat", "Val" },
 	}
 end
 
 local function HexEntry(
 	scope: ConFusion.Scope,
 	props: {
-		Position: UDim2,
-		OutputColor: ConFusion.Value<Color3>,
+		position: UDim2,
+		output: ConFusion.Value<Color3>,
 	}
 )
 	local inner = scope:innerScope { Entry = Entry }
@@ -164,17 +165,17 @@ local function HexEntry(
 	end
 
 	return inner:Entry {
-		Position = props.Position,
-		Size = UDim2.fromOffset(120, 20),
+		position = props.position,
+		size = UDim2.fromOffset(120, 20),
 
-		TextboxRef = hexFieldRef,
+		textboxRef = hexFieldRef,
 
-		Label = "Hex",
-		Value = inner:Computed(function(use: ConFusion.Use)
-			return "#" .. use(props.OutputColor):ToHex()
+		label = "Hex",
+		value = inner:Computed(function(use: ConFusion.Use)
+			return "#" .. use(props.output):ToHex()
 		end),
-		Callback = function()
-			props.OutputColor:set(getInputValue())
+		callback = function()
+			props.output:set(getInputValue())
 		end,
 	}
 end
@@ -236,33 +237,33 @@ local function ColorPickerWidget(
 		end),
 
 		[Children] = {
-			Padding = inner:New "UIPadding" {
+			padding = inner:New "UIPadding" {
 				PaddingTop = UDim.new(0, 11),
 				PaddingBottom = UDim.new(0, 11),
 				PaddingLeft = UDim.new(0, 11),
 				PaddingRight = UDim.new(0, 11),
 			},
 
-			Pickers = inner:New "Frame" {
+			pickers = inner:New "Frame" {
 				Size = UDim2.new(1, 0, 0, 200),
 				BackgroundTransparency = 1,
 
 				[Children] = {
-					HueSaturation = inner:HueSaturationPicker {
-						OutputColor = output,
+					huesaturation = inner:HueSaturationPicker {
+						position = UDim2.fromOffset(1, 1),
+						size = UDim2.fromOffset(220, 200),
 
-						Position = UDim2.fromOffset(0, 0),
-						Size = UDim2.fromOffset(220, 200),
+						output = output,
 					},
-					Value = inner:ValuePicker {
-						OutputColor = output,
+					value = inner:ValuePicker {
+						position = UDim2.fromOffset(237, 1),
+						size = UDim2.fromOffset(13, 200),
 
-						Position = UDim2.fromOffset(236, 0),
-						Size = UDim2.fromOffset(13, 200),
+						output = output,
 					},
 				},
 			},
-			Panel = inner:New "Frame" {
+			panel = inner:New "Frame" {
 				Position = UDim2.fromOffset(0, 220),
 				Size = UDim2.new(1, 0, 0, 110),
 
@@ -270,48 +271,48 @@ local function ColorPickerWidget(
 				BackgroundColor3 = Color3.new(1, 0, 1),
 
 				[Children] = {
-					Display = inner:New "Frame" {
+					display = inner:New "Frame" {
 						Position = UDim2.fromOffset(1, 0),
 						Size = UDim2.new(0, 60, 1, 0),
 
 						BackgroundColor3 = output,
-						BorderColor3 = Color3.new(0, 0, 0),
+						BorderColor3 = Theme.Color.InputField.Border,
 						BorderSizePixel = 1,
 					},
 
-					RGB = inner:RGBEntries {
-						Position = UDim2.fromOffset(220, 0),
-						OutputColor = output,
+					rgb = inner:RGBEntries {
+						position = UDim2.fromOffset(220, 0),
+						output = output,
 					},
-					HSV = inner:HSVEntries {
-						Position = UDim2.fromOffset(120, 0),
-						OutputColor = output,
+					hsv = inner:HSVEntries {
+						position = UDim2.fromOffset(120, 0),
+						output = output,
 					},
-					Hex = inner:HexEntry {
-						Position = UDim2.fromOffset(120, 88),
-						OutputColor = output,
+					hex = inner:HexEntry {
+						position = UDim2.fromOffset(120, 88),
+						output = output,
 					},
 				},
 			},
-			Buttons = inner:ElementGroup {
-				Position = UDim2.fromOffset(0, 340),
-				Size = UDim2.new(1, 0, 0, 24),
+			buttons = inner:ElementGroup {
+				position = UDim2.fromOffset(0, 340),
+				size = UDim2.new(1, 0, 0, 24),
 
-				FlexAlignment = Enum.UIFlexAlignment.None,
-				HorizontalAlignment = Enum.HorizontalAlignment.Right,
-				Padding = UDim.new(0, 8),
+				flexAlignment = Enum.UIFlexAlignment.None,
+				horizontalAlignment = Enum.HorizontalAlignment.Right,
+				padding = UDim.new(0, 8),
 
-				Render = function(scope: typeof(inner), _, label: string)
+				labels = { "OK", "Cancel" },
+				render = function(scope: typeof(inner), _, label: string)
 					return scope:Button {
-						Size = UDim2.fromOffset(74, 24),
-						Text = label,
+						size = UDim2.fromOffset(74, 24),
+						text = label,
 
-						Callback = if label == "OK"
+						callback = if label == "OK"
 							then props.confirm
 							else props.cancel,
 					}
 				end,
-				Labels = { "OK", "Cancel" },
 			},
 		},
 	}

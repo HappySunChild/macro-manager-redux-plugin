@@ -21,8 +21,8 @@ type SectionMacroItem = Types.MacroItem & {
 local function TitleLabel(
 	scope: ConFusion.Scope,
 	props: {
-		Text: ConFusion.UsedAs<string>,
-		BackgroundColor: ConFusion.UsedAs<Color3>,
+		text: ConFusion.UsedAs<string>,
+		backgroundColor: ConFusion.UsedAs<Color3>,
 	}
 )
 	local inner = scope:innerScope {
@@ -35,33 +35,33 @@ local function TitleLabel(
 		Size = UDim2.fromOffset(0, 18),
 		AutomaticSize = Enum.AutomaticSize.X,
 
-		BackgroundColor3 = props.BackgroundColor,
+		BackgroundColor3 = props.backgroundColor,
 
 		[Children] = {
-			Border = inner:RoundBorder {
-				Color = Theme.Color.Section.Border,
-				Thickness = 2,
+			border = inner:RoundBorder {
+				color = Theme.Color.Section.Border,
+				thickness = 2,
 			},
-			Padding = inner:New "UIPadding" {
+			padding = inner:New "UIPadding" {
 				PaddingLeft = UDim.new(0, 6),
 				PaddingRight = UDim.new(0, 6),
 			},
 
-			Unborder = inner:New "Frame" {
+			unborder = inner:New "Frame" {
 				AnchorPoint = Vector2.new(0, 0),
 				Position = UDim2.new(0, -6, 0.5, 0),
 				Size = UDim2.new(1, 18, 0.5, 2),
 
-				BackgroundColor3 = props.BackgroundColor,
+				BackgroundColor3 = props.backgroundColor,
 			},
-			Text = inner:New "TextLabel" {
+			label = inner:New "TextLabel" {
 				Size = UDim2.fromScale(0, 1),
 				AutomaticSize = Enum.AutomaticSize.X,
 
 				BackgroundTransparency = 1,
 				ZIndex = 10,
 
-				Text = props.Text,
+				Text = props.text,
 				TextSize = 16,
 				TextColor3 = Theme.Color.BrightText,
 				FontFace = Theme.Font.Bold,
@@ -113,7 +113,7 @@ local function SectionMacroItem(
 		BackgroundTransparency = 1,
 
 		[Children] = {
-			Padding = inner:New "UIPadding" {
+			padding = inner:New "UIPadding" {
 				PaddingLeft = UDim.new(0, 4),
 				PaddingRight = UDim.new(0, 4),
 				PaddingTop = inner:Computed(function(use: ConFusion.Use)
@@ -126,7 +126,7 @@ local function SectionMacroItem(
 				PaddingBottom = UDim.new(0, 6),
 			},
 
-			Container = inner:New "Frame" {
+			container = inner:New "Frame" {
 				-- AnchorPoint = Vector2.new(0.5, 0),
 				-- Position = UDim2.fromScale(0.5, 0),
 				Position = UDim2.fromOffset(0, 4),
@@ -136,38 +136,38 @@ local function SectionMacroItem(
 				BackgroundColor3 = background,
 
 				[Children] = {
-					Border = inner:RoundBorder {
-						Color = Theme.Color.Section.Border,
-						Thickness = 2,
+					border = inner:RoundBorder {
+						color = Theme.Color.Section.Border,
+						thickness = 2,
 					},
-					TitleLabel = inner:Computed(
+
+					title = inner:Computed(
 						function(use: ConFusion.Use, scope: typeof(inner))
 							if use(hasTitle) then
 								return scope:TitleLabel {
-									Text = displayText,
-									BackgroundColor = background,
+									text = displayText,
+									backgroundColor = background,
 								}
 							end
 
 							return nil
 						end
 					),
-
-					Items = inner:ItemsContainer {
-						Items = macroItem.Items,
-						ItemProperties = {
+					items = inner:ItemsContainer {
+						items = macroItem.Items,
+						itemProperties = {
 							InSection = true,
 							SectionDepth = currentDepth + 1,
 						},
 
-						Position = inner:Computed(function(use: ConFusion.Use)
+						position = inner:Computed(function(use: ConFusion.Use)
 							if use(hasTitle) then
 								return UDim2.fromOffset(0, 6)
 							end
 
 							return UDim2.fromOffset(0, 0)
 						end),
-						BackgroundTransparency = 1,
+						backgroundTransparency = 1,
 					},
 				},
 			},

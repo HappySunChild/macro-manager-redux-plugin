@@ -4,19 +4,19 @@ local Theme = require "@utility/Theme"
 local function Label(
 	scope: ConFusion.Scope,
 	props: {
-		Position: UDim2,
-		Size: UDim2,
+		position: UDim2,
+		size: UDim2,
 
-		Text: ConFusion.UsedAs<string>,
+		text: ConFusion.UsedAs<string>,
 	}
 )
 	return scope:New "TextLabel" {
-		Position = props.Position,
-		Size = props.Size,
+		Position = props.position,
+		Size = props.size,
 
 		BackgroundTransparency = 1,
 
-		Text = props.Text,
+		Text = props.text,
 		TextXAlignment = Enum.TextXAlignment.Left,
 		TextTruncate = Enum.TextTruncate.AtEnd,
 		TextSize = 16,

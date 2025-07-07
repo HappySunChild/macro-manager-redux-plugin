@@ -55,8 +55,6 @@ local function Color3MacroItem(
 	if not renderStyle then
 		renderStyle = RenderStyles.RGB
 
-		-- TODO: replace this with a `logging` message
-		-- warn(`Color3 render style '{macroItem.Style}' does not exist.`)
 		logging.warn("color3UnknownStyle", nil, styleIndex)
 	end
 
@@ -66,18 +64,18 @@ local function Color3MacroItem(
 		BackgroundTransparency = 1,
 
 		[Children] = {
-			Padding = inner:New "UIPadding" {
+			padding = inner:New "UIPadding" {
 				PaddingTop = UDim.new(0, 2),
 				PaddingBottom = UDim.new(0, 2),
 				PaddingLeft = UDim.new(0, 2),
 				PaddingRight = UDim.new(0, 2),
 			},
 
-			Label = inner:Label {
-				Size = UDim2.fromScale(0.5, 1),
-				Text = displayText,
+			label = inner:Label {
+				size = UDim2.fromScale(0.5, 1),
+				text = displayText,
 			},
-			InputElements = renderStyle(inner, {
+			input = renderStyle(inner, {
 				color = value,
 				setColor = setInternalValue,
 			}),

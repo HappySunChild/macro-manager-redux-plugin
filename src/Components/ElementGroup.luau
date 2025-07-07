@@ -7,38 +7,38 @@ type UsedAs<V> = ConFusion.UsedAs<V>
 local function ElementGroup(
 	scope: ConFusion.Scope,
 	props: {
-		AnchorPoint: UsedAs<Vector2>,
-		Position: UsedAs<UDim2>?,
-		Size: UsedAs<UDim2>?,
-		AutomaticSize: UsedAs<Enum.AutomaticSize>?,
+		anchorPoint: UsedAs<Vector2>,
+		position: UsedAs<UDim2>?,
+		size: UsedAs<UDim2>?,
+		automaticSize: UsedAs<Enum.AutomaticSize>?,
 
-		Padding: UsedAs<UDim>?,
-		FillDirection: UsedAs<Enum.FillDirection>?,
+		padding: UsedAs<UDim>?,
+		fillDirection: UsedAs<Enum.FillDirection>?,
 
-		HorizontalAlignment: UsedAs<Enum.HorizontalAlignment>?,
-		VerticalAlignment: UsedAs<Enum.VerticalAlignment>?,
-		FlexAlignment: UsedAs<Enum.UIFlexAlignment>?,
+		horizontalAlignment: UsedAs<Enum.HorizontalAlignment>?,
+		verticalAlignment: UsedAs<Enum.VerticalAlignment>?,
+		flexAlignment: UsedAs<Enum.UIFlexAlignment>?,
 
-		Render: ((
+		render: ((
 			scope: ConFusion.Scope,
 			index: number,
 			label: string
 		) -> ConFusion.Child)?,
-		Labels: UsedAs<{ string }>?,
-		Refs: { ConFusion.Value<Instance> }?,
+		labels: UsedAs<{ string }>?,
+		refs: { ConFusion.Value<Instance> }?,
 
 		[ConFusion.SpecialKey<"Children">]: { ConFusion.Child }?,
 	}
 )
-	local labels = props.Labels
-	local refs = props.Refs or {}
+	local labels = props.labels
+	local refs = props.refs or {}
 
 	local inner = scope:innerScope()
 	local elements = if labels
 		then inner:ForPairs(
 			labels,
 			function(_, forScope: typeof(inner), index: number, label: string)
-				local element = props.Render(forScope, index, label)
+				local element = props.render(forScope, index, label)
 
 				if not element then
 					return index
@@ -56,33 +56,33 @@ local function ElementGroup(
 		else nil
 
 	return inner:New "Frame" {
-		AnchorPoint = props.AnchorPoint,
-		Position = props.Position,
-		Size = props.Size,
-		AutomaticSize = props.AutomaticSize,
+		AnchorPoint = props.anchorPoint,
+		Position = props.position,
+		Size = props.size,
+		AutomaticSize = props.automaticSize,
 
 		BackgroundTransparency = 1,
 
 		[Children] = {
-			Layout = inner:New "UIListLayout" {
-				FillDirection = props.FillDirection
+			layout = inner:New "UIListLayout" {
+				FillDirection = props.fillDirection
 					or Enum.FillDirection.Horizontal,
 
-				HorizontalAlignment = props.HorizontalAlignment
+				HorizontalAlignment = props.horizontalAlignment
 					or Enum.HorizontalAlignment.Center,
-				HorizontalFlex = props.FlexAlignment
+				HorizontalFlex = props.flexAlignment
 					or Enum.UIFlexAlignment.Fill,
 
-				VerticalAlignment = props.VerticalAlignment
+				VerticalAlignment = props.verticalAlignment
 					or Enum.VerticalAlignment.Center,
-				VerticalFlex = props.FlexAlignment or Enum.UIFlexAlignment.Fill,
+				VerticalFlex = props.flexAlignment or Enum.UIFlexAlignment.Fill,
 
 				SortOrder = Enum.SortOrder.LayoutOrder,
-				Padding = props.Padding,
+				Padding = props.padding,
 			},
 
-			Elements = elements,
-			Children = props[Children],
+			elements = elements,
+			children = props[Children],
 		},
 	}
 end

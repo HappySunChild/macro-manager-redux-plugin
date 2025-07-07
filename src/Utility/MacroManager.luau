@@ -1,3 +1,5 @@
+local Types = require "@plugin/Types"
+
 local ContainerManager = require "./ContainerManager"
 local Logging = require "./Logging"
 
@@ -9,7 +11,10 @@ local loadedMacros = {}
 local customItemClasses = {}
 
 local function loadMacro(macroModule: ModuleScript, reference: Instance?)
-	table.insert(loadedMacros, { Module = macroModule, Reference = reference })
+	local macroReference: Types.MacroReference =
+		{ Module = macroModule, Document = reference }
+
+	table.insert(loadedMacros, macroReference)
 end
 
 local function loadCurrentContainer()

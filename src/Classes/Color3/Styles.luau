@@ -39,9 +39,9 @@ local function ColorDisplay(
 			props.setColor(newColor)
 		end,
 		[Children] = {
-			Flex = inner:New "UIFlexItem" {},
-			Border = inner:RoundBorder {
-				Color = Theme.Color.InputField.Border,
+			flex = inner:New "UIFlexItem" {},
+			border = inner:RoundBorder {
+				color = Theme.Color.InputField.Border,
 			},
 		},
 	}
@@ -75,29 +75,26 @@ return table.freeze {
 		end
 
 		return inner:ElementGroup {
-			Position = UDim2.fromScale(0.5, 0),
-			Size = UDim2.fromScale(0.5, 1),
+			position = UDim2.fromScale(0.5, 0),
+			size = UDim2.fromScale(0.5, 1),
 
-			Padding = UDim.new(0, 4),
-
-			Labels = {},
-			Refs = {},
+			padding = UDim.new(0, 4),
 
 			[Children] = {
-				Entry = inner:TextEntry {
-					Text = inner:Computed(function(use: ConFusion.Use)
+				entry = inner:TextEntry {
+					text = inner:Computed(function(use: ConFusion.Use)
 						return `#{use(props.color):ToHex()}`
 					end),
-					PlaceholderText = "Hex",
-					Size = UDim2.fromScale(1, 1),
+					placeholderText = "Hex",
+					size = UDim2.fromScale(1, 1),
 
-					Callback = function()
+					callback = function()
 						props.setColor(getInputValue())
 					end,
 
 					[Ref] = hexFieldRef,
 				},
-				Display = inner:ColorDisplay {
+				display = inner:ColorDisplay {
 					color = props.color,
 					setColor = props.setColor,
 				},
@@ -132,20 +129,22 @@ return table.freeze {
 		end
 
 		return inner:ElementGroup {
-			Position = UDim2.fromScale(0.5, 0),
-			Size = UDim2.fromScale(0.5, 1),
+			position = UDim2.fromScale(0.5, 0),
+			size = UDim2.fromScale(0.5, 1),
 
-			Padding = UDim.new(0, 4),
+			padding = UDim.new(0, 4),
 
-			Render = function(
+			labels = { "H", "S", "V" },
+			refs = { hueFieldRef, saturationFieldRef, valueFieldRef },
+			render = function(
 				scope: typeof(inner),
 				index: number,
 				label: string
 			)
 				return scope:TextEntry {
-					Size = UDim2.fromScale(1, 1),
+					size = UDim2.fromScale(1, 1),
 
-					Text = scope:Computed(function(use: ConFusion.Use)
+					text = scope:Computed(function(use: ConFusion.Use)
 						local components = { use(props.color):ToHSV() }
 						local value = components[index]
 
@@ -155,18 +154,16 @@ return table.freeze {
 
 						return math.floor(value * 100)
 					end),
-					PlaceholderText = label,
+					placeholderText = label,
 
-					Callback = function()
+					callback = function()
 						props.setColor(getInputValue())
 					end,
 				}
 			end,
-			Labels = { "H", "S", "V" },
-			Refs = { hueFieldRef, saturationFieldRef, valueFieldRef },
 
 			[Children] = {
-				Display = inner:ColorDisplay {
+				display = inner:ColorDisplay {
 					color = props.color,
 					setColor = props.setColor,
 				},
@@ -197,31 +194,31 @@ return table.freeze {
 		end
 
 		return inner:ElementGroup {
-			Position = UDim2.fromScale(0.5, 0),
-			Size = UDim2.fromScale(0.5, 1),
+			position = UDim2.fromScale(0.5, 0),
+			size = UDim2.fromScale(0.5, 1),
 
-			Padding = UDim.new(0, 4),
+			padding = UDim.new(0, 4),
 
-			Render = function(scope: typeof(inner), _: number, label: string)
+			labels = { "R", "G", "B" },
+			refs = { redFieldRef, greenFieldRef, blueFieldRef },
+			render = function(scope: typeof(inner), _: number, label: string)
 				return scope:TextEntry {
-					Size = UDim2.fromScale(1, 1),
+					size = UDim2.fromScale(1, 1),
 
-					Text = inner:Computed(function(use: ConFusion.Use)
+					text = inner:Computed(function(use: ConFusion.Use)
 						local component = use(props.color)[label] :: number
 						return math.floor(component * 255)
 					end),
-					PlaceholderText = label,
+					placeholderText = label,
 
-					Callback = function()
+					callback = function()
 						props.setColor(getInputValue())
 					end,
 				}
 			end,
-			Labels = { "R", "G", "B" },
-			Refs = { redFieldRef, greenFieldRef, blueFieldRef },
 
 			[Children] = {
-				Display = inner:ColorDisplay {
+				display = inner:ColorDisplay {
 					color = props.color,
 					setColor = props.setColor,
 				},

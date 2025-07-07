@@ -32,50 +32,50 @@ local function MacrosPage(
 	local filter = inner:Value ""
 
 	return {
-		Padding = inner:New "UIPadding" {
+		padding = inner:New "UIPadding" {
 			PaddingTop = UDim.new(0, 2),
 			PaddingBottom = UDim.new(0, 4),
 			PaddingLeft = UDim.new(0, 2),
 			PaddingRight = UDim.new(0, 2),
 		},
-		Topbar = inner:New "Frame" {
+
+		topbar = inner:New "Frame" {
 			Size = UDim2.new(1, 0, 0, TOPBAR_HEIGHT),
 
 			BackgroundColor3 = Theme.Color.Macro.Background,
 
 			[Children] = {
-				Padding = inner:New "UIPadding" {
+				padding = inner:New "UIPadding" {
 					PaddingTop = UDim.new(0, 2),
 					PaddingBottom = UDim.new(0, 2),
 					PaddingLeft = UDim.new(0, 2),
 					PaddingRight = UDim.new(0, 2),
 				},
-				RoundBorder = inner:RoundBorder { Thickness = 0 },
+				border = inner:RoundBorder { thickness = 0 },
 
-				Container = inner:ElementGroup {
-					Size = UDim2.fromScale(1, 1),
-
-					Padding = UDim.new(0, 3),
+				container = inner:ElementGroup {
+					size = UDim2.fromScale(1, 1),
+					padding = UDim.new(0, 3),
 
 					[Children] = {
-						Search = inner:TextEntry {
-							Size = UDim2.new(1, -60, 1, 0),
+						search = inner:TextEntry {
+							size = UDim2.new(1, -60, 1, 0),
 
-							TextSize = 16,
-							TextXAlignment = Enum.TextXAlignment.Left,
-							PlaceholderText = "Filter...",
+							textSize = 16,
+							textXAlignment = Enum.TextXAlignment.Left,
+							placeholderText = "Filter...",
 
-							TypingCallback = function(text: string)
+							typingCallback = function(text: string)
 								filter:set(text:lower())
 							end,
 						},
-						RefreshButton = inner:TextButton {
-							Size = UDim2.new(0, 60, 1, 0),
+						refresh = inner:TextButton {
+							size = UDim2.new(0, 60, 1, 0),
 
-							Text = "Refresh",
-							TextSize = 16,
+							text = "Refresh",
+							textSize = 16,
 
-							Callback = function()
+							callback = function()
 								MacroManager.refreshMacros()
 							end,
 						},
@@ -83,7 +83,7 @@ local function MacrosPage(
 				},
 			},
 		},
-		Container = inner:New "Frame" {
+		container = inner:New "Frame" {
 			Size = UDim2.new(1, 0, 1, -TOPBAR_HEIGHT),
 			Position = UDim2.new(0, 0, 0, TOPBAR_HEIGHT + 2),
 

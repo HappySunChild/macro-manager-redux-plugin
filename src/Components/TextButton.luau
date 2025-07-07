@@ -6,11 +6,11 @@ local Button = require "@components/Button"
 local function TextButton(
 	scope: ConFusion.Scope,
 	props: Button._buttonProps & {
-		Text: ConFusion.UsedAs<string>?,
-		TextXAlignment: ConFusion.UsedAs<Enum.TextXAlignment>?,
-		TextYAlignment: ConFusion.UsedAs<Enum.TextYAlignment>?,
-		TextSize: ConFusion.UsedAs<number>?,
-		TextColor: ConFusion.UsedAs<Color3>?,
+		text: ConFusion.UsedAs<string>?,
+		textXAlignment: ConFusion.UsedAs<Enum.TextXAlignment>?,
+		textYAlignment: ConFusion.UsedAs<Enum.TextYAlignment>?,
+		textSize: ConFusion.UsedAs<number>?,
+		textColor: ConFusion.UsedAs<Color3>?,
 	}
 )
 	local inner = scope:innerScope {
@@ -18,31 +18,31 @@ local function TextButton(
 	}
 
 	return inner:Button {
-		AnchorPoint = props.AnchorPoint,
-		Size = props.Size,
-		SizeConstraint = props.SizeConstraint,
-		Position = props.Position,
-		LayoutOrder = props.LayoutOrder,
+		anchorPoint = props.anchorPoint,
+		size = props.size,
+		sizeConstraint = props.sizeConstraint,
+		position = props.position,
+		layoutOrder = props.layoutOrder,
 
-		BorderColor = props.BorderColor,
-		HoverBorderColor = props.HoverBorderColor,
+		borderColor = props.borderColor,
+		hoverBorderColor = props.hoverBorderColor,
 
-		IdleColor = props.IdleColor,
-		PressColor = props.PressColor,
-		HoverColor = props.HoverColor,
+		idleColor = props.idleColor,
+		pressColor = props.pressColor,
+		hoverColor = props.hoverColor,
 
-		Callback = props.Callback,
+		callback = props.callback,
 
-		Contents = inner:New "TextLabel" {
+		contents = inner:New "TextLabel" {
 			Size = UDim2.fromScale(1, 1),
 
 			BackgroundTransparency = 1,
 
-			Text = props.Text,
-			TextXAlignment = props.TextXAlignment,
-			TextYAlignment = props.TextYAlignment,
-			TextSize = props.TextSize,
-			TextColor3 = props.TextColor or Theme.Color.Button.Text,
+			Text = props.text,
+			TextXAlignment = props.textXAlignment,
+			TextYAlignment = props.textYAlignment,
+			TextSize = props.textSize,
+			TextColor3 = props.textColor or Theme.Color.Button.Text,
 			FontFace = Theme.Font.Regular,
 			TextTruncate = Enum.TextTruncate.AtEnd,
 		},

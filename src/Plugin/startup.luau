@@ -88,8 +88,8 @@ end
 local function setupWidget(plugin: Plugin)
 	local scope = PluginShared.Scope:innerScope { PluginWidget = App }
 	local newWidget = scope:PluginWidget {
-		Plugin = plugin,
-		Title = `Macros {PLUGIN_VERSION}`,
+		plugin = plugin,
+		title = `Macros {PLUGIN_VERSION}`,
 	}
 
 	newWidget:BindToClose(deactivate)

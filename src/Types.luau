@@ -1,6 +1,6 @@
 export type MacroReference = {
 	Module: ModuleScript,
-	Reference: Instance?,
+	Document: LuaSourceContainer?,
 }
 
 export type Macro = {

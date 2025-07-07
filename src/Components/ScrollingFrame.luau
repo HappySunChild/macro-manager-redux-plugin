@@ -11,17 +11,17 @@ local DEFAULT_SCROLLBAR_WIDTH = 9
 local function ScrollingFrame(
 	scope: ConFusion.Scope,
 	props: {
-		Position: ConFusion.UsedAs<UDim2>?,
-		Size: ConFusion.UsedAs<UDim2>?,
-		CanvasSize: ConFusion.UsedAs<UDim2>?,
-		AutomaticSize: ConFusion.UsedAs<Enum.AutomaticSize>?,
-		AutomaticCanvasSize: ConFusion.UsedAs<Enum.AutomaticSize>?,
+		position: ConFusion.UsedAs<UDim2>?,
+		size: ConFusion.UsedAs<UDim2>?,
+		canvasSize: ConFusion.UsedAs<UDim2>?,
+		automaticSize: ConFusion.UsedAs<Enum.AutomaticSize>?,
+		automaticCanvasSize: ConFusion.UsedAs<Enum.AutomaticSize>?,
 
-		ScrollBarThickness: number,
+		scrollBarThickness: number,
 
-		Visible: ConFusion.UsedAs<boolean>?,
-		BackgroundColor3: ConFusion.UsedAs<Color3>?,
-		ZIndex: ConFusion.UsedAs<number>?,
+		visible: ConFusion.UsedAs<boolean>?,
+		backgroundColor3: ConFusion.UsedAs<Color3>?,
+		zIndex: ConFusion.UsedAs<number>?,
 
 		[ConFusion.SpecialKey<"Children">]: ConFusion.Child?,
 	}
@@ -34,27 +34,28 @@ local function ScrollingFrame(
 	end)
 
 	return inner:New "ScrollingFrame" {
-		Position = props.Position,
-		Size = props.Size,
-		CanvasSize = props.CanvasSize,
-		AutomaticSize = props.AutomaticSize,
-		AutomaticCanvasSize = props.AutomaticCanvasSize,
+		Position = props.position,
+		Size = props.size,
+		CanvasSize = props.canvasSize,
+		AutomaticSize = props.automaticSize,
+		AutomaticCanvasSize = props.automaticCanvasSize,
 
-		ScrollBarThickness = props.ScrollBarThickness
+		ScrollBarThickness = props.scrollBarThickness
 			or DEFAULT_SCROLLBAR_WIDTH,
 		ScrollBarImageColor3 = Theme.Color.DimmedText,
 		TopImage = Assets.Images.ScrollBar.Top,
 		MidImage = Assets.Images.ScrollBar.Middle,
 		BottomImage = Assets.Images.ScrollBar.Bottom,
 
-		Visible = props.Visible,
-		BackgroundColor3 = props.BackgroundColor3,
-		ZIndex = props.ZIndex,
+		Visible = props.visible,
+		BackgroundColor3 = props.backgroundColor3,
+		ZIndex = props.zIndex,
 
 		[Out "AbsoluteWindowSize"] = windowSize,
 		[Out "AbsoluteCanvasSize"] = canvasSize,
+
 		[Children] = {
-			ScrollbarPadding = inner:Computed(
+			padding = inner:Computed(
 				function(use: ConFusion.Use, scope: ConFusion.Scope)
 					if not use(scrollBarVisible) then
 						return nil
@@ -63,12 +64,12 @@ local function ScrollingFrame(
 					return scope:New "UIPadding" {
 						PaddingRight = UDim.new(
 							0,
-							props.ScrollBarThickness or DEFAULT_SCROLLBAR_WIDTH
+							props.scrollBarThickness or DEFAULT_SCROLLBAR_WIDTH
 						),
 					}
 				end
 			),
-			Children = props[Children],
+			children = props[Children],
 		},
 	}
 end

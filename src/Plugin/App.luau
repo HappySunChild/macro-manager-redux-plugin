@@ -14,18 +14,18 @@ type PageIndex = keyof<typeof(Pages)>
 local function App(
 	scope: ConFusion.Scope,
 	props: {
-		Plugin: Plugin,
-		Title: string,
+		plugin: Plugin,
+		title: string,
 	}
 ): DockWidgetPluginGui
-	assert(props.Plugin, "Missing 'Plugin' property!")
+	assert(props.plugin, "Missing 'plugin' property!")
 
-	local widget = props.Plugin:CreateDockWidgetPluginGui(
+	local widget = props.plugin:CreateDockWidgetPluginGui(
 		"MacrosWidget",
 		DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Left, true)
 	)
-	widget.Name = props.Title
-	widget.Title = props.Title
+	widget.Name = props.title
+	widget.Title = props.title
 	widget.Enabled = false
 	widget.ZIndexBehavior = Enum.ZIndexBehavior.Global
 

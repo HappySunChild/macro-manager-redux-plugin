@@ -164,16 +164,16 @@ local function SliderMacroItem(
 		BackgroundTransparency = 1,
 
 		[Children] = {
-			Padding = inner:New "UIPadding" {
+			padding = inner:New "UIPadding" {
 				PaddingTop = UDim.new(0, 2),
 				PaddingBottom = UDim.new(0, 2),
 				PaddingLeft = UDim.new(0, 2),
 				PaddingRight = UDim.new(0, 2),
 			},
 
-			Label = inner:Label {
-				Size = UDim2.new(0.5, 0, 0, 16),
-				Text = inner:Computed(function(use: ConFusion.Use)
+			label = inner:Label {
+				size = UDim2.new(0.5, 0, 0, 16),
+				text = inner:Computed(function(use: ConFusion.Use)
 					return string.format(
 						"%s: %.1f",
 						use(displayText),
@@ -181,7 +181,7 @@ local function SliderMacroItem(
 					)
 				end),
 			},
-			Slider = inner:New "Frame" {
+			slider = inner:New "Frame" {
 				Position = UDim2.fromOffset(0, 18),
 				Size = UDim2.new(1, 0, 0, 16),
 
@@ -247,7 +247,7 @@ local function SliderMacroItem(
 				end,
 
 				[Children] = {
-					MinimumLabel = inner:New "TextLabel" {
+					minimumLabel = inner:New "TextLabel" {
 						Size = UDim2.new(0, 35, 1, 0),
 
 						BackgroundTransparency = 1,
@@ -259,7 +259,7 @@ local function SliderMacroItem(
 						TextColor3 = Theme.Color.DimmedText,
 						FontFace = Theme.Font.Regular,
 					},
-					MaximumLabel = inner:New "TextLabel" {
+					maximumLabel = inner:New "TextLabel" {
 						AnchorPoint = Vector2.new(1, 0),
 						Position = UDim2.fromScale(1, 0),
 						Size = UDim2.new(0, 35, 1, 0),
@@ -273,7 +273,7 @@ local function SliderMacroItem(
 						TextColor3 = Theme.Color.DimmedText,
 						FontFace = Theme.Font.Regular,
 					},
-					Bar = inner:New "Frame" {
+					bar = inner:New "Frame" {
 						AnchorPoint = Vector2.new(0.5, 0.5),
 						Position = UDim2.fromScale(0.5, 0.5),
 						Size = UDim2.new(1, -70, 0, 4),
@@ -282,12 +282,12 @@ local function SliderMacroItem(
 
 						[Ref] = barRef,
 						[Children] = {
-							Border = inner:RoundBorder {
-								Color = Theme.Color.Slider.Border,
+							border = inner:RoundBorder {
+								color = Theme.Color.Slider.Border,
 							},
 
-							Ticks = snapTicks,
-							Handle = inner:New "Frame" {
+							ticks = snapTicks,
+							handle = inner:New "Frame" {
 								AnchorPoint = Vector2.new(0.5, 0.5),
 								Position = inner:Computed(
 									function(use: ConFusion.Use)
@@ -303,8 +303,8 @@ local function SliderMacroItem(
 
 								BackgroundColor3 = Theme.Color.Slider.Handle,
 								[Children] = {
-									Border = inner:RoundBorder {
-										Color = Theme.Color.Slider.Border,
+									border = inner:RoundBorder {
+										color = Theme.Color.Slider.Border,
 									},
 								},
 							},

@@ -12,25 +12,25 @@ local OnEvent, OnChange, Out =
 local function TextEntry(
 	scope: ConFusion.Scope,
 	props: {
-		AnchorPoint: ConFusion.UsedAs<Vector2>?,
-		Position: ConFusion.UsedAs<UDim2>?,
-		Size: ConFusion.UsedAs<UDim2>?,
-		SizeConstraint: ConFusion.UsedAs<Enum.SizeConstraint>?,
+		anchorPoint: ConFusion.UsedAs<Vector2>?,
+		position: ConFusion.UsedAs<UDim2>?,
+		size: ConFusion.UsedAs<UDim2>?,
+		sizeConstraint: ConFusion.UsedAs<Enum.SizeConstraint>?,
 
-		PlaceholderText: string?,
-		Text: string?,
-		TextSize: number?,
-		TextXAlignment: Enum.TextXAlignment,
-		TextYAlignment: Enum.TextYAlignment,
+		placeholderText: string?,
+		text: string?,
+		textSize: number?,
+		textXAlignment: Enum.TextXAlignment,
+		textYAlignment: Enum.TextYAlignment,
 
-		Callback: (string) -> (),
-		TypingCallback: (string) -> (),
+		callback: (string) -> (),
+		typingCallback: (string) -> (),
 
 		[ConFusion.SpecialKey<"Ref">]: ConFusion.Value<unknown>?,
 	}
 )
 	local inner = scope:innerScope { RoundBorder = RoundBorder }
-	local text = inner:Value(peek(props.Text) or "")
+	local text = inner:Value(peek(props.text) or "")
 
 	local isFocused = inner:Value(false)
 	local borderColor = inner:Computed(function(use)
@@ -42,34 +42,34 @@ local function TextEntry(
 	end)
 
 	return inner:New "TextBox" {
-		AnchorPoint = props.AnchorPoint,
-		Size = props.Size,
-		Position = props.Position,
+		AnchorPoint = props.anchorPoint,
+		Size = props.size,
+		Position = props.position,
 
 		BackgroundColor3 = Theme.Color.InputField.Background,
 
-		PlaceholderText = props.PlaceholderText,
+		PlaceholderText = props.placeholderText,
 		PlaceholderColor3 = Theme.Color.DimmedText,
 
-		Text = props.Text,
-		TextSize = props.TextSize or 18,
+		Text = props.text,
+		TextSize = props.textSize or 18,
 		TextColor3 = Theme.Color.Text,
 		TextTruncate = Enum.TextTruncate.AtEnd,
 		FontFace = Theme.Font.Regular,
 
-		TextXAlignment = props.TextXAlignment,
-		TextYAlignment = props.TextYAlignment,
+		TextXAlignment = props.textXAlignment,
+		TextYAlignment = props.textYAlignment,
 
 		[Out "Text"] = text,
-		[OnChange "Text"] = props.TypingCallback,
+		[OnChange "Text"] = props.typingCallback,
 		[OnEvent "Focused"] = function()
 			isFocused:set(true)
 		end,
 		[OnEvent "FocusLost"] = function()
 			isFocused:set(false)
 
-			if props.Callback then
-				props.Callback(peek(text))
+			if props.callback then
+				props.callback(peek(text))
 			end
 		end,
 
@@ -81,7 +81,7 @@ local function TextEntry(
 				PaddingBottom = UDim.new(0, 2),
 			},
 			Border = inner:RoundBorder {
-				Color = inner:Tween(borderColor, Theme.TweenInfo.Highlight),
+				color = inner:Tween(borderColor, Theme.TweenInfo.Highlight),
 			},
 		},
 		[Ref] = props[Ref],

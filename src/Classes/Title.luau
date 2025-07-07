@@ -32,7 +32,7 @@ local function Title(scope: ConFusion.Scope, macroItem: Types.MacroItem)
 		BackgroundTransparency = 1,
 
 		[Children] = {
-			Label = inner:New "TextLabel" {
+			label = inner:New "TextLabel" {
 				Size = UDim2.fromScale(1, 1),
 
 				BackgroundTransparency = 1,

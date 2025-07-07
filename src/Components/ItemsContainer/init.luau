@@ -13,17 +13,17 @@ local Children = ConFusion.Children
 local function ItemsContainer(
 	scope: ConFusion.Scope,
 	props: {
-		Items: { Types.MacroItem },
-		ItemProperties: { [string]: any }?,
+		items: { Types.MacroItem },
+		itemProperties: { [string]: any }?,
 
-		Position: ConFusion.UsedAs<UDim2>?,
-		Size: ConFusion.UsedAs<UDim2>?,
-		BackgroundColor: ConFusion.UsedAs<Color3>?,
-		BackgroundTransparency: ConFusion.UsedAs<number>?,
-		Visible: ConFusion.UsedAs<boolean>?,
+		position: ConFusion.UsedAs<UDim2>?,
+		size: ConFusion.UsedAs<UDim2>?,
+		backgroundColor: ConFusion.UsedAs<Color3>?,
+		backgroundTransparency: ConFusion.UsedAs<number>?,
+		visible: ConFusion.UsedAs<boolean>?,
 	}
 )
-	if props.Items == nil or #props.Items == 0 then
+	if props.items == nil or #props.items == 0 then
 		return
 	end
 
@@ -33,11 +33,11 @@ local function ItemsContainer(
 	-- items are not dynamic, i don't plan on changing this
 	-- it is definitely possible but there really is no need
 	-- unless i feel like adding an :AddItem method to Section
-	for ind, macroItem in props.Items do
+	for ind, macroItem in props.items do
 		macroItem.Order = macroItem.Order or ind
 
-		if props.ItemProperties then
-			merge(macroItem, props.ItemProperties)
+		if props.itemProperties then
+			merge(macroItem, props.itemProperties)
 		end
 
 		local itemContents = inner:Item(macroItem)
@@ -50,30 +50,29 @@ local function ItemsContainer(
 	end
 
 	return inner:New "Frame" {
-		Position = props.Position,
-		Size = props.Size or UDim2.new(1, 0, 0, 0),
+		Position = props.position,
+		Size = props.size or UDim2.new(1, 0, 0, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
 
-		BackgroundColor3 = props.BackgroundColor or Theme.Color.Item.Background,
-		BackgroundTransparency = props.BackgroundTransparency,
+		BackgroundColor3 = props.backgroundColor or Theme.Color.Item.Background,
+		BackgroundTransparency = props.backgroundTransparency,
 		-- ClipsDescendants = true,
-		Visible = props.Visible,
+		Visible = props.visible,
 
 		[Children] = {
-			Layout = inner:New "UIListLayout" {
+			layout = inner:New "UIListLayout" {
 				FillDirection = Enum.FillDirection.Vertical,
 				SortOrder = Enum.SortOrder.LayoutOrder,
 			},
-			Padding = inner:New "UIPadding" {
+			padding = inner:New "UIPadding" {
 				PaddingTop = UDim.new(0, 2),
 				PaddingBottom = UDim.new(0, 2),
 				PaddingLeft = UDim.new(0, 1),
 				PaddingRight = UDim.new(0, 1),
 			},
+			border = inner:RoundBorder { thickness = 0 },
 
-			RoundBorder = inner:RoundBorder { Thickness = 0 },
-
-			Items = items,
+			items = items,
 		},
 	}
 end

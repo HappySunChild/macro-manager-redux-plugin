@@ -67,39 +67,38 @@ local function NumberRangeMacroItem(
 		BackgroundTransparency = 1,
 
 		[Children] = {
-			Padding = inner:New "UIPadding" {
+			padding = inner:New "UIPadding" {
 				PaddingTop = UDim.new(0, 2),
 				PaddingBottom = UDim.new(0, 2),
 				PaddingLeft = UDim.new(0, 2),
 				PaddingRight = UDim.new(0, 2),
 			},
 
-			Label = inner:Label {
-				Size = UDim2.fromScale(0.5, 1),
-				Text = displayText,
+			label = inner:Label {
+				size = UDim2.fromScale(0.5, 1),
+				text = displayText,
 			},
-			InputElements = inner:ElementGroup {
-				Position = UDim2.fromScale(0.5, 0),
-				Size = UDim2.fromScale(0.5, 1),
+			input = inner:ElementGroup {
+				position = UDim2.fromScale(0.5, 0),
+				size = UDim2.fromScale(0.5, 1),
+				padding = UDim.new(0, 4),
 
-				Padding = UDim.new(0, 4),
-
-				Render = function(scope: typeof(inner), _, label: string)
+				labels = { "Min", "Max" },
+				refs = { minFieldRef, maxFieldRef },
+				render = function(scope: typeof(inner), _, label: string)
 					return scope:TextEntry {
-						Size = UDim2.fromScale(1, 1),
+						size = UDim2.fromScale(1, 1),
 
-						Text = scope:Computed(function(use: ConFusion.Use)
+						text = scope:Computed(function(use: ConFusion.Use)
 							return use(value)[label]
 						end),
-						PlaceholderText = label,
+						placeholderText = label,
 
-						Callback = function()
+						callback = function()
 							setValueInternal(getInputValue())
 						end,
 					}
 				end,
-				Labels = { "Min", "Max" },
-				Refs = { minFieldRef, maxFieldRef },
 			},
 		},
 	}

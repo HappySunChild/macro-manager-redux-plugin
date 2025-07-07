@@ -23,7 +23,8 @@ local function testProperty(instance: Instance, property: string)
 end
 
 local function setProperty(instance: Instance, property: string, value: any)
-	local success, err = xpcall(rawSetProperty, parseError, instance, property, value)
+	local success, err =
+		xpcall(rawSetProperty, parseError, instance, property, value)
 
 	if not success then
 		if not pcall(testProperty, instance, property) then
@@ -42,7 +43,7 @@ local function setProperty(instance: Instance, property: string, value: any)
 			else
 				External.logErrorNonFatal(
 					"propertyInvalidType",
-					nil,
+					err,
 					instance.ClassName,
 					property,
 					expectedType,

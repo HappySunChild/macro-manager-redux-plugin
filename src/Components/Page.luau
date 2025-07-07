@@ -33,7 +33,7 @@ local function Page(
 		BackgroundTransparency = 1,
 
 		[Children] = {
-			Fade = inner:New "Frame" {
+			fade = inner:New "Frame" {
 				Size = UDim2.fromScale(1, 1),
 				ZIndex = 100,
 
@@ -41,7 +41,7 @@ local function Page(
 				Transparency = alpha,
 			},
 
-			Content = props.content,
+			content = props.content,
 		},
 	}
 end

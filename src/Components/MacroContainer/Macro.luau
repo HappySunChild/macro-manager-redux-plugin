@@ -36,9 +36,9 @@ end
 local function Title(
 	scope: ConFusion.Scope,
 	props: {
-		Text: string,
-		Icon: string?,
-		Document: LuaSourceContainer?,
+		text: string,
+		icon: string?,
+		document: LuaSourceContainer?,
 	}
 )
 	local inner = scope:innerScope { RoundBorder = RoundBorder }
@@ -59,16 +59,16 @@ local function Title(
 		[OnEvent "MouseLeave"] = function()
 			transparency:set(1)
 		end,
-		[OnEvent "InputBegan"] = if props.Document
+		[OnEvent "InputBegan"] = if props.document
 			then function(input: InputObject)
 				if input.UserInputType ~= Enum.UserInputType.MouseButton1 then
 					return
 				end
 
 				if os.clock() - lastClick < 0.2 then
-					ScriptEditorService:OpenScriptDocumentAsync(props.Document)
+					ScriptEditorService:OpenScriptDocumentAsync(props.document)
 				else
-					Selection:Set { props.Document }
+					Selection:Set { props.document }
 				end
 
 				lastClick = os.clock()
@@ -76,27 +76,27 @@ local function Title(
 			else nil,
 
 		[Children] = {
-			Padding = inner:New "UIPadding" {
+			padding = inner:New "UIPadding" {
 				PaddingLeft = UDim.new(0, 2),
 				PaddingRight = UDim.new(0, 2),
 			},
-			RoundBorder = inner:RoundBorder {
-				Thickness = 0,
+			border = inner:RoundBorder {
+				thickness = 0,
 			},
 
-			Icon = inner:New "ImageLabel" {
+			icon = inner:New "ImageLabel" {
 				Size = UDim2.fromOffset(16, 16),
 
 				BackgroundTransparency = 1,
 
-				Image = props.Icon or Assets.Images.DefaultMacroIcon,
+				Image = props.icon or Assets.Images.DefaultMacroIcon,
 			},
-			Label = inner:New "TextLabel" {
+			label = inner:New "TextLabel" {
 				Position = UDim2.fromOffset(18, 0),
 				Size = UDim2.fromOffset(0, 16),
 				AutomaticSize = Enum.AutomaticSize.X,
 
-				Text = props.Text,
+				Text = props.text,
 				TextSize = 16,
 				TextColor3 = Theme.Color.Macro.Title.Text,
 				TextTruncate = Enum.TextTruncate.AtEnd,
@@ -161,10 +161,10 @@ local function Macro(
 
 	-- have to do this so items are loaded before :Init is called.
 	local itemContainer = inner:ItemsContainer {
-		Items = macro.Items,
+		items = macro.Items,
 
-		Position = UDim2.fromOffset(0, 18),
-		Visible = inner:Computed(function(use)
+		position = UDim2.fromOffset(0, 18),
+		visible = inner:Computed(function(use)
 			return not use(minimized)
 		end),
 	}
@@ -190,37 +190,34 @@ local function Macro(
 		BackgroundColor3 = Theme.Color.Macro.Background,
 
 		[Children] = {
-			Padding = inner:New "UIPadding" {
+			padding = inner:New "UIPadding" {
 				PaddingLeft = UDim.new(0, 2),
 				PaddingRight = UDim.new(0, 2),
 				PaddingTop = UDim.new(0, 2),
 				PaddingBottom = UDim.new(0, 2),
 			},
 
-			Title = inner:Title {
-				Text = displayName,
-				Icon = macro.Icon,
-				Document = props.reference.Reference,
+			title = inner:Title {
+				text = displayName,
+				icon = macro.Icon,
+				document = props.reference.Document,
 			},
+			minimize = inner:TextButton {
+				anchorPoint = Vector2.new(1, 0),
+				position = UDim2.fromScale(1, 0),
+				size = UDim2.fromOffset(16, 16),
 
-			MinimizeButton = inner:TextButton {
-				AnchorPoint = Vector2.new(1, 0),
-				Position = UDim2.fromScale(1, 0),
-				Size = UDim2.fromOffset(16, 16),
-
-				Text = inner:Computed(function(use: ConFusion.Use)
+				text = inner:Computed(function(use: ConFusion.Use)
 					return if use(minimized) then "+" else "-"
 				end),
-				TextSize = 20,
+				textSize = 20,
 
-				Callback = function()
+				callback = function()
 					minimized:set(not peek(minimized))
 				end,
 			},
 
-			-- RoundBorder = inner:RoundBorder { Thickness = 0 },
-
-			Items = itemContainer,
+			items = itemContainer,
 		},
 	}
 end

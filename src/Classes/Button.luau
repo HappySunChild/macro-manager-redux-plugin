@@ -40,20 +40,20 @@ local function ButtonMacroItem(
 		BackgroundTransparency = 1,
 
 		[Children] = {
-			Padding = inner:New "UIPadding" {
+			padding = inner:New "UIPadding" {
 				PaddingLeft = UDim.new(0, 2),
 				PaddingRight = UDim.new(0, 2),
 				PaddingTop = UDim.new(0, 2),
 				PaddingBottom = UDim.new(0, 2),
 			},
 
-			Button = inner:TextButton {
-				Size = UDim2.fromScale(1, 1),
+			button = inner:TextButton {
+				size = UDim2.fromScale(1, 1),
 
-				Text = displayText,
-				TextSize = 18,
+				text = displayText,
+				textSize = 18,
 
-				Callback = function()
+				callback = function()
 					if not macroItem.Activate then
 						return
 					end

@@ -51,18 +51,18 @@ local function ContainerMacroItem(
 		BackgroundTransparency = 1,
 
 		[Children] = {
-			Padding = inner:New "UIPadding" {
+			padding = inner:New "UIPadding" {
 				PaddingTop = UDim.new(0, 2),
 				PaddingBottom = UDim.new(0, 2),
 				PaddingLeft = UDim.new(0, 2),
 				PaddingRight = UDim.new(0, 2),
 			},
-			Label = inner:Label {
-				Text = displayText,
-				Size = UDim2.new(0.5, 0, 0, 24),
-			},
 
-			Contents = inner:New "Frame" {
+			label = inner:Label {
+				text = displayText,
+				size = UDim2.new(0.5, 0, 0, 24),
+			},
+			container = inner:New "Frame" {
 				Position = UDim2.fromOffset(0, 24),
 				Size = UDim2.fromScale(1, 0),
 				AutomaticSize = Enum.AutomaticSize.Y,

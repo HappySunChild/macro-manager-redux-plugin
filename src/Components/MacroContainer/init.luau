@@ -48,20 +48,20 @@ local function MacroContainer(
 	end
 
 	return inner:ScrollingFrame {
-		Size = UDim2.fromScale(1, 1),
-		CanvasSize = UDim2.fromScale(0, 0),
-		AutomaticCanvasSize = Enum.AutomaticSize.Y,
+		size = UDim2.fromScale(1, 1),
+		canvasSize = UDim2.fromScale(0, 0),
+		automaticCanvasSize = Enum.AutomaticSize.Y,
 
-		BackgroundColor3 = Theme.Color.MainBackground,
-		ScrollBarThickness = 0,
+		backgroundColor3 = Theme.Color.MainBackground,
+		scrollBarThickness = 0,
 
 		[Children] = {
-			Layout = inner:New "UIListLayout" {
+			layout = inner:New "UIListLayout" {
 				Padding = UDim.new(0, 2),
 				SortOrder = Enum.SortOrder.LayoutOrder,
 			},
 
-			Macros = inner:Computed(
+			macros = inner:Computed(
 				function(use: ConFusion.Use, scope: typeof(inner))
 					local macros = use(props.macros)
 
