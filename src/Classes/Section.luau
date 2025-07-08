@@ -162,7 +162,7 @@ local function SectionMacroItem(
 
 						position = inner:Computed(function(use: ConFusion.Use)
 							if use(hasTitle) then
-								return UDim2.fromOffset(0, 6)
+								return UDim2.fromOffset(0, 8)
 							end
 
 							return UDim2.fromOffset(0, 0)
