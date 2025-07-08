@@ -43,6 +43,9 @@ local function Placeholder(
 	local reference = props.reference
 	local name = reference.Module.Name
 
+	local timer = scope:Timer()
+	timer:unpause()
+
 	return scope:New "TextLabel" {
 		Visible = scope:Computed(function(use: ConFusion.Use)
 			return props.shouldShow({ Name = name }, use)
@@ -55,6 +58,23 @@ local function Placeholder(
 		Text = `Loading {name}...`,
 		TextSize = 18,
 		TextColor3 = Theme.Color.Text,
+
+		[Children] = {
+			throbber = scope:New "ImageLabel" {
+				Position = UDim2.fromOffset(2, 2),
+				Size = UDim2.fromOffset(20, 20),
+
+				BackgroundTransparency = 1,
+
+				Image = Assets.Images.MacroLoadingThrobber,
+				ImageColor3 = Theme.Color.BrightText,
+				ResampleMode = Enum.ResamplerMode.Pixelated,
+
+				Rotation = scope:Computed(function(use: ConFusion.Use)
+					return use(timer) * 360
+				end),
+			},
+		},
 	}
 end
 

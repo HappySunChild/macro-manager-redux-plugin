@@ -5,6 +5,7 @@ local Assets = {
 		RefreshButtonLight = "rbxassetid://17210880996",
 
 		DefaultMacroIcon = "rbxassetid://95866080",
+		MacroLoadingThrobber = "rbxassetid://2459243309",
 
 		ColorPicker = {
 			HueSat = "rbxassetid://117908944470249",
