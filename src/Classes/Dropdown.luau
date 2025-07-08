@@ -216,7 +216,7 @@ local function DropdownMacroItem(
 	local function setValueInternal(newValue: any)
 		value:set(newValue)
 
-		updateItemValue(macroItem, newValue)
+		task.spawn(updateItemValue, macroItem, newValue)
 	end
 
 	function macroItem:UpdateText(newText: string)

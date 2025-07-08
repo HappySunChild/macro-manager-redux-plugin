@@ -25,7 +25,7 @@ local function NumberMacroItem(
 	local function setValueInternal(newValue: number)
 		value:set(newValue)
 
-		updateItemValue(macroItem, newValue)
+		task.spawn(updateItemValue, macroItem, newValue)
 	end
 
 	function macroItem:SetValue(newValue: number)

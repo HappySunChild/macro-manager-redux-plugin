@@ -47,7 +47,7 @@ local function Vector3ItemClass(
 	local function setValueInternal(newValue: Vector3)
 		value:set(newValue)
 
-		updateItemValue(macroItem, newValue)
+		task.spawn(updateItemValue, macroItem, newValue)
 	end
 
 	function macroItem:SetValue(newValue: Vector3)

@@ -1,6 +1,7 @@
 local Types = require "@plugin/Types"
 
 local Theme = require "@utility/Theme"
+local updateItemValue = require "@utility/updateItemValue"
 
 local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
@@ -88,14 +89,9 @@ local function SliderMacroItem(
 	local barRef = inner:Value()
 
 	local function setInternalValue(newValue: number)
-		local oldValue = macroItem.Value
-		macroItem.Value = newValue
-
 		valueState:set(newValue)
 
-		if type(macroItem.Changed) == "function" then
-			macroItem:Changed(newValue, oldValue)
-		end
+		task.spawn(updateItemValue, macroItem, newValue)
 	end
 
 	function macroItem:UpdateText(newText: string)

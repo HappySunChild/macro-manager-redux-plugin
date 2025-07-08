@@ -44,7 +44,7 @@ local function NumberRangeMacroItem(
 	local function setValueInternal(newValue: NumberRange)
 		value:set(newValue)
 
-		updateItemValue(newValue)
+		task.spawn(updateItemValue, macroItem, newValue)
 	end
 
 	function macroItem:UpdateText(newText: string)

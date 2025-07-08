@@ -30,7 +30,7 @@ local function Color3MacroItem(
 	local function setInternalValue(newValue: Color3)
 		value:set(newValue)
 
-		updateItemValue(macroItem, newValue)
+		task.spawn(updateItemValue, macroItem, newValue)
 	end
 
 	function macroItem:SetValue(newValue: Color3)

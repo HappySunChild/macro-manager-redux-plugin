@@ -44,7 +44,7 @@ local function Vector2ItemClass(
 	local function setValueInternal(newValue: Vector2)
 		value:set(newValue)
 
-		updateItemValue(macroItem, newValue)
+		task.spawn(updateItemValue, macroItem, newValue)
 	end
 
 	function macroItem:SetValue(newValue: Vector2)

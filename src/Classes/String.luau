@@ -19,13 +19,13 @@ local function StringItemClass(
 	macroItem.Value = default(macroItem.Value)
 
 	local inner = scope:innerScope { TextEntry = TextEntry, Label = Label }
-	local value = scope:Value(macroItem.Value)
-	local displayText = scope:Value(macroItem.Text or "String")
+	local value = inner:Value(macroItem.Value)
+	local displayText = inner:Value(macroItem.Text or "String")
 
 	local function setValueInternal(newValue: string)
 		value:set(newValue)
 
-		updateItemValue(macroItem, newValue)
+		task.spawn(updateItemValue, macroItem, newValue)
 	end
 
 	function macroItem:SetValue(newValue: string)
