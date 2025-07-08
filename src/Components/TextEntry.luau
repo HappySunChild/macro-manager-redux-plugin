@@ -23,6 +23,8 @@ local function TextEntry(
 		textXAlignment: Enum.TextXAlignment,
 		textYAlignment: Enum.TextYAlignment,
 
+		layoutOrder: number,
+
 		callback: (string) -> (),
 		typingCallback: (string) -> (),
 
@@ -45,6 +47,8 @@ local function TextEntry(
 		AnchorPoint = props.anchorPoint,
 		Size = props.size,
 		Position = props.position,
+
+		LayoutOrder = props.layoutOrder,
 
 		BackgroundColor3 = Theme.Color.InputField.Background,
 
@@ -74,13 +78,13 @@ local function TextEntry(
 		end,
 
 		[Children] = {
-			Padding = inner:New "UIPadding" {
+			padding = inner:New "UIPadding" {
 				PaddingLeft = UDim.new(0, 2),
 				PaddingRight = UDim.new(0, 2),
 				PaddingTop = UDim.new(0, 2),
 				PaddingBottom = UDim.new(0, 2),
 			},
-			Border = inner:RoundBorder {
+			border = inner:RoundBorder {
 				color = inner:Tween(borderColor, Theme.TweenInfo.Highlight),
 			},
 		},
