@@ -51,7 +51,7 @@ return table.freeze {
 
 		Border = StudioColor(Enum.StudioStyleGuideColor.Border),
 		AccentBorder = ColorSet {
-			Light = Color3.fromRGB(146, 163, 255),
+			Light = Color3.fromRGB(108, 130, 255),
 			Dark = Color3.fromRGB(247, 152, 58),
 		},
 
