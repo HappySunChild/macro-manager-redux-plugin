@@ -13,6 +13,7 @@ local App = require "./App"
 
 local PLUGIN_VERSION = require "@plugin/Version"
 
+local _firstActivation = true
 local isActive = false
 
 local buttonWidget = nil :: PluginToolbarButton
@@ -32,7 +33,11 @@ local function activate()
 	buttonWidget:SetActive(true)
 	widget.Enabled = true
 
-	MacroManager.refreshMacros()
+	if _firstActivation then
+		_firstActivation = false
+
+		MacroManager.refreshMacros()
+	end
 end
 
 local function deactivate()
