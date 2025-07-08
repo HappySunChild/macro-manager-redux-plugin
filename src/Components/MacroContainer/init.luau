@@ -23,7 +23,7 @@ local function NoMacrosLabel(scope: ConFusion.Scope)
 		TextColor3 = Theme.Color.DimmedText,
 
 		[Children] = RoundBorder(scope, {
-			Thickness = 0,
+			thickness = 0,
 		}),
 	}
 end
