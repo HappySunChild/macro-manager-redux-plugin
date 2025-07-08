@@ -146,6 +146,13 @@ local function Macro(
 		TextButton = TextButton,
 	}
 
+	-- im not entirely sure if i should make this asynchronous
+	-- because future methods may be reliant on it completely finishing
+	-- (ex: Setup creates some macro items and Init calls some method on them)
+
+	-- the only problem i have with this is that it's incredibly ugly seeing the modules stop loading
+	-- just for a single module to run its setup...
+	-- maybe i could figure out how to use Eventuals in this context to avoid that
 	_callMacroMethod(macro, "Setup", PluginShared.Plugin)
 
 	local visible = inner:Value(true)
@@ -169,11 +176,11 @@ local function Macro(
 		end),
 	}
 
-	_callMacroMethod(macro, "Init", PluginShared.Plugin)
+	task.spawn(_callMacroMethod, macro, "Init", PluginShared.Plugin)
 
 	if macro.Cleanup ~= nil then
 		table.insert(inner, function()
-			_callMacroMethod(macro, "Cleanup", PluginShared.Plugin)
+			task.spawn(_callMacroMethod, macro, "Cleanup", PluginShared.Plugin)
 		end)
 	end
 
