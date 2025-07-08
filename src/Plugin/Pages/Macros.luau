@@ -29,7 +29,7 @@ local function MacrosPage(
 		RoundBorder = RoundBorder,
 	}
 
-	local filter = inner:Value ""
+	local filterAgainst = inner:Value ""
 
 	return {
 		padding = inner:New "UIPadding" {
@@ -41,7 +41,6 @@ local function MacrosPage(
 
 		topbar = inner:New "Frame" {
 			Size = UDim2.new(1, 0, 0, TOPBAR_HEIGHT),
-
 			BackgroundColor3 = Theme.Color.Macro.Background,
 
 			[Children] = {
@@ -58,7 +57,7 @@ local function MacrosPage(
 					padding = UDim.new(0, 3),
 
 					[Children] = {
-						search = inner:TextEntry {
+						filter = inner:TextEntry {
 							size = UDim2.new(1, -60, 1, 0),
 
 							textSize = 16,
@@ -66,8 +65,10 @@ local function MacrosPage(
 							placeholderText = "Filter...",
 
 							typingCallback = function(text: string)
-								filter:set(text:lower())
+								filterAgainst:set(text:lower())
 							end,
+
+							layoutOrder = 1,
 						},
 						refresh = inner:TextButton {
 							size = UDim2.new(0, 60, 1, 0),
@@ -78,6 +79,8 @@ local function MacrosPage(
 							callback = function()
 								MacroManager.refreshMacros()
 							end,
+
+							layoutOrder = 2,
 						},
 					},
 				},
@@ -90,7 +93,7 @@ local function MacrosPage(
 			BackgroundTransparency = 1,
 
 			[Children] = inner:MacroContainer {
-				filter = filter,
+				filter = filterAgainst,
 				macros = props.macros,
 			},
 		},
