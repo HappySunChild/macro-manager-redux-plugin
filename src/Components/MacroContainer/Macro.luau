@@ -17,7 +17,7 @@ local RoundBorder = require "@components/RoundBorder"
 local TextButton = require "@components/TextButton"
 
 local Children, OnEvent = ConFusion.Children, ConFusion.OnEvent
-local peek = ConFusion.peek
+local peek, doCleanup = ConFusion.peek, ConFusion.doCleanup
 
 local function _callMacroMethod(macro: Types.Macro, method: string, ...: any)
 	local func = macro[method]
@@ -31,6 +31,31 @@ local function _callMacroMethod(macro: Types.Macro, method: string, ...: any)
 	end
 
 	xpcall(func, errHandler, macro, ...)
+end
+
+local function Placeholder(
+	scope: ConFusion.Scope,
+	props: {
+		reference: Types.MacroReference,
+		shouldShow: (macro: Types.Macro, use: ConFusion.Use) -> boolean,
+	}
+)
+	local reference = props.reference
+	local name = reference.Module.Name
+
+	return scope:New "TextLabel" {
+		Visible = scope:Computed(function(use: ConFusion.Use)
+			return props.shouldShow({ Name = name }, use)
+		end),
+
+		Size = UDim2.new(1, 0, 0, 24),
+
+		BackgroundColor3 = Theme.Color.Macro.Background,
+
+		Text = `Loading {name}...`,
+		TextSize = 18,
+		TextColor3 = Theme.Color.Text,
+	}
 end
 
 local function Title(
@@ -115,30 +140,6 @@ local function Macro(
 		shouldShow: (macro: Types.Macro, use: ConFusion.Use) -> boolean,
 	}
 )
-	local name = props.reference.Module.Name
-	local displayName = name:gsub("(%l)([%u%d])", "%1 %2")
-
-	local macro: Types.Macro = {} :: any
-	local reqOk, reqErr = pcall(function()
-		macro = require(props.reference.Module) :: any
-	end)
-
-	if not reqOk then
-		Logging.warn("macroRequireError", reqErr, name)
-	end
-
-	if t.table(macro) == false then
-		Logging.warn("macroInvalidType", nil, name, type(macro))
-
-		return
-	end
-
-	if macro.Items == nil then
-		Logging.warn("macroMissingItems", nil, name)
-	end
-
-	macro.Name = name
-
 	local inner = scope:innerScope {
 		Title = Title,
 		ItemsContainer = ItemsContainer,
@@ -146,87 +147,119 @@ local function Macro(
 		TextButton = TextButton,
 	}
 
-	-- im not entirely sure if i should make this asynchronous
-	-- because future methods may be reliant on it completely finishing
-	-- (ex: Setup creates some macro items and Init calls some method on them)
-
-	-- the only problem i have with this is that it's incredibly ugly seeing the modules stop loading
-	-- just for a single module to run its setup...
-	-- maybe i could figure out how to use Eventuals in this context to avoid that
-	_callMacroMethod(macro, "Setup", PluginShared.Plugin)
-
-	local visible = inner:Value(true)
-	local minimized = inner:Value(false)
-
-	function macro:SetVisible(isVisible: boolean)
-		visible:set(isVisible)
-	end
-
-	function macro:SetMinimized(isMinimized: boolean)
-		minimized:set(isMinimized)
-	end
-
-	-- have to do this so items are loaded before :Init is called.
-	local itemContainer = inner:ItemsContainer {
-		items = macro.Items,
-
-		position = UDim2.fromOffset(0, 18),
-		visible = inner:Computed(function(use)
-			return not use(minimized)
-		end),
+	local _placeholderScope = inner:innerScope {
+		Placeholder = Placeholder,
 	}
 
-	task.spawn(_callMacroMethod, macro, "Init", PluginShared.Plugin)
+	return inner:Eventual(function(_, become)
+		local name = props.reference.Module.Name
+		local displayName = name:gsub("(%l)([%u%d])", "%1 %2")
 
-	if macro.Cleanup ~= nil then
-		table.insert(inner, function()
-			task.spawn(_callMacroMethod, macro, "Cleanup", PluginShared.Plugin)
+		local macro: Types.Macro = {} :: any
+		local reqOk, reqErr = pcall(function()
+			macro = require(props.reference.Module) :: any
 		end)
-	end
 
-	return inner:New "Frame" {
-		Name = `Macro_{name}`,
-		Size = UDim2.new(1, 0, 0, 20),
-		AutomaticSize = Enum.AutomaticSize.Y,
+		if not reqOk then
+			Logging.warn("macroRequireError", reqErr, name)
+		end
 
-		Visible = inner:Computed(function(use: ConFusion.Use)
-			return props.shouldShow(macro, use) and use(visible)
-		end),
+		if t.table(macro) == false then
+			Logging.warn("macroInvalidType", nil, name, type(macro))
 
-		LayoutOrder = macro.Order,
-		BackgroundColor3 = Theme.Color.Macro.Background,
+			return
+		end
 
-		[Children] = {
-			padding = inner:New "UIPadding" {
-				PaddingLeft = UDim.new(0, 2),
-				PaddingRight = UDim.new(0, 2),
-				PaddingTop = UDim.new(0, 2),
-				PaddingBottom = UDim.new(0, 2),
+		if macro.Items == nil then
+			Logging.warn("macroMissingItems", nil, name)
+		end
+
+		macro.Name = name
+
+		_callMacroMethod(macro, "Setup", PluginShared.Plugin)
+
+		local visible = inner:Value(true)
+		local minimized = inner:Value(false)
+
+		function macro:SetVisible(isVisible: boolean)
+			visible:set(isVisible)
+		end
+
+		function macro:SetMinimized(isMinimized: boolean)
+			minimized:set(isMinimized)
+		end
+
+		-- have to do this so items are loaded before :Init is called.
+		local itemContainer = inner:ItemsContainer {
+			items = macro.Items,
+
+			position = UDim2.fromOffset(0, 18),
+			visible = inner:Computed(function(use)
+				return not use(minimized)
+			end),
+		}
+
+		task.spawn(_callMacroMethod, macro, "Init", PluginShared.Plugin)
+
+		if macro.Cleanup ~= nil then
+			table.insert(inner, function()
+				task.spawn(
+					_callMacroMethod,
+					macro,
+					"Cleanup",
+					PluginShared.Plugin
+				)
+			end)
+		end
+
+		become(inner:New "Frame" {
+			Name = `Macro_{name}`,
+			Size = UDim2.new(1, 0, 0, 20),
+			AutomaticSize = Enum.AutomaticSize.Y,
+
+			Visible = inner:Computed(
+				function(use: ConFusion.Use) -- horrible coupling here, DO NOT REPLICATE!!!
+					return props.shouldShow(macro, use) and use(visible)
+				end
+			),
+
+			LayoutOrder = macro.Order,
+			BackgroundColor3 = Theme.Color.Macro.Background,
+
+			[Children] = {
+				padding = inner:New "UIPadding" {
+					PaddingLeft = UDim.new(0, 2),
+					PaddingRight = UDim.new(0, 2),
+					PaddingTop = UDim.new(0, 2),
+					PaddingBottom = UDim.new(0, 2),
+				},
+
+				title = inner:Title {
+					text = displayName,
+					icon = macro.Icon,
+					document = props.reference.Document,
+				},
+				minimize = inner:TextButton {
+					anchorPoint = Vector2.new(1, 0),
+					position = UDim2.fromScale(1, 0),
+					size = UDim2.fromOffset(16, 16),
+
+					text = inner:Computed(function(use: ConFusion.Use)
+						return if use(minimized) then "+" else "-"
+					end),
+					textSize = 20,
+
+					callback = function()
+						minimized:set(not peek(minimized))
+					end,
+				},
+
+				items = itemContainer,
 			},
+		})
 
-			title = inner:Title {
-				text = displayName,
-				icon = macro.Icon,
-				document = props.reference.Document,
-			},
-			minimize = inner:TextButton {
-				anchorPoint = Vector2.new(1, 0),
-				position = UDim2.fromScale(1, 0),
-				size = UDim2.fromOffset(16, 16),
-
-				text = inner:Computed(function(use: ConFusion.Use)
-					return if use(minimized) then "+" else "-"
-				end),
-				textSize = 20,
-
-				callback = function()
-					minimized:set(not peek(minimized))
-				end,
-			},
-
-			items = itemContainer,
-		},
-	}
+		doCleanup(_placeholderScope)
+	end, _placeholderScope:Placeholder(props))
 end
 
 return Macro
