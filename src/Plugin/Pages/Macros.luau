@@ -18,7 +18,7 @@ local TOPBAR_HEIGHT = 24
 local function MacrosPage(
 	scope: ConFusion.Scope,
 	props: {
-		macros: ConFusion.UsedAs<{ Types.Macro }>,
+		macros: ConFusion.UsedAs<{ Types.MacroReference }>,
 	}
 )
 	local inner = scope:innerScope {
