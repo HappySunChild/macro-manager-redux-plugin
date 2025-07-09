@@ -6,13 +6,19 @@ local t = require "@packages/t"
 
 local Children = ConFusion.Children
 
-local default = t.default("Label", t.string)
+local defaultText = t.default("Label", t.string)
+local defaultSelectable = t.default(nil, t.literal(true)) -- either true or nil
 
-local function LabelMacroItem(
-	scope: ConFusion.Scope,
-	macroItem: Types.MacroItem
-)
-	macroItem.Text = default(macroItem.Text)
+type LabelMacroItem = Types.MacroItem & {
+	Selectable: boolean?,
+	RichText: boolean?,
+	TextXAlignment: Enum.TextXAlignment?,
+	TextYAlignment: Enum.TextYAlignment?,
+}
+
+local function LabelMacroItem(scope: ConFusion.Scope, macroItem: LabelMacroItem)
+	macroItem.Text = defaultText(macroItem.Text)
+	macroItem.Selectable = defaultSelectable(macroItem.Selectable)
 
 	local inner = scope:innerScope()
 	local displayText = inner:Value(macroItem.Text)
@@ -24,6 +30,8 @@ local function LabelMacroItem(
 
 		displayText:set(newText)
 	end
+
+	local labelType = macroItem.Selectable and "TextBox" or "TextLabel"
 
 	return inner:New "Frame" {
 		Size = UDim2.new(1, 0, 0, 0),
@@ -39,7 +47,7 @@ local function LabelMacroItem(
 				PaddingRight = UDim.new(0, 2),
 			},
 
-			label = inner:New "TextLabel" {
+			label = inner:New(labelType) {
 				Size = UDim2.new(1, 0, 0, 0),
 				AutomaticSize = Enum.AutomaticSize.Y,
 
@@ -54,6 +62,9 @@ local function LabelMacroItem(
 				TextWrapped = true,
 				TextColor3 = Theme.Color.Text,
 				FontFace = Theme.Font.Regular,
+
+				TextEditable = macroItem.Selectable and false,
+				ClearTextOnFocus = macroItem.Selectable and false,
 			},
 		},
 	}
