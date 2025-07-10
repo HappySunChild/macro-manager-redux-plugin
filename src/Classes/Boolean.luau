@@ -69,8 +69,7 @@ local function BooleanMacroItem(
 				size = UDim2.fromScale(1, 1),
 				sizeConstraint = Enum.SizeConstraint.RelativeYY,
 
-				idleColor = Theme.Color.InputField.Background,
-				borderColor = Theme.Color.InputField.Border,
+				style = Theme.ButtonStyles.Input,
 
 				text = map(value, function(v: boolean)
 					return if v then "✓" else ""
