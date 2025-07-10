@@ -1,5 +1,7 @@
 local ConFusion = require "@packages/ConFusion"
+
 local Theme = require "@utility/Theme"
+local getButtonStyle = require "@utility/getButtonStyle"
 
 local RoundBorder = require "@components/RoundBorder"
 
@@ -13,12 +15,7 @@ export type _buttonProps = {
 	position: ConFusion.UsedAs<UDim2>?,
 	layoutOrder: ConFusion.UsedAs<number>?,
 
-	borderColor: ConFusion.UsedAs<Color3>?,
-	hoverBorderColor: ConFusion.UsedAs<Color3>?,
-
-	idleColor: ConFusion.UsedAs<Color3>?,
-	pressColor: ConFusion.UsedAs<Color3>?,
-	hoverColor: ConFusion.UsedAs<Color3>?,
+	style: Theme.ButtonStyle | string?,
 
 	callback: () -> (),
 }
@@ -33,26 +30,36 @@ local function Button(
 		RoundBorder = RoundBorder,
 	}
 	local state = inner:Value(Enum.GuiState.Idle)
-	local color = inner:Computed(function(use)
+
+	local backgroundColor = inner:Computed(function(use)
+		local style = use(props.style)
 		local current = use(state) :: Enum.GuiState
 
 		if current == Enum.GuiState.Hover then
-			return use(props.hoverColor or Theme.Color.Button.HoverBackground)
+			return use(getButtonStyle(style, "HoverBackground"))
 		elseif current == Enum.GuiState.Press then
-			return use(props.pressColor or Theme.Color.Button.PressedBackground)
+			return use(getButtonStyle(style, "PressedBackground"))
 		end
 
-		return use(props.idleColor or Theme.Color.Button.Background)
+		return use(getButtonStyle(style, "Background"))
 	end)
 
 	local borderColor = inner:Computed(function(use)
+		local style = use(props.style)
+
+		if getButtonStyle(style, "HasBorder") == false then
+			return use(backgroundColor)
+		end
+
 		local current = use(state)
 
 		if current == Enum.GuiState.Hover then
-			return use(props.borderColor or Theme.Color.AccentBorder)
+			return use(
+				getButtonStyle(style, "HoverBorder") or Theme.Color.AccentBorder
+			)
 		end
 
-		return use(props.borderColor or Theme.Color.Button.Border)
+		return use(getButtonStyle(style, "Border"))
 	end)
 
 	-- I wanted to just use a Frame, but there's not a good way to reimplement MouseButton1Click
@@ -64,14 +71,14 @@ local function Button(
 		Position = props.position,
 		LayoutOrder = props.layoutOrder,
 
-		BackgroundColor3 = color,
+		BackgroundColor3 = backgroundColor,
 
 		[Out "GuiState"] = state,
 		[OnEvent "MouseButton1Click"] = props.callback,
 
 		[Children] = {
 			border = inner:RoundBorder {
-				color = inner:Tween(borderColor, Theme.TweenInfo.Hover),
+				color = borderColor,
 			},
 			padding = inner:New "UIPadding" {
 				PaddingLeft = UDim.new(0, 2),

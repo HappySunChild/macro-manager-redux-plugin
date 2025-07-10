@@ -1,5 +1,7 @@
 local ConFusion = require "@packages/ConFusion"
+
 local Theme = require "@utility/Theme"
+local getButtonStyle = require "@utility/getButtonStyle"
 
 local Button = require "@components/Button"
 
@@ -24,12 +26,7 @@ local function TextButton(
 		position = props.position,
 		layoutOrder = props.layoutOrder,
 
-		borderColor = props.borderColor,
-		hoverBorderColor = props.hoverBorderColor,
-
-		idleColor = props.idleColor,
-		pressColor = props.pressColor,
-		hoverColor = props.hoverColor,
+		style = props.style,
 
 		callback = props.callback,
 
@@ -42,7 +39,10 @@ local function TextButton(
 			TextXAlignment = props.textXAlignment,
 			TextYAlignment = props.textYAlignment,
 			TextSize = props.textSize,
-			TextColor3 = props.textColor or Theme.Color.Button.Text,
+			TextColor3 = props.textColor
+				or inner:Computed(function(use: ConFusion.Use)
+					return use(getButtonStyle(use(props.style), "Text"))
+				end),
 			FontFace = Theme.Font.Regular,
 			TextTruncate = Enum.TextTruncate.AtEnd,
 		},

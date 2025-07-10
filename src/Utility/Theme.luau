@@ -52,6 +52,38 @@ local function ColorSet(set: { [string]: Color3 }): ConFusion.Computed<Color3>
 	end)
 end
 
+export type ButtonStyle = {
+	Text: ConFusion.UsedAs<Color3>,
+
+	Background: ConFusion.UsedAs<Color3>,
+	HoverBackground: ConFusion.UsedAs<Color3>,
+	PressedBackground: ConFusion.UsedAs<Color3>,
+
+	HasBorder: boolean?,
+	Border: ConFusion.UsedAs<Color3>?,
+	HoverBorder: ConFusion.UsedAs<Color3>?,
+}
+
+local DEFAULT_BUTTON_STYLE = {
+	Text = StudioColor(Enum.StudioStyleGuideColor.ButtonText),
+	Background = ColorSet {
+		Light = Color3.fromRGB(252, 252, 252),
+		Dark = Color3.fromRGB(56, 56, 56),
+	},
+	HoverBackground = StudioColor(
+		Enum.StudioStyleGuideColor.Button,
+		Enum.StudioStyleGuideModifier.Hover
+	),
+	PressedBackground = StudioColor(
+		Enum.StudioStyleGuideColor.Button,
+		Enum.StudioStyleGuideModifier.Pressed
+	),
+	Border = ColorSet {
+		Light = Color3.fromRGB(162, 162, 162),
+		Dark = Color3.fromRGB(26, 26, 26),
+	},
+}
+
 return table.freeze {
 	setTheme = function(newTheme: StudioTheme)
 		currentTheme:set(newTheme)
@@ -106,26 +138,6 @@ return table.freeze {
 			},
 		},
 
-		Button = {
-			Text = StudioColor(Enum.StudioStyleGuideColor.ButtonText),
-			Background = ColorSet {
-				Light = Color3.fromRGB(252, 252, 252),
-				Dark = Color3.fromRGB(56, 56, 56),
-			},
-			HoverBackground = StudioColor(
-				Enum.StudioStyleGuideColor.Button,
-				Enum.StudioStyleGuideModifier.Hover
-			),
-			PressedBackground = StudioColor(
-				Enum.StudioStyleGuideColor.Button,
-				Enum.StudioStyleGuideModifier.Pressed
-			),
-			Border = ColorSet {
-				Light = Color3.fromRGB(162, 162, 162),
-				Dark = Color3.fromRGB(26, 26, 26),
-			},
-		},
-
 		InputField = {
 			Background = StudioColor(
 				Enum.StudioStyleGuideColor.InputFieldBackground
@@ -159,9 +171,9 @@ return table.freeze {
 			},
 		},
 	},
+
 	TweenInfo = {
 		Highlight = TweenInfo.new(0.1),
-		Hover = TweenInfo.new(0.05),
 
 		Page = TweenInfo.new(
 			0.2,
@@ -172,5 +184,36 @@ return table.freeze {
 		DropdownRotation = TweenInfo.new(0.2),
 	},
 
-	Roundness = scope:Value(UDim.new(0, 4)),
+	ButtonStyles = {
+		Default = DEFAULT_BUTTON_STYLE,
+		Input = {
+			Background = StudioColor(
+				Enum.StudioStyleGuideColor.InputFieldBackground
+			),
+			Border = StudioColor(Enum.StudioStyleGuideColor.InputFieldBorder),
+		},
+		Red = {
+			Text = Color3.new(1, 1, 1),
+			Background = Color3.fromRGB(225, 56, 53),
+			HoverBackground = Color3.fromRGB(231, 95, 93),
+			PressedBackground = Color3.fromRGB(245, 139, 139),
+			HasBorder = false,
+		},
+		Blue = {
+			Text = Color3.new(1, 1, 1),
+			Background = Color3.fromRGB(74, 104, 236),
+			HoverBackground = Color3.fromRGB(97, 124, 245),
+			PressedBackground = Color3.fromRGB(120, 144, 249),
+			HasBorder = false,
+		},
+		Green = {
+			Text = Color3.new(1, 1, 1),
+			Background = Color3.fromRGB(67, 166, 58),
+			HoverBackground = Color3.fromRGB(89, 187, 80),
+			PressedBackground = Color3.fromRGB(109, 214, 99),
+			HasBorder = false,
+		},
+	},
+
+	Roundness = UDim.new(0, 4),
 }
