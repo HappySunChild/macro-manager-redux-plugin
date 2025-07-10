@@ -5,23 +5,41 @@ local ConFusion = require "@packages/ConFusion"
 local PluginShared = require "@plugin/Shared"
 
 local map = ConFusion.map
-local scope = PluginShared.Scope
 
+local scope = PluginShared.Scope
 local currentTheme = scope:Value(Studio.Theme)
 
 local MISSING_COLOR = Color3.new(1, 0, 1)
+
+local _studioColorCache = {}
 
 local function StudioColor(
 	styleGuideColor: Enum.StudioStyleGuideColor,
 	modifier: Enum.StudioStyleGuideModifier?
 ): ConFusion.Computed<Color3>
-	return map(currentTheme, function(theme: StudioTheme)
+	modifier = modifier or Enum.StudioStyleGuideModifier.Default
+
+	if _studioColorCache[styleGuideColor.Name] == nil then
+		_studioColorCache[styleGuideColor.Name] = {}
+	else
+		local cached = _studioColorCache[styleGuideColor.Name][modifier.Name]
+
+		if cached then
+			return cached
+		end
+	end
+
+	local dynamicColor = map(currentTheme, function(theme: StudioTheme)
 		if not theme then
 			return MISSING_COLOR
 		end
 
 		return theme:GetColor(styleGuideColor, modifier)
 	end)
+
+	_studioColorCache[styleGuideColor.Name][modifier.Name] = dynamicColor
+
+	return dynamicColor
 end
 
 local function ColorSet(set: { [string]: Color3 }): ConFusion.Computed<Color3>
@@ -30,7 +48,7 @@ local function ColorSet(set: { [string]: Color3 }): ConFusion.Computed<Color3>
 			return MISSING_COLOR
 		end
 
-		return set[theme.Name]
+		return set[theme.Name] or MISSING_COLOR
 	end)
 end
 
