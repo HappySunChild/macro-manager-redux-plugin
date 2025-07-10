@@ -27,7 +27,7 @@ local function ButtonMacroItem(
 	macroItem.Activate = macroItem.Activate or macroItem.Activated
 
 	function macroItem:UpdateText(newText: string)
-		assert(t.strict(newText))
+		assert(t.string(newText))
 
 		macroItem.Text = newText
 
