@@ -7,9 +7,12 @@ local TextButton = require "@components/TextButton"
 
 local Children = ConFusion.Children
 
+local styleType = t.union(t.string, t.table)
 local default = t.default("Button", t.string)
+local defaultStyle = t.default(nil, styleType)
 
 type ButtonMacroItem = Types.MacroItem & {
+	Style: string,
 	Activate: (ButtonMacroItem) -> (),
 	Activated: (ButtonMacroItem) -> (),
 }
@@ -19,9 +22,11 @@ local function ButtonMacroItem(
 	macroItem: ButtonMacroItem
 )
 	macroItem.Text = default(macroItem.Text)
+	macroItem.Style = defaultStyle(macroItem.Style)
 
 	local inner = scope:innerScope { TextButton = TextButton }
 	local displayText = inner:Value(macroItem.Text)
+	local displayStyle = inner:Value(macroItem.Style)
 
 	-- for backwards compatibility
 	macroItem.Activate = macroItem.Activate or macroItem.Activated
@@ -32,6 +37,14 @@ local function ButtonMacroItem(
 		macroItem.Text = newText
 
 		displayText:set(newText)
+	end
+
+	function macroItem:UpdateStyle(newStyle: string)
+		assert(styleType(newStyle))
+
+		macroItem.Style = newStyle
+
+		displayStyle:set(newStyle)
 	end
 
 	return inner:New "Frame" {
@@ -52,6 +65,8 @@ local function ButtonMacroItem(
 
 				text = displayText,
 				textSize = 18,
+
+				style = displayStyle,
 
 				callback = function()
 					if not macroItem.Activate then
