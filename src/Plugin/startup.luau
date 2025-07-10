@@ -1,10 +1,9 @@
 local Studio = settings():GetService "Studio"
 
+local ColorPicker = require "@utility/ColorPicker"
 local ContainerManager = require "@utility/ContainerManager"
 local MacroManager = require "@utility/MacroManager"
 local Theme = require "@utility/Theme"
-
-local ColorPicker = require "@packages/ColorPicker"
 
 local Assets = require "@plugin/Assets"
 local PluginShared = require "@plugin/Shared"
@@ -127,7 +126,6 @@ return function(plugin: Plugin)
 	setupToolbar(plugin)
 
 	plugin.Unloading:Connect(_onClose)
-
 	Studio.ThemeChanged:Connect(function()
 		_onThemeChange(Studio.Theme)
 	end)

@@ -1,6 +1,6 @@
 local Theme = require "@utility/Theme"
+local ColorPicker = require "@utility/ColorPicker"
 
-local ColorPicker = require "@packages/ColorPicker"
 local ConFusion = require "@packages/ConFusion"
 
 local ElementGroup = require "@components/ElementGroup"

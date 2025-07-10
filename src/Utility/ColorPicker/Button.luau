@@ -3,6 +3,8 @@ local Theme = require "@utility/Theme"
 
 local OnEvent, Out = ConFusion.OnEvent, ConFusion.Out
 
+local BUTTON_STYLE = Theme.ButtonStyles.Default
+
 local function Button(
 	scope: ConFusion.Scope,
 	props: {
@@ -19,12 +21,12 @@ local function Button(
 		local currentState = use(state)
 
 		if currentState == Enum.GuiState.Hover then
-			return use(Theme.Color.Button.HoverBackground)
+			return use(BUTTON_STYLE.HoverBackground)
 		elseif currentState == Enum.GuiState.Press then
-			return use(Theme.Color.Button.PressedBackground)
+			return use(BUTTON_STYLE.PressedBackground)
 		end
 
-		return use(Theme.Color.Button.Background)
+		return use(BUTTON_STYLE.Background)
 	end)
 
 	return inner:New "TextButton" {
@@ -32,11 +34,11 @@ local function Button(
 		Size = props.size,
 
 		BackgroundColor3 = color,
-		BorderColor3 = Theme.Color.Button.Border,
+		BorderColor3 = BUTTON_STYLE.Border,
 		BorderSizePixel = 1,
 
 		Text = props.text,
-		TextColor3 = Theme.Color.Button.Text,
+		TextColor3 = BUTTON_STYLE.Text,
 		TextSize = 16,
 
 		[Out "GuiState"] = state,
