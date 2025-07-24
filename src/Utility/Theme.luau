@@ -115,13 +115,13 @@ return table.freeze {
 			Title = {
 				Text = StudioColor(Enum.StudioStyleGuideColor.InfoText),
 			},
-			Background = StudioColor(Enum.StudioStyleGuideColor.Mid),
+			Background = StudioColor(
+				Enum.StudioStyleGuideColor.Tab,
+				Enum.StudioStyleGuideModifier.Selected
+			),
 		},
 		Item = {
-			Background = ColorSet {
-				Light = Color3.fromRGB(255, 255, 255),
-				Dark = Color3.fromRGB(46, 46, 46),
-			},
+			Background = StudioColor(Enum.StudioStyleGuideColor.Item),
 		},
 		Section = {
 			Background = ColorSet {
@@ -161,14 +161,11 @@ return table.freeze {
 		},
 
 		DropdownItem = {
-			Background = ColorSet {
-				Light = Color3.fromRGB(242, 242, 242),
-				Dark = Color3.fromRGB(50, 50, 50),
-			},
-			BackgroundAlt = ColorSet {
-				Light = Color3.fromRGB(227, 227, 227),
-				Dark = Color3.fromRGB(45, 45, 45),
-			},
+			Background = StudioColor(Enum.StudioStyleGuideColor.HeaderSection),
+			BackgroundAlt = StudioColor(
+				Enum.StudioStyleGuideColor.HeaderSection,
+				Enum.StudioStyleGuideModifier.Pressed
+			),
 		},
 	},
 
