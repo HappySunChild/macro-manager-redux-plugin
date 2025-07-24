@@ -64,12 +64,9 @@ export type ButtonStyle = {
 	HoverBorder: ConFusion.UsedAs<Color3>?,
 }
 
-local DEFAULT_BUTTON_STYLE = {
+local DEFAULT_BUTTON_STYLE: ButtonStyle = {
 	Text = StudioColor(Enum.StudioStyleGuideColor.ButtonText),
-	Background = ColorSet {
-		Light = Color3.fromRGB(252, 252, 252),
-		Dark = Color3.fromRGB(56, 56, 56),
-	},
+	Background = StudioColor(Enum.StudioStyleGuideColor.Button),
 	HoverBackground = StudioColor(
 		Enum.StudioStyleGuideColor.Button,
 		Enum.StudioStyleGuideModifier.Hover
@@ -78,10 +75,7 @@ local DEFAULT_BUTTON_STYLE = {
 		Enum.StudioStyleGuideColor.Button,
 		Enum.StudioStyleGuideModifier.Pressed
 	),
-	Border = ColorSet {
-		Light = Color3.fromRGB(162, 162, 162),
-		Dark = Color3.fromRGB(26, 26, 26),
-	},
+	Border = StudioColor(Enum.StudioStyleGuideColor.Border),
 }
 
 return table.freeze {
@@ -207,6 +201,9 @@ return table.freeze {
 			Background = Color3.fromRGB(225, 56, 53),
 			HoverBackground = Color3.fromRGB(231, 95, 93),
 			PressedBackground = Color3.fromRGB(245, 139, 139),
+			Background = Color3.fromRGB(225, 77, 77),
+			HoverBackground = Color3.fromRGB(228, 110, 108),
+			PressedBackground = Color3.fromRGB(188, 82, 80),
 			HasBorder = false,
 		},
 		Blue = {
@@ -214,6 +211,7 @@ return table.freeze {
 			Background = Color3.fromRGB(74, 104, 236),
 			HoverBackground = Color3.fromRGB(97, 124, 245),
 			PressedBackground = Color3.fromRGB(120, 144, 249),
+			PressedBackground = Color3.fromRGB(77, 98, 196),
 			HasBorder = false,
 		},
 		Green = {
@@ -221,6 +219,7 @@ return table.freeze {
 			Background = Color3.fromRGB(67, 166, 58),
 			HoverBackground = Color3.fromRGB(89, 187, 80),
 			PressedBackground = Color3.fromRGB(109, 214, 99),
+			PressedBackground = Color3.fromRGB(61, 154, 52),
 			HasBorder = false,
 		},
 	},
