@@ -42,17 +42,17 @@ local function ItemButton(
 	}
 )
 	local baseColor = if props.index % 2 == 0
-		then Theme.Color.DropdownItem.Background
-		else Theme.Color.DropdownItem.BackgroundAlt
+		then Theme.Color.DropdownItem.BackgroundAlt
+		else Theme.Color.DropdownItem.Background
 
 	local state = scope:Value(Enum.GuiState.Idle)
 	local color = scope:Computed(function(use: ConFusion.Use)
 		local currentState = use(state)
 
 		if currentState == Enum.GuiState.Hover then
-			return use(Theme.Color.Button.HoverBackground)
+			return use(Theme.ButtonStyles.Default.HoverBackground)
 		elseif currentState == Enum.GuiState.Press then
-			return use(Theme.Color.Button.PressedBackground)
+			return use(Theme.ButtonStyles.Default.PressedBackground)
 		end
 
 		return use(baseColor)
@@ -74,6 +74,7 @@ local function ItemButton(
 
 		[OnEvent "MouseButton1Click"] = props.callback,
 		[Out "GuiState"] = state,
+
 		[Children] = {
 			padding = scope:New "UIPadding" {
 				PaddingLeft = UDim.new(0, 2),
@@ -133,7 +134,7 @@ local function Dropdown(
 					return tostring(use(props.value))
 				end),
 				TextSize = 16,
-				TextColor3 = Theme.Color.Button.Text,
+				TextColor3 = Theme.ButtonStyles.Default.Text,
 				FontFace = Theme.Font.Regular,
 				TextXAlignment = Enum.TextXAlignment.Left,
 				TextTruncate = Enum.TextTruncate.AtEnd,
@@ -170,7 +171,7 @@ local function Dropdown(
 				canvasSize = UDim2.fromScale(0, 0),
 				automaticCanvasSize = Enum.AutomaticSize.Y,
 
-				backgroundColor3 = Theme.Color.Button.Background,
+				backgroundColor3 = Theme.Color.DropdownItem.BackgroundAlt,
 
 				visible = open,
 
@@ -180,12 +181,11 @@ local function Dropdown(
 						Padding = UDim.new(0, 0),
 					},
 					padding = inner:New "UIPadding" {
-						PaddingTop = UDim.new(0, 4),
-						PaddingBottom = UDim.new(0, 4),
-						PaddingRight = UDim.new(0, 4),
+						PaddingTop = UDim.new(0, 3),
+						PaddingBottom = UDim.new(0, 3),
 					},
 					border = inner:RoundBorder {
-						color = Theme.Color.Button.Border,
+						color = Theme.ButtonStyles.Default.Border,
 					},
 
 					items = items,
