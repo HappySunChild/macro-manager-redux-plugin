@@ -114,10 +114,6 @@ return table.freeze {
 		Macro = {
 			Title = {
 				Text = StudioColor(Enum.StudioStyleGuideColor.InfoText),
-				Background = ColorSet {
-					Light = Color3.fromRGB(195, 195, 195),
-					Dark = Color3.fromRGB(17, 17, 17),
-				},
 			},
 			Background = StudioColor(Enum.StudioStyleGuideColor.Mid),
 		},

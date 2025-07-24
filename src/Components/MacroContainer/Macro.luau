@@ -96,10 +96,10 @@ local function Title(
 		AutomaticSize = Enum.AutomaticSize.X,
 
 		BackgroundTransparency = transparency,
-		BackgroundColor3 = Theme.Color.Macro.Title.Background,
+		BackgroundColor3 = Color3.new(0, 0, 0),
 
 		[OnEvent "MouseEnter"] = function()
-			transparency:set(0)
+			transparency:set(0.7)
 		end,
 		[OnEvent "MouseLeave"] = function()
 			transparency:set(1)
