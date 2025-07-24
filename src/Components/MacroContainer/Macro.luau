@@ -33,7 +33,7 @@ local function _callMacroMethod(macro: Types.Macro, method: string, ...: any)
 	xpcall(func, errHandler, macro, ...)
 end
 
-local function Placeholder(
+local function LoadingPlaceholder(
 	scope: ConFusion.Scope,
 	props: {
 		reference: Types.MacroReference,
@@ -46,33 +46,71 @@ local function Placeholder(
 	local timer = scope:Timer()
 	timer:unpause()
 
-	return scope:New "TextLabel" {
+	return scope:New "Frame" {
 		Visible = scope:Computed(function(use: ConFusion.Use)
 			return props.shouldShow({ Name = name }, use)
 		end),
 
 		Size = UDim2.new(1, 0, 0, 24),
+		AutomaticSize = Enum.AutomaticSize.Y,
 
 		BackgroundColor3 = Theme.Color.Macro.Background,
 
-		Text = `Loading {name}...`,
-		TextSize = 18,
-		TextColor3 = Theme.Color.Text,
-
 		[Children] = {
+			label = scope:New "TextLabel" {
+				Position = UDim2.fromOffset(26, 0),
+				Size = UDim2.new(1, -26, 1, 0),
+				AutomaticSize = Enum.AutomaticSize.Y,
+
+				BackgroundTransparency = 1,
+
+				Text = `Loading {name}...`,
+				TextSize = 18,
+				TextColor3 = Theme.Color.Text,
+				TextTruncate = Enum.TextTruncate.AtEnd,
+			},
 			throbber = scope:New "ImageLabel" {
-				Position = UDim2.fromOffset(2, 2),
+				AnchorPoint = Vector2.new(0, 0.5),
+				Position = UDim2.new(0, 2, 0.5, 0),
 				Size = UDim2.fromOffset(20, 20),
 
 				BackgroundTransparency = 1,
 
 				Image = Assets.Images.MacroLoadingThrobber,
 				ImageColor3 = Theme.Color.BrightText,
-				ResampleMode = Enum.ResamplerMode.Pixelated,
+				-- ResampleMode = Enum.ResamplerMode.Pixelated,
 
 				Rotation = scope:Computed(function(use: ConFusion.Use)
 					return use(timer) * 360
 				end),
+			},
+		},
+	}
+end
+
+local function ErrorPlaceholder(
+	scope: ConFusion.Scope,
+	props: { errorText: string }
+)
+	return scope:New "TextLabel" {
+		Size = UDim2.fromScale(1, 0),
+		AutomaticSize = Enum.AutomaticSize.Y,
+
+		BackgroundColor3 = Theme.Color.Macro.Background,
+
+		Text = props.errorText,
+		TextColor3 = Theme.Color.ErrorText,
+		TextSize = 18,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		TextYAlignment = Enum.TextYAlignment.Top,
+		TextWrapped = true,
+
+		[Children] = {
+			padding = scope:New "UIPadding" {
+				PaddingLeft = UDim.new(0, 2),
+				PaddingRight = UDim.new(0, 2),
+				PaddingTop = UDim.new(0, 2),
+				PaddingBottom = UDim.new(0, 2),
 			},
 		},
 	}
@@ -168,24 +206,37 @@ local function Macro(
 	}
 
 	local _placeholderScope = inner:innerScope {
-		Placeholder = Placeholder,
+		LoadingPlaceholder = LoadingPlaceholder,
+		ErrorPlaceholder = ErrorPlaceholder,
 	}
 
 	return inner:Eventual(function(_, become)
 		local name = props.reference.Module.Name
 		local displayName = name:gsub("(%l)([%u%d])", "%1 %2")
 
-		local macro: Types.Macro = {} :: any
+		local macro: Types.Macro?
 		local reqOk, reqErr = pcall(function()
 			macro = require(props.reference.Module) :: any
 		end)
 
 		if not reqOk then
 			Logging.warn("macroRequireError", reqErr, name)
+
+			doCleanup(_placeholderScope)
+			become(_placeholderScope:ErrorPlaceholder {
+				errorText = `There was an error loading {name}!`,
+			})
+
+			return
 		end
 
 		if t.table(macro) == false then
 			Logging.warn("macroInvalidType", nil, name, type(macro))
+
+			-- i feel like the eventual is missing some pretty important features,
+			-- like you should be able to add a :finally or something.
+			doCleanup(_placeholderScope)
+			become(nil)
 
 			return
 		end
@@ -232,7 +283,7 @@ local function Macro(
 			end)
 		end
 
-		become(inner:New "Frame" {
+		local container = inner:New "Frame" {
 			Name = `Macro_{name}`,
 			Size = UDim2.new(1, 0, 0, 20),
 			AutomaticSize = Enum.AutomaticSize.Y,
@@ -276,10 +327,11 @@ local function Macro(
 
 				items = itemContainer,
 			},
-		})
+		}
 
+		become(container)
 		doCleanup(_placeholderScope)
-	end, _placeholderScope:Placeholder(props))
+	end, _placeholderScope:LoadingPlaceholder(props))
 end
 
 return Macro
