@@ -33,6 +33,15 @@ local function ScrollingFrame(
 		return use(canvasSize).Y > use(windowSize).Y
 	end)
 
+	local _guiState = inner:Value(Enum.GuiState.Idle)
+	local scrollbarColor = inner:Computed(function(use: ConFusion.Use)
+		if use(_guiState) == Enum.GuiState.Idle then
+			return use(Theme.Color.ScrollBar.Idle)
+		end
+
+		return use(Theme.Color.ScrollBar.Hover)
+	end)
+
 	return inner:New "ScrollingFrame" {
 		Position = props.position,
 		Size = props.size,
@@ -42,7 +51,10 @@ local function ScrollingFrame(
 
 		ScrollBarThickness = props.scrollBarThickness
 			or DEFAULT_SCROLLBAR_WIDTH,
-		ScrollBarImageColor3 = Theme.Color.DimmedText,
+		ScrollBarImageColor3 = inner:Tween(
+			scrollbarColor,
+			Theme.TweenInfo.Highlight
+		),
 		TopImage = Assets.Images.ScrollBar.Top,
 		MidImage = Assets.Images.ScrollBar.Middle,
 		BottomImage = Assets.Images.ScrollBar.Bottom,
@@ -53,6 +65,7 @@ local function ScrollingFrame(
 
 		[Out "AbsoluteWindowSize"] = windowSize,
 		[Out "AbsoluteCanvasSize"] = canvasSize,
+		[Out "GuiState"] = _guiState,
 
 		[Children] = {
 			padding = inner:Computed(
