@@ -46,7 +46,7 @@ local function ItemButton(
 		else Theme.Color.DropdownItem.BackgroundAlt
 
 	local state = scope:Value(Enum.GuiState.Idle)
-	local color = scope:Computed(function(use: ConFusion.Scope)
+	local color = scope:Computed(function(use: ConFusion.Use)
 		local currentState = use(state)
 
 		if currentState == Enum.GuiState.Hover then
