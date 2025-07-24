@@ -174,13 +174,11 @@ return table.freeze {
 
 	TweenInfo = {
 		Highlight = TweenInfo.new(0.1),
-
 		Page = TweenInfo.new(
 			0.2,
 			Enum.EasingStyle.Cubic,
 			Enum.EasingDirection.Out
 		),
-
 		DropdownRotation = TweenInfo.new(0.2),
 	},
 
@@ -194,9 +192,6 @@ return table.freeze {
 		},
 		Red = {
 			Text = Color3.new(1, 1, 1),
-			Background = Color3.fromRGB(225, 56, 53),
-			HoverBackground = Color3.fromRGB(231, 95, 93),
-			PressedBackground = Color3.fromRGB(245, 139, 139),
 			Background = Color3.fromRGB(225, 77, 77),
 			HoverBackground = Color3.fromRGB(228, 110, 108),
 			PressedBackground = Color3.fromRGB(188, 82, 80),
@@ -206,7 +201,6 @@ return table.freeze {
 			Text = Color3.new(1, 1, 1),
 			Background = Color3.fromRGB(74, 104, 236),
 			HoverBackground = Color3.fromRGB(97, 124, 245),
-			PressedBackground = Color3.fromRGB(120, 144, 249),
 			PressedBackground = Color3.fromRGB(77, 98, 196),
 			HasBorder = false,
 		},
@@ -214,7 +208,6 @@ return table.freeze {
 			Text = Color3.new(1, 1, 1),
 			Background = Color3.fromRGB(67, 166, 58),
 			HoverBackground = Color3.fromRGB(89, 187, 80),
-			PressedBackground = Color3.fromRGB(109, 214, 99),
 			PressedBackground = Color3.fromRGB(61, 154, 52),
 			HasBorder = false,
 		},
