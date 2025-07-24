@@ -50,19 +50,21 @@ local function Item(scope: ConFusion.Scope, macroItem: Types.MacroItem)
 	local inner = scope:innerScope()
 	local itemContents: Frame?
 
-	xpcall(function()
+	local createOk, err = xpcall(function()
 		itemContents = constructor(inner, macroItem)
-	end, function(err)
-		Logging.errorNonFatal(
-			"itemConstructorError",
-			Logging.parse(err),
-			targetType
-		)
-	end)
+	end, Logging.parse)
 
-	local ok, msg = validate(itemContents)
+	if not createOk then
+		Logging.errorNonFatal("itemConstructorError", err, targetType)
 
-	if not ok then
+		inner:doCleanup()
+
+		return
+	end
+
+	local typeOk, msg = validate(itemContents)
+
+	if not typeOk then
 		Logging.errorNonFatal("itemInvalidContainer", nil, targetType, msg)
 
 		inner:doCleanup()
