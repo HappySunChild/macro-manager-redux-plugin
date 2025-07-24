@@ -93,19 +93,29 @@ return table.freeze {
 		Regular = Font.fromName "SourceSansPro",
 		Bold = Font.fromName("SourceSansPro", Enum.FontWeight.Bold),
 	},
+
 	Color = {
 		Text = StudioColor(Enum.StudioStyleGuideColor.MainText),
 		BrightText = StudioColor(Enum.StudioStyleGuideColor.BrightText),
 		SubText = StudioColor(Enum.StudioStyleGuideColor.SubText),
 		DimmedText = StudioColor(Enum.StudioStyleGuideColor.DimmedText),
+		ErrorText = StudioColor(Enum.StudioStyleGuideColor.ErrorText),
+
+		MainBackground = StudioColor(Enum.StudioStyleGuideColor.MainBackground),
+
+		ScrollBar = {
+			Idle = StudioColor(Enum.StudioStyleGuideColor.ScrollBar),
+			Hover = StudioColor(
+				Enum.StudioStyleGuideColor.ScrollBar,
+				Enum.StudioStyleGuideModifier.Hover
+			),
+		},
 
 		Border = StudioColor(Enum.StudioStyleGuideColor.Border),
 		AccentBorder = ColorSet {
 			Light = Color3.fromRGB(108, 130, 255),
 			Dark = Color3.fromRGB(247, 152, 58),
 		},
-
-		MainBackground = StudioColor(Enum.StudioStyleGuideColor.MainBackground),
 
 		Macro = {
 			Title = {
