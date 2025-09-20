@@ -1,4 +1,4 @@
-local function swap(tab: { [any]: any })
+local function swap_values_keys(tab: { [any]: any })
 	local swapped = {}
 
 	for k, v in tab do
@@ -56,7 +56,7 @@ t.nan = function(value: number)
 
 	return true
 end
-t.numberMin = function(minimum: number)
+t.number_min = function(minimum: number)
 	return function(value: number)
 		local numSuccess, numMessage = t.number(value)
 
@@ -71,7 +71,7 @@ t.numberMin = function(minimum: number)
 		return true
 	end
 end
-t.numberMax = function(maximum: number)
+t.number_max = function(maximum: number)
 	return function(value: number)
 		local numSuccess, numMessage = t.number(value)
 
@@ -144,7 +144,7 @@ t.InstanceIsA = function(className: string)
 	end
 end
 
-t.withKeys = function(keys: { any })
+t.with_keys = function(keys: { any })
 	assert(t.table(keys))
 
 	return function(tab: { [any]: any })
@@ -164,7 +164,7 @@ t.withKeys = function(keys: { any })
 		return true
 	end
 end
-t.withValues = function(values: { any })
+t.with_values = function(values: { any })
 	assert(t.table(values))
 
 	return function(tab: { [any]: any })
@@ -174,7 +174,7 @@ t.withValues = function(values: { any })
 			return false, message
 		end
 
-		local swapped = swap(tab)
+		local swapped = swap_values_keys(tab)
 
 		for _, value in values do
 			if swapped[value] == nil then
