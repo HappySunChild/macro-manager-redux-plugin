@@ -1,10 +1,9 @@
---!strict
-local Types = require "../Types"
+local memory = require "./types"
 
 local deriveScope = require "./deriveScope"
 
 local function innerScope<T>(
-	existing: Types.Scope<T>,
+	existing: memory.Scope<T>,
 	methods: { [unknown]: unknown }
 ): unknown
 	local inner = deriveScope(existing, methods)

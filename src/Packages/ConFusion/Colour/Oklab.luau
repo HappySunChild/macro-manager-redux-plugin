@@ -1,9 +1,9 @@
---!strict
-local sRGB = require("./sRGB")
+-- TODO: if we truly wanted to make this platform agnostic we'd implement our own Color3 object constructor.
+-- maybe we could do something with ExternalProviders for that? again that's if we really REALLY wanted to go that route, sounds like a headache.
 
-local Oklab = {}
+local sRGB = require "./sRGB"
 
-function Oklab.fromLinear(rgb: Color3): Vector3
+local function fromLinear(rgb: Color3): vector
 	local l = rgb.R * 0.4122214708 + rgb.G * 0.5363325363 + rgb.B * 0.0514459929
 	local m = rgb.R * 0.2119034982 + rgb.G * 0.6806995451 + rgb.B * 0.1073969566
 	local s = rgb.R * 0.0883024619 + rgb.G * 0.2817188376 + rgb.B * 0.6299787005
@@ -12,21 +12,17 @@ function Oklab.fromLinear(rgb: Color3): Vector3
 	local mRoot = m ^ (1 / 3)
 	local sRoot = s ^ (1 / 3)
 
-	return Vector3.new(
+	return vector.create(
 		lRoot * 0.2104542553 + mRoot * 0.7936177850 - sRoot * 0.0040720468,
 		lRoot * 1.9779984951 - mRoot * 2.4285922050 + sRoot * 0.4505937099,
 		lRoot * 0.0259040371 + mRoot * 0.7827717662 - sRoot * 0.8086757660
 	)
 end
 
-function Oklab.fromSRGB(srgb: Color3): Vector3
-	return Oklab.fromLinear(sRGB.toLinear(srgb))
-end
-
-function Oklab.toLinear(lab: Vector3, unclamped: boolean?): Color3
-	local lRoot = lab.X + lab.Y * 0.3963377774 + lab.Z * 0.2158037573
-	local mRoot = lab.X - lab.Y * 0.1055613458 - lab.Z * 0.0638541728
-	local sRoot = lab.X - lab.Y * 0.0894841775 - lab.Z * 1.2914855480
+local function toLinear(lab: vector, unclamped: boolean?): Color3
+	local lRoot = lab.x + lab.y * 0.3963377774 + lab.z * 0.2158037573
+	local mRoot = lab.x - lab.y * 0.1055613458 - lab.z * 0.0638541728
+	local sRoot = lab.x - lab.y * 0.0894841775 - lab.z * 1.2914855480
 
 	local l = lRoot ^ 3
 	local m = mRoot ^ 3
@@ -45,8 +41,14 @@ function Oklab.toLinear(lab: Vector3, unclamped: boolean?): Color3
 	return Color3.new(red, green, blue)
 end
 
-function Oklab.toSRGB(lab: Vector3, unclamped: boolean?): Color3
-	return sRGB.fromLinear(Oklab.toLinear(lab, unclamped))
-end
+return table.freeze {
+	fromLinear = fromLinear,
+	toLinear = toLinear,
 
-return Oklab
+	fromSRGB = function(srgb: Color3): vector
+		return fromLinear(sRGB.toLinear(srgb))
+	end,
+	toSRGB = function(lab: vector, unclamped: boolean?): Color3
+		return sRGB.fromLinear(toLinear(lab, unclamped))
+	end,
+}

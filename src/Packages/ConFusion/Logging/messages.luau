@@ -1,7 +1,16 @@
 return {
 	infiniteLoop = "Detected an infinite loop. Consider adding an explicit breakpoint to your code to prevent a cyclic dependency.",
-	callbackError = "Error in callback:\nERROR_MESSAGE",
 
+	callbackError = "Error in callback:\nERROR_MESSAGE",
+	callbackNoScope = "Callback for %s does not utilize passed scope parameter! You can silence this by prefixing the `scope` parameter with an underscore.",
+
+	destroyedTwice = "`doCleanup()` was given something that it is already cleaning up. Unclear how to proceed.",
+  
+	animatedInvalidGoal = "An Animated was given a NaN goal. Ensure NaN isn't being passed anywhere!\nGoal: '%*'",
+	animatedInvalidMotion = "An Animated encountered NaN during motion. Ensure NaN/inf isn't being passed anywhere!\nCurrent: '%*'\nGoal: '%*'",
+  
+  awaitNonGraph = "Can't await non-graph values.",
+  
 	missingChild = "Could not find child '%s' in '%s'.",
 	missingChildClass = "Could not find child of class '%s' in '%s'.",
 	missingDescendant = "Could not find descendant '%s' in '%s'.",
@@ -26,4 +35,6 @@ return {
 
 	missingSpecialKeyStage = "The SpecialKey '%s' is missing a stage property.",
 	invalidSpecialKeyStage = "The SpecialKey '%s' has an invalid stage '%s'.",
+
+	expectedType = "Expected a %s, got %s.",
 }

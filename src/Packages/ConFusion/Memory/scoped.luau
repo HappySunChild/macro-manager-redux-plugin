@@ -1,10 +1,8 @@
---!strict
-local Types = require "../Types"
-
-local merge = require "../Utility/merge"
+local memory = require "./types"
+local merge = require "./merge"
 
 local function scoped(
-	base: Types.Scope<{ [unknown]: unknown }>,
+	base: memory.Scope<{ [unknown]: unknown }>,
 	methods: { [unknown]: unknown }
 ): unknown
 	local metatable = { __index = merge(false, {}, base, methods) }

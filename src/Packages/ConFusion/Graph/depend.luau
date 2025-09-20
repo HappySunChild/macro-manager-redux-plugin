@@ -1,12 +1,13 @@
+local graph = require "./types"
+
 local External = require "../External"
-local Types = require "../Types"
 
 local castToGraph = require "./castToGraph"
 local evaluate = require "./evaluate"
 
-local nameOf = require "../Utility/nameOf"
+local nameOf = require "../logging/nameOf"
 
-local function depend(user: Types.GraphObject, dependency: Types.GraphObject)
+local function depend(user: graph.GraphObject, dependency: graph.GraphObject)
 	if castToGraph(dependency) then
 		evaluate(dependency)
 

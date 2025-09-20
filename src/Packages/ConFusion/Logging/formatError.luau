@@ -1,12 +1,12 @@
-local Types = require("../Types")
+local logging = require "./types"
 
-local messages = require("./messages")
+local messages = require "./messages"
 
 export type MessageId = string | keyof<typeof(messages)>
 
 local function formatError(
 	messageId: MessageId,
-	errorOrTrace: Types.Error | string | nil,
+	errorOrTrace: logging.Error | string | nil,
 	...: unknown
 )
 	local err = if typeof(errorOrTrace) == "table" then errorOrTrace else nil
@@ -14,7 +14,7 @@ local function formatError(
 		then errorOrTrace.trace
 		else errorOrTrace
 
-	local message: string = messages[messageId] or messageId
+	local message = (messages :: any)[messageId] or messageId
 	message = message:format(...)
 
 	if err ~= nil then
@@ -23,7 +23,7 @@ local function formatError(
 		message = message:gsub("ERROR_MESSAGE", messageId)
 	end
 
-	local errorText = `[Fusion] {message}\nId: {messageId}`
+	local errorText = `[ConFusion] {message}\nId: {messageId}`
 
 	if trace ~= nil then
 		errorText ..= `\n---- Stack trace ----\n{trace}`

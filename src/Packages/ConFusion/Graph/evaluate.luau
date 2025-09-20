@@ -1,11 +1,12 @@
+local graph = require "./types"
+
 local External = require "../External"
-local Types = require "../Types"
 
 local castToGraph = require "./castToGraph"
 
-local xtypeof = require "../Utility/xtypeof"
+local xtypeof = require "../xtypeof"
 
-local function evaluate(target: Types.GraphObject, forceComputation: boolean?)
+local function evaluate(target: graph.GraphObject, forceComputation: boolean?)
 	if not castToGraph(target) then
 		return External.logErrorNonFatal("invalidEvaluateType", nil, xtypeof(target))
 	end

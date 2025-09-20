@@ -1,10 +1,9 @@
---!strict
-local Types = require "../Types"
+local memory = require "./types"
 
-local merge = require "../Utility/merge"
+local merge = require "./merge"
 
 local function deriveScope<S>(
-	existing: Types.Scope<S>,
+	existing: memory.Scope<S>,
 	methods: { [unknown]: unknown }?
 ): unknown
 	-- the plague !strict has brought upon me

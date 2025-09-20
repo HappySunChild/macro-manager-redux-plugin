@@ -1,91 +1,194 @@
---!strict
-
 --[[
+package: confusion-for-roblox
+
 ConFusion - A fork of Fusion
 
 GitHub Repository: https://github.com/HappySunChild/ConFusion
-Fusion: https://github.com/dphfox/Fusion
+Fusion on GitHub: https://github.com/dphfox/Fusion
 --]]
 
-local External = require "@self/External"
-local Types = require "@self/Types"
+local async = require "@self/async/types"
+local calc = require "@self/calc/types"
+local chrono = require "@self/chrono/types"
+local context = require "@self/context/types"
+local graph = require "@self/graph/types"
+local instances = require "@self/roblox-instances/types"
+local memory = require "@self/memory/types"
+local motion = require "@self/motion/types"
+local pipeline = require "@self/pipeline/types"
 
-type Fusion = Types.Fusion
+export type Scope<T = ConFusion> = memory.Scope<T>
 
-export type Scope<Constructors = Fusion> = Types.Scope<Constructors>
-export type UsedAs<V> = Types.UsedAs<V>
-export type Use = Types.Use
+export type GraphObject = graph.GraphObject
 
-export type SpecialKey<T> = Types.SpecialKey<T>
+export type StateObject<T> = calc.StateObject<T>
+export type Value<V> = calc.Value<V>
+export type Computed<V> = calc.Computed<V>
+export type For<OK, OV> = calc.For<OK, OV>
+export type Use = calc.Use
+export type UsedAs<T> = calc.UsedAs<T>
 
-export type ScopedObject = Types.ScopedObject
-export type GraphObject = Types.GraphObject
-export type StateObject<V> = Types.StateObject<V>
+export type Animated<T> = motion.Animated<T>
 
-export type Animated<V> = Types.Animated<V>
-export type Value<V> = Types.Value<V>
-export type Computed<V> = Types.Computed<V>
-export type For<K, V> = Types.For<K, V>
-export type Observer = Types.Observer
+export type Eventual<T> = async.Eventual<T>
 
-export type Child = Types.Child
+export type Contextual<T> = context.Contextual<T>
 
-local Fusion = table.freeze {
+export type Timer = chrono.Timer
+
+export type Pipe<T, S = unknown> = pipeline.Pipe<S, T>
+
+export type SpecialKey<T = string> = instances.SpecialKey
+export type Child = instances.Child
+
+type ConFusion = {
+	read version: {
+		read major: number,
+		read minor: number,
+	},
+
 	-- Memory
-	scoped = require "@self/Memory/scoped",
-	deriveScope = require "@self/Memory/deriveScope",
-	innerScope = require "@self/Memory/innerScope",
-	doCleanup = require "@self/Memory/doCleanup",
+	read scoped: <B, M>(base: B, methods: M?) -> memory.Scope<B> & M,
+	read deriveScope: <T, M>(existing: T, methods: M?) -> T & M,
+	read innerScope: <T, M>(existing: T, methods: M?) -> T & M,
+	read doCleanup: (action: memory.CleanupTask) -> (),
+	read insert: <Tasks...>(scope: memory.Scope, Tasks...) -> Tasks...,
 
-	-- State
-	Eventual = require "@self/State/Eventual",
-	Computed = require "@self/State/Computed",
-	Value = require "@self/State/Value",
-	Table = require "@self/State/Table",
-	ForPairs = require "@self/State/ForPairs",
-	ForKeys = require "@self/State/ForKeys",
-	ForValues = require "@self/State/ForValues",
-	peek = require "@self/State/peek",
+	-- State/Calculated State
+	read Computed: calc.ComputedConstructor,
+	read Value: calc.ValueConstructor,
+	read ForPairs: calc.ForPairsConstructor,
+	read ForKeys: calc.ForKeysConstructor,
+	read ForValue: calc.ForValuesConstructor,
 
-	map = require "@self/Utility/map",
-	flatten = require "@self/Utility/flatten",
+	-- Async
+	read Eventual: async.EventualConstructor,
+	read await: (subject: graph.GraphObject) -> (),
 
-	Observer = require "@self/Graph/Observer",
+	-- Contextual
+	read Contextual: context.ContextConstructor,
 
-	-- Animation
-	Timer = require "@self/Animation/Timer",
-	Animated = require "@self/Animation/Animated",
-	Tween = require "@self/Animation/Tween",
-	Spring = require "@self/Animation/Spring",
-	Delay = require "@self/Animation/Delay",
+	-- Use
+	read peek: calc.Use,
+	read flatten: <T>(calc.Use, calc.UsedAs<T>) -> T,
 
-	-- Instance
-	New = require "@self/Instances/New",
-	Hydrate = require "@self/Instances/Hydrate",
-	WithChild = require "@self/Instances/WithChild",
-	WithChildOfClass = require "@self/Instances/WithChildOfClass",
-	WithDescendant = require "@self/Instances/WithDescendant",
-	WithDescendantOfClass = require "@self/Instances/WithDescendantOfClass",
+	-- Graph
+	read observe: (
+		scope: memory.Scope,
+		subject: graph.GraphObject,
+		callback: () -> (),
+		immediate: boolean?
+	) -> () -> (),
 
-	-- Instance Keys
-	Children = require "@self/Instances/Keys/Children",
-	OnStartup = require "@self/Instances/Keys/OnStartup",
-	OnRemoval = require "@self/Instances/Keys/OnRemoval",
-	Ref = require "@self/Instances/Keys/Ref",
-	Passthrough = require "@self/Instances/Keys/Passthrough",
-	Attribute = require "@self/Instances/Keys/Attribute",
-	AttributeChange = require "@self/Instances/Keys/AttributeChange",
-	AttributeOut = require "@self/Instances/Keys/AttributeOut",
-	Tag = require "@self/Instances/Keys/Tag",
-	Out = require "@self/Instances/Keys/Out",
-	OnEvent = require "@self/Instances/Keys/OnEvent",
-	OnChange = require "@self/Instances/Keys/OnChange",
+	-- Chrono
+	read Timer: chrono.TimerConstructor,
 
-	-- External
-	setProvider = External.setProvider,
+	-- Motion
+	read Animated: motion.AnimatedConstructor,
+	read Tween: motion.TweenConstructor,
+	read Spring: motion.SpringConstructor,
+
+	-- Pipeline
+	read Pipe: pipeline.PipeConstructor,
+
+	-- Instances
+	read New: instances.NewConstructor,
+	read FromTemplate: instances.FromTemplateConstructor,
+	read Hydrate: instances.HydrateConstructor,
+	read WithChild: instances.WithChildConstructor,
+	read WithChildOfClass: instances.WithChildOfClassConstructor,
+	read WithDescendant: instances.WithChildConstructor,
+	read WithDescendantOfClass: instances.WithChildOfClassConstructor,
+
+	read PropertyOf: instances.PropertyOfConstructor,
+	read AttributeOf: instances.AttributeOfConstructor,
+
+	read Children: instances.SpecialKey<"Children">,
+	read OnStartup: instances.SpecialKey<"OnStartup">,
+	read OnRemoval: instances.SpecialKey<"OnRemoval">,
+	read Passthrough: instances.SpecialKey<"Passthrough">,
+	read Attribute: (attribute: string) -> instances.SpecialKey<"Attribute">,
+	read AttributeChange: (attribute: string) -> instances.SpecialKey<"AttributeChange">,
+	read AttributeOut: (attribute: string) -> instances.SpecialKey<"AttributeOut">,
+	read Tag: (tag: string) -> instances.SpecialKey<"Tag">,
+	read Out: (property: string) -> instances.SpecialKey<"Out">,
+	read OnEvent: (event: string) -> instances.SpecialKey<"OnEvent">,
+	read OnChange: (property: string) -> instances.SpecialKey<"OnChange">,
 }
+
+local External = require "@self/External"
 
 local RobloxProvider = require "@self/RobloxProvider"
 External.setProvider(RobloxProvider)
 
-return Fusion :: Fusion
+local ConFusion = table.freeze {
+	version = table.freeze {
+		major = 0,
+		minor = 4,
+	},
+
+	-- Memory
+	scoped = require "@self/memory/scoped",
+	deriveScope = require "@self/memory/deriveScope",
+	innerScope = require "@self/memory/innerScope",
+	doCleanup = require "@self/memory/doCleanup",
+	insert = require "@self/memory/insert",
+
+	-- State/Calculated State
+	Computed = require "@self/calc/Computed",
+	Value = require "@self/calc/Value",
+	ForPairs = require "@self/calc/ForPairs",
+	ForKeys = require "@self/calc/ForKeys",
+	ForValues = require "@self/calc/ForValues",
+
+	-- Async
+	Eventual = require "@self/async/Eventual",
+	await = require "@self/async/await",
+
+	-- Context
+	Contextual = require "@self/context/Contextual",
+
+	-- Use
+	peek = require "@self/use/peek",
+	flatten = require "@self/use/flatten",
+
+	-- Graph
+	observe = require "@self/graph/observe",
+
+	-- Chrono
+	Timer = require "@self/chrono/Timer",
+
+	-- Motion
+	Animated = require "@self/motion/Animated",
+	Tween = require "@self/motion/Tween",
+	Spring = require "@self/motion/Spring",
+
+	-- Pipeline
+	Pipe = require "@self/pipeline/Pipe",
+
+	-- Instances
+	New = require "@self/roblox-instances/New",
+	Hydrate = require "@self/roblox-instances/Hydrate",
+	WithChild = require "@self/roblox-instances/WithChild",
+	WithChildOfClass = require "@self/roblox-instances/WithChildOfClass",
+	WithDescendant = require "@self/roblox-instances/WithDescendant",
+	WithDescendantOfClass = require "@self/roblox-instances/WithDescendantOfClass",
+
+	PropertyOf = require "@self/roblox-instances/PropertyOf",
+	AttributeOf = require "@self/roblox-instances/AttributeOf",
+
+	-- Instance Keys
+	Children = require "@self/roblox-instances/keys/Children",
+	OnStartup = require "@self/roblox-instances/keys/OnStartup",
+	OnRemoval = require "@self/roblox-instances/keys/OnRemoval",
+	Passthrough = require "@self/roblox-instances/keys/Passthrough",
+	Attribute = require "@self/roblox-instances/keys/Attribute",
+	AttributeChange = require "@self/roblox-instances/keys/AttributeChange",
+	AttributeOut = require "@self/roblox-instances/keys/AttributeOut",
+	Tag = require "@self/roblox-instances/keys/Tag",
+	Out = require "@self/roblox-instances/keys/Out",
+	OnEvent = require "@self/roblox-instances/keys/OnEvent",
+	OnChange = require "@self/roblox-instances/keys/OnChange",
+}
+
+return ConFusion :: ConFusion
