@@ -19,7 +19,7 @@ local TextButton = require "@components/TextButton"
 local Children, OnEvent = ConFusion.Children, ConFusion.OnEvent
 local peek, doCleanup = ConFusion.peek, ConFusion.doCleanup
 
-local function _callMacroMethod(macro: Types.Macro, method: string, ...: any)
+local function callMacroMethod(macro: Types.Macro, method: string, ...: any)
 	local func = macro[method]
 
 	if not func then
@@ -40,14 +40,12 @@ local function LoadingPlaceholder(
 		shouldShow: (macro: Types.Macro, use: ConFusion.Use) -> boolean,
 	}
 )
+	local inner = scope:innerScope { RoundBorder = RoundBorder }
 	local reference = props.reference
 	local name = reference.Module.Name
 
-	local timer = scope:Timer()
-	timer:unpause()
-
-	return scope:New "Frame" {
-		Visible = scope:Computed(function(use: ConFusion.Use)
+	return inner:New "Frame" {
+		Visible = inner:Computed(function(use: ConFusion.Use)
 			return props.shouldShow({ Name = name }, use)
 		end),
 
@@ -57,7 +55,9 @@ local function LoadingPlaceholder(
 		BackgroundColor3 = Theme.Color.Macro.Background,
 
 		[Children] = {
-			label = scope:New "TextLabel" {
+			border = inner:RoundBorder { thickness = 0 },
+
+			label = inner:New "TextLabel" {
 				Position = UDim2.fromOffset(26, 0),
 				Size = UDim2.new(1, -26, 1, 0),
 				AutomaticSize = Enum.AutomaticSize.Y,
@@ -69,7 +69,7 @@ local function LoadingPlaceholder(
 				TextColor3 = Theme.Color.Text,
 				TextTruncate = Enum.TextTruncate.AtEnd,
 			},
-			throbber = scope:New "ImageLabel" {
+			throbber = inner:New "ImageLabel" {
 				AnchorPoint = Vector2.new(0, 0.5),
 				Position = UDim2.new(0, 2, 0.5, 0),
 				Size = UDim2.fromOffset(20, 20),
@@ -80,9 +80,12 @@ local function LoadingPlaceholder(
 				ImageColor3 = Theme.Color.BrightText,
 				-- ResampleMode = Enum.ResamplerMode.Pixelated,
 
-				Rotation = scope:Computed(function(use: ConFusion.Use)
-					return use(timer) * 360
-				end),
+				Rotation = inner
+					:Pipe(inner:Timer())
+					:map(function(now)
+						return now * 360
+					end)
+					:resolve(),
 			},
 		},
 	}
@@ -92,7 +95,9 @@ local function ErrorPlaceholder(
 	scope: ConFusion.Scope,
 	props: { errorText: string }
 )
-	return scope:New "TextLabel" {
+	local inner = scope:innerScope { RoundBorder = RoundBorder }
+
+	return inner:New "TextLabel" {
 		Size = UDim2.fromScale(1, 0),
 		AutomaticSize = Enum.AutomaticSize.Y,
 
@@ -106,7 +111,8 @@ local function ErrorPlaceholder(
 		TextWrapped = true,
 
 		[Children] = {
-			padding = scope:New "UIPadding" {
+			border = inner:RoundBorder { thickness = 0 },
+			padding = inner:New "UIPadding" {
 				PaddingLeft = UDim.new(0, 2),
 				PaddingRight = UDim.new(0, 2),
 				PaddingTop = UDim.new(0, 2),
@@ -116,7 +122,7 @@ local function ErrorPlaceholder(
 	}
 end
 
-local function Title(
+local function MacroTitle(
 	scope: ConFusion.Scope,
 	props: {
 		text: string,
@@ -199,7 +205,7 @@ local function Macro(
 	}
 )
 	local inner = scope:innerScope {
-		Title = Title,
+		MacroTitle = MacroTitle,
 		ItemsContainer = ItemsContainer,
 		RoundBorder = RoundBorder,
 		TextButton = TextButton,
@@ -210,7 +216,7 @@ local function Macro(
 		ErrorPlaceholder = ErrorPlaceholder,
 	}
 
-	return inner:Eventual(function(_, become)
+	return inner:Eventual(function(_, _, become)
 		local name = props.reference.Module.Name
 		local displayName = name:gsub("(%l)([%u%d])", "%1 %2")
 
@@ -247,7 +253,7 @@ local function Macro(
 
 		macro.Name = name
 
-		_callMacroMethod(macro, "Setup", PluginShared.Plugin)
+		callMacroMethod(macro, "Setup", PluginShared.Plugin)
 
 		local visible = inner:Value(true)
 		local minimized = inner:Value(false)
@@ -270,12 +276,12 @@ local function Macro(
 			end),
 		}
 
-		task.spawn(_callMacroMethod, macro, "Init", PluginShared.Plugin)
+		task.spawn(callMacroMethod, macro, "Init", PluginShared.Plugin)
 
 		if macro.Cleanup ~= nil then
 			table.insert(inner, function()
 				task.spawn(
-					_callMacroMethod,
+					callMacroMethod,
 					macro,
 					"Cleanup",
 					PluginShared.Plugin
@@ -298,6 +304,7 @@ local function Macro(
 			BackgroundColor3 = Theme.Color.Macro.Background,
 
 			[Children] = {
+				border = inner:RoundBorder { thickness = 0 },
 				padding = inner:New "UIPadding" {
 					PaddingLeft = UDim.new(0, 2),
 					PaddingRight = UDim.new(0, 2),
@@ -305,7 +312,7 @@ local function Macro(
 					PaddingBottom = UDim.new(0, 2),
 				},
 
-				title = inner:Title {
+				title = inner:MacroTitle {
 					text = displayName,
 					icon = macro.Icon,
 					document = props.reference.Document,

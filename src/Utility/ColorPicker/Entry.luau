@@ -20,7 +20,7 @@ local function Entry(
 
 		callback: (string) -> (),
 
-		textboxRef: ConFusion.Value<unknown>?,
+		textboxRef: ConFusion.Value<TextBox>?,
 	}
 )
 	local inner = scope:innerScope()
@@ -30,7 +30,7 @@ local function Entry(
 			return use(Theme.Color.AccentBorder)
 		end
 
-		return use(Theme.Color.InputField.Border)
+		return use(Theme.Color.Border)
 	end)
 
 	local text = inner:Value(peek(props.value) or "")

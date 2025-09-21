@@ -9,11 +9,11 @@ local t = require "@packages/t"
 local Label = require "@components/Label"
 local RoundBorder = require "@components/RoundBorder"
 
-local Children, Ref, OnEvent =
-	ConFusion.Children, ConFusion.Ref, ConFusion.OnEvent
+local Children, OnEvent, Ref =
+	ConFusion.Children, ConFusion.OnEvent, ConFusion.Ref
 local peek = ConFusion.peek
 
-local snapValidate = t.union(t.integer, t.numberMin(0))
+local snapValidate = t.union(t.integer, t.number_min(0))
 local snapDefault = t.default(0, snapValidate)
 local default = t.default(0, t.number)
 

@@ -9,7 +9,7 @@ local t = require "@packages/t"
 
 local Children = ConFusion.Children
 
-local validate = t.optional(t.InstanceIsA "GuiBase2d")
+local validate = t.InstanceIsA "GuiBase2d"
 
 local function getMacroItemClass(name: string)
 	local customClass = MacroManager.CustomItemClasses[name]
@@ -24,16 +24,16 @@ local function getMacroItemClass(name: string)
 	return Classes[name]
 end
 
-local _RENDERED = {}
-
 local function Item(scope: ConFusion.Scope, macroItem: Types.MacroItem)
+	if table.isfrozen(macroItem) then
+		return Logging.warn "itemFrozen"
+	end
+
 	local targetType = macroItem.Type
 	local constructor = getMacroItemClass(targetType)
 
 	if not constructor then
-		Logging.warn("classCannotFind", nil, targetType)
-
-		return
+		return Logging.warn("classCannotFind", nil, targetType)
 	end
 
 	-- added this to prevent weird duplicate rerenders
@@ -41,20 +41,17 @@ local function Item(scope: ConFusion.Scope, macroItem: Types.MacroItem)
 	-- an items array. but i mainly added this so that you couldn't
 	-- as easily crash studio by putting a section inside of its own items array
 	-- which would recursively create itself until the script or studio crashed.
-	if macroItem[_RENDERED] == true then
-		Logging.warn("itemAlreadyRendered", nil, targetType)
-
-		return
+	if macroItem._was_rendered == true then
+		return Logging.warn("itemAlreadyRendered", nil, targetType)
 	end
 
 	local inner = scope:innerScope()
-	local itemContents: Frame?
+	local itemContents: Frame
 
-	local createOk, err = xpcall(function()
+	local ok, err = xpcall(function()
 		itemContents = constructor(inner, macroItem)
 	end, Logging.parse)
-
-	if not createOk then
+	if not ok then
 		Logging.errorNonFatal("itemConstructorError", err, targetType)
 
 		inner:doCleanup()
@@ -62,10 +59,9 @@ local function Item(scope: ConFusion.Scope, macroItem: Types.MacroItem)
 		return
 	end
 
-	local typeOk, msg = validate(itemContents)
-
-	if not typeOk then
-		Logging.errorNonFatal("itemInvalidContainer", nil, targetType, msg)
+	local ok, err = validate(itemContents)
+	if not ok then
+		Logging.errorNonFatal("itemInvalidContainer", nil, targetType, err)
 
 		inner:doCleanup()
 
@@ -78,13 +74,9 @@ local function Item(scope: ConFusion.Scope, macroItem: Types.MacroItem)
 		visible:set(isVisible)
 	end
 
-	macroItem[_RENDERED] = true
+	macroItem._was_rendered = true
 
-	local size = scope:Value(Vector2.zero)
-
-	if itemContents then
-		size:bindToInstanceProperty(itemContents, "AbsoluteSize")
-	end
+	local size = inner:PropertyOf(itemContents, "AbsoluteSize")
 
 	return inner:New "Frame" {
 		Name = `{macroItem.Order}_{targetType}_MacroItem`,
@@ -100,7 +92,7 @@ local function Item(scope: ConFusion.Scope, macroItem: Types.MacroItem)
 		-- Size = UDim2.new(1, 0, 0, 0),
 		-- AutomaticSize = Enum.AutomaticSize.Y,
 
-		Size = inner:Computed(function(use: ConFusion.Use)
+		Size = inner:Computed(function(use: ConFusion.Use, _)
 			return UDim2.new(1, 0, 0, use(size).Y)
 		end),
 
@@ -108,9 +100,7 @@ local function Item(scope: ConFusion.Scope, macroItem: Types.MacroItem)
 
 		Visible = visible,
 
-		[Children] = {
-			contents = itemContents,
-		},
+		[Children] = itemContents,
 	}
 end
 

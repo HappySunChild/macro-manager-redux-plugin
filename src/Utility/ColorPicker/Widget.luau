@@ -10,7 +10,7 @@ local ValuePicker = require "./ValuePicker"
 
 local Children = ConFusion.Children
 
-local peek, map = ConFusion.peek, ConFusion.map
+local peek = ConFusion.peek
 
 local function getHSVComponent(color: Color3, index: number): number
 	local hue, sat, val = color:ToHSV()
@@ -69,7 +69,7 @@ local function RGBEntries(
 
 				label = label,
 				range = NumberRange.new(0, 255),
-				value = scope:Computed(function(use: ConFusion.Use)
+				value = scope:Computed(function(use: ConFusion.Use, _)
 					return getRGBComponent(use(props.output), index)
 				end),
 				callback = function()
@@ -171,7 +171,7 @@ local function HexEntry(
 		textboxRef = hexFieldRef,
 
 		label = "Hex",
-		value = inner:Computed(function(use: ConFusion.Use)
+		value = inner:Computed(function(use: ConFusion.Use, _)
 			return "#" .. use(props.output):ToHex()
 		end),
 		callback = function()
@@ -228,7 +228,9 @@ local function ColorPickerWidget(
 
 	return inner:Hydrate(widget) {
 		Enabled = props.enabled,
-		Title = map(props.status, function(status: string?)
+		Title = inner:Computed(function(use: ConFusion.Use)
+			local status = use(props.status)
+
 			if not status then
 				return "Select Color"
 			end
@@ -276,7 +278,7 @@ local function ColorPickerWidget(
 						Size = UDim2.new(0, 60, 1, 0),
 
 						BackgroundColor3 = output,
-						BorderColor3 = Theme.Color.InputField.Border,
+						BorderColor3 = Theme.Color.Border,
 						BorderSizePixel = 1,
 					},
 

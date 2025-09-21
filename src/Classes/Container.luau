@@ -50,6 +50,7 @@ local function ContainerMacroItem(
 
 		BackgroundTransparency = 1,
 
+		[Ref] = containerRef,
 		[Children] = {
 			padding = inner:New "UIPadding" {
 				PaddingTop = UDim.new(0, 2),
@@ -68,8 +69,6 @@ local function ContainerMacroItem(
 				AutomaticSize = Enum.AutomaticSize.Y,
 
 				BackgroundTransparency = 1,
-
-				[Ref] = containerRef,
 			},
 		},
 	}

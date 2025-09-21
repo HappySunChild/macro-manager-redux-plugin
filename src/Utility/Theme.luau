@@ -4,8 +4,6 @@ local Studio = settings():GetService "Studio"
 local ConFusion = require "@packages/ConFusion"
 local PluginShared = require "@plugin/Shared"
 
-local map = ConFusion.map
-
 local scope = PluginShared.Scope
 local currentTheme = scope:Value(Studio.Theme)
 
@@ -29,7 +27,9 @@ local function StudioColor(
 		end
 	end
 
-	local dynamicColor = map(currentTheme, function(theme: StudioTheme)
+	local dynamicColor = scope:Computed(function(use: ConFusion.Use)
+		local theme = use(currentTheme)
+
 		if not theme then
 			return MISSING_COLOR
 		end
@@ -43,7 +43,9 @@ local function StudioColor(
 end
 
 local function ColorSet(set: { [string]: Color3 }): ConFusion.Computed<Color3>
-	return map(currentTheme, function(theme: StudioTheme)
+	return scope:Computed(function(use: ConFusion.Use)
+		local theme = use(currentTheme)
+
 		if not theme then
 			return MISSING_COLOR
 		end
@@ -64,6 +66,7 @@ export type ButtonStyle = {
 	HoverBorder: ConFusion.UsedAs<Color3>?,
 }
 
+local BORDER_COLOR = StudioColor(Enum.StudioStyleGuideColor.Border)
 local DEFAULT_BUTTON_STYLE: ButtonStyle = {
 	Text = StudioColor(Enum.StudioStyleGuideColor.ButtonText),
 	Background = StudioColor(Enum.StudioStyleGuideColor.Button),
@@ -75,7 +78,7 @@ local DEFAULT_BUTTON_STYLE: ButtonStyle = {
 		Enum.StudioStyleGuideColor.Button,
 		Enum.StudioStyleGuideModifier.Pressed
 	),
-	Border = StudioColor(Enum.StudioStyleGuideColor.Border),
+	Border = BORDER_COLOR,
 }
 
 return table.freeze {
@@ -105,7 +108,7 @@ return table.freeze {
 			),
 		},
 
-		Border = StudioColor(Enum.StudioStyleGuideColor.Border),
+		Border = BORDER_COLOR,
 		AccentBorder = ColorSet {
 			Light = Color3.fromRGB(108, 130, 255),
 			Dark = Color3.fromRGB(247, 152, 58),
@@ -116,33 +119,31 @@ return table.freeze {
 				Text = StudioColor(Enum.StudioStyleGuideColor.InfoText),
 			},
 			Background = StudioColor(
-				Enum.StudioStyleGuideColor.Tab,
+				Enum.StudioStyleGuideColor.Dark,
 				Enum.StudioStyleGuideModifier.Selected
 			),
 		},
 		Item = {
-			Background = StudioColor(Enum.StudioStyleGuideColor.Item),
+			Background = StudioColor(Enum.StudioStyleGuideColor.TabBar),
 		},
 		Section = {
-			Background = ColorSet {
-				Light = Color3.fromRGB(239, 239, 239),
-				Dark = Color3.fromRGB(55, 55, 55),
-			},
-			BackgroundAlt = ColorSet {
-				Light = Color3.fromRGB(255, 255, 255),
-				Dark = Color3.fromRGB(50, 50, 50),
-			},
-			Border = ColorSet {
-				Light = Color3.fromRGB(216, 216, 216),
-				Dark = Color3.fromRGB(34, 34, 34),
-			},
+			Background = StudioColor(Enum.StudioStyleGuideColor.Dark),
+			BackgroundAlt = StudioColor(Enum.StudioStyleGuideColor.Light),
+			-- Background = ColorSet {
+			-- 	Light = Color3.fromRGB(239, 239, 239),
+			-- 	Dark = Color3.fromRGB(55, 55, 55),
+			-- },
+			-- BackgroundAlt = ColorSet {
+			-- 	Light = Color3.fromRGB(255, 255, 255),
+			-- 	Dark = Color3.fromRGB(50, 50, 50),
+			-- },
+			Border = BORDER_COLOR,
 		},
 
 		InputField = {
 			Background = StudioColor(
 				Enum.StudioStyleGuideColor.InputFieldBackground
 			),
-			Border = StudioColor(Enum.StudioStyleGuideColor.InputFieldBorder),
 		},
 
 		Slider = {
@@ -154,10 +155,10 @@ return table.freeze {
 				Light = Color3.fromRGB(232, 232, 232),
 				Dark = Color3.fromRGB(200, 200, 200),
 			},
-			Border = ColorSet {
-				Light = Color3.fromRGB(143, 143, 143),
-				Dark = Color3.fromRGB(28, 28, 28),
-			},
+			Border = StudioColor(
+				Enum.StudioStyleGuideColor.Dark,
+				Enum.StudioStyleGuideModifier.Selected
+			),
 		},
 
 		DropdownItem = {
@@ -185,7 +186,6 @@ return table.freeze {
 			Background = StudioColor(
 				Enum.StudioStyleGuideColor.InputFieldBackground
 			),
-			Border = StudioColor(Enum.StudioStyleGuideColor.InputFieldBorder),
 		},
 		Red = {
 			Text = Color3.new(1, 1, 1),

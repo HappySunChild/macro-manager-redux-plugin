@@ -31,7 +31,7 @@ local function Button(
 	}
 	local state = inner:Value(Enum.GuiState.Idle)
 
-	local backgroundColor = inner:Computed(function(use)
+	local backgroundColor = inner:Computed(function(use: ConFusion.Use)
 		local style = use(props.style)
 		local current = use(state) :: Enum.GuiState
 
@@ -44,7 +44,7 @@ local function Button(
 		return use(getButtonStyle(style, "Background"))
 	end)
 
-	local borderColor = inner:Computed(function(use)
+	local borderColor = inner:Computed(function(use: ConFusion.Use)
 		local style = use(props.style)
 
 		if getButtonStyle(style, "HasBorder") == false then

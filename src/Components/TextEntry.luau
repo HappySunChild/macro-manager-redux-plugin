@@ -28,19 +28,19 @@ local function TextEntry(
 		callback: (string) -> (),
 		typingCallback: (string) -> (),
 
-		[ConFusion.SpecialKey<"Ref">]: ConFusion.Value<unknown>?,
+		ref: ConFusion.Value<TextBox>?,
 	}
 )
 	local inner = scope:innerScope { RoundBorder = RoundBorder }
 	local text = inner:Value(peek(props.text) or "")
 
 	local isFocused = inner:Value(false)
-	local borderColor = inner:Computed(function(use)
+	local borderColor = inner:Computed(function(use: ConFusion.Use)
 		if use(isFocused) then
 			return use(Theme.Color.AccentBorder)
 		end
 
-		return use(Theme.Color.InputField.Border)
+		return use(Theme.Color.Border)
 	end)
 
 	return inner:New "TextBox" {
@@ -77,6 +77,7 @@ local function TextEntry(
 			end
 		end,
 
+		[Ref] = props.ref,
 		[Children] = {
 			padding = inner:New "UIPadding" {
 				PaddingLeft = UDim.new(0, 2),
@@ -88,7 +89,6 @@ local function TextEntry(
 				color = inner:Tween(borderColor, Theme.TweenInfo.Highlight),
 			},
 		},
-		[Ref] = props[Ref],
 	}
 end
 

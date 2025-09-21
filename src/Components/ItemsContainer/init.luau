@@ -1,7 +1,6 @@
 local Types = require "@plugin/Types"
 
 local Theme = require "@utility/Theme"
-local merge = require "@utility/merge"
 
 local ConFusion = require "@packages/ConFusion"
 
@@ -14,8 +13,7 @@ local function ItemsContainer(
 	scope: ConFusion.Scope,
 	props: {
 		items: { Types.MacroItem },
-		itemProperties: { [string]: any }?,
-
+		
 		position: ConFusion.UsedAs<UDim2>?,
 		size: ConFusion.UsedAs<UDim2>?,
 		backgroundColor: ConFusion.UsedAs<Color3>?,
@@ -35,10 +33,6 @@ local function ItemsContainer(
 	-- unless i feel like adding an :AddItem method to Section
 	for ind, macroItem in props.items do
 		macroItem.Order = macroItem.Order or ind
-
-		if props.itemProperties then
-			merge(macroItem, props.itemProperties)
-		end
 
 		local itemContents = inner:Item(macroItem)
 

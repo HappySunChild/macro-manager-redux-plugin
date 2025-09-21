@@ -11,7 +11,7 @@ local function TheRockWithPancakes(
 )
 	local navigate = props.navigate
 
-	scope:Observer(props.active):onChange(function()
+	scope:observe(props.active, function()
 		if peek(props.active) then
 			task.delay(5, navigate, "Macros")
 		end

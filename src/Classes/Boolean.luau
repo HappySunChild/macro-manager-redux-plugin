@@ -9,7 +9,7 @@ local t = require "@packages/t"
 local Label = require "@components/Label"
 local TextButton = require "@components/TextButton"
 
-local map, peek = ConFusion.map, ConFusion.peek
+local peek = ConFusion.peek
 local Children = ConFusion.Children
 
 local default = t.default(false, t.boolean)
@@ -71,8 +71,8 @@ local function BooleanMacroItem(
 
 				style = Theme.ButtonStyles.Input,
 
-				text = map(value, function(v: boolean)
-					return if v then "✓" else ""
+				text = inner:Computed(function(use: ConFusion.Use)
+					return if use(value) then "✓" else ""
 				end),
 				textSize = 24,
 				textColor = Theme.Color.BrightText,

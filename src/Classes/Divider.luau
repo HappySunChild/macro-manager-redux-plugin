@@ -26,9 +26,6 @@ local function DividerMacroItem(
 		displayText:set(newText)
 	end
 
-	macroItem.InSection = nil
-	macroItem.SectionDepth = nil
-
 	return inner:New "Frame" {
 		BackgroundTransparency = 1,
 		Size = UDim2.new(1, 0, 0, 26),

@@ -23,9 +23,6 @@ local function Title(scope: ConFusion.Scope, macroItem: Types.MacroItem)
 		displayText:set(newText)
 	end
 
-	macroItem.InSection = nil
-	macroItem.SectionDepth = nil
-
 	return inner:New "Frame" {
 		Size = UDim2.new(1, 0, 0, 26),
 

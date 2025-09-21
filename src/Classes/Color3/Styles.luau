@@ -1,5 +1,5 @@
-local Theme = require "@utility/Theme"
 local ColorPicker = require "@utility/ColorPicker"
+local Theme = require "@utility/Theme"
 
 local ConFusion = require "@packages/ConFusion"
 
@@ -7,8 +7,7 @@ local ElementGroup = require "@components/ElementGroup"
 local RoundBorder = require "@components/RoundBorder"
 local TextEntry = require "@components/TextEntry"
 
-local Children, Ref, OnEvent =
-	ConFusion.Children, ConFusion.Ref, ConFusion.OnEvent
+local Children, OnEvent = ConFusion.Children, ConFusion.OnEvent
 local peek = ConFusion.peek
 
 local function ColorDisplay(
@@ -41,7 +40,7 @@ local function ColorDisplay(
 		[Children] = {
 			flex = inner:New "UIFlexItem" {},
 			border = inner:RoundBorder {
-				color = Theme.Color.InputField.Border,
+				color = Theme.Color.Border,
 			},
 		},
 	}
@@ -92,7 +91,7 @@ return table.freeze {
 						props.setColor(getInputValue())
 					end,
 
-					[Ref] = hexFieldRef,
+					ref = hexFieldRef,
 				},
 				display = inner:ColorDisplay {
 					color = props.color,

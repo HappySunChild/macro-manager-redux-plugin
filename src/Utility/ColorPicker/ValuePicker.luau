@@ -29,7 +29,7 @@ local function ValuePicker(
 		Size = props.size,
 
 		BorderSizePixel = 1,
-		BorderColor3 = Theme.Color.InputField.Border,
+		BorderColor3 = Theme.Color.Border,
 
 		Image = Assets.Images.ColorPicker.Val,
 

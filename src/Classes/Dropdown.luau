@@ -29,9 +29,9 @@ local tostring = function(value: any)
 	return tostring(value)
 end
 
-type DropdownMacroItem = {
+type DropdownMacroItem = Types.ValueMacroItem<any> & {
 	Items: { any },
-} & Types.ValueMacroItem<any>
+}
 
 local function ItemButton(
 	scope: ConFusion.Scope,
@@ -149,16 +149,21 @@ local function Dropdown(
 				Image = Assets.Images.Dropdown.Arrow,
 				ImageColor3 = Theme.Color.Text,
 
-				Rotation = inner:Tween(
-					inner:Computed(function(use: ConFusion.Use)
-						return if use(open) then 90 else 180
-					end),
-					Theme.TweenInfo.DropdownRotation
-				),
+				Rotation = inner
+					:Pipe(open)
+					:map(function(isOpen: boolean)
+						return if isOpen then 90 else 180
+					end)
+					:tween(Theme.TweenInfo.DropdownRotation)
+					:resolve(),
 			},
 			items = inner:ScrollingFrame {
 				position = UDim2.new(0, 0, 1, 3),
 				size = inner:Computed(function(use: ConFusion.Use)
+					if not use(open) then
+						return UDim2.fromScale(1, 0)
+					end
+
 					return UDim2.new(
 						1,
 						0,
@@ -168,12 +173,12 @@ local function Dropdown(
 				end),
 				zIndex = 100,
 
+				visible = open,
+
 				canvasSize = UDim2.fromScale(0, 0),
 				automaticCanvasSize = Enum.AutomaticSize.Y,
 
 				backgroundColor3 = Theme.Color.DropdownItem.BackgroundAlt,
-
-				visible = open,
 
 				[Children] = {
 					layout = inner:New "UIListLayout" {

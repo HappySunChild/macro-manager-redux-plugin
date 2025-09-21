@@ -8,6 +8,7 @@ local messages = {
 	itemAlreadyRendered = "MacroItem '%s' has already been rendered.",
 	itemInvalidContainer = "Invalid return value for MacroItem class '%s';\n%s",
 	itemChangedInfiniteLoop = "Changed recursive callback depth limit (8) exceeded! Consider restructuring your code to prevent this from happening.",
+	itemFrozen = "MacroItems should not be frozen with table.freeze!",
 
 	classRequireError = "An error occured while loading MacroItem class '%s'\nERROR_MESSAGE",
 	classInvalidType = "Expected MacroItem class '%s' to return value of type function, got %s.\nYou may have to remove/modify existing classes!",
