@@ -5,7 +5,6 @@ local memory = require "../memory/types"
 
 local External = require "../External"
 
-local checkArity = require "../memory/checkArity"
 local doCleanup = require "../memory/doCleanup"
 
 local Computed = require "./Computed"
@@ -70,8 +69,6 @@ local function ForValues<S, IK, IV, OV>(
 	inputTable: calc.UsedAs<{ [IK]: IV }>,
 	processor: (calc.Use, memory.Scope<S>, IV) -> OV
 ): calc.For<IK, OV> | { [IK]: OV }
-	checkArity(processor)
-
 	local canDissolve, constant = checkDissolvable(
 		scope,
 		inputTable,

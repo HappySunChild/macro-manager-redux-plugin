@@ -5,7 +5,6 @@ local memory = require "../memory/types"
 
 local External = require "../External"
 
-local checkArity = require "../memory/checkArity"
 local doCleanup = require "../memory/doCleanup"
 
 local Computed = require "./Computed"
@@ -85,8 +84,6 @@ local function ForPairs<S, IK, IV, OK, OV>(
 		IV
 	) -> (OK, OV)
 ): calc.For<OK, OV> | { [OK]: OV }
-	checkArity(processor)
-
 	local canDissolve, constant = checkDissolvable(scope, inputTable, processor)
 
 	if canDissolve then

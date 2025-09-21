@@ -13,7 +13,6 @@ local isSimilar = require "../calc/isSimilar"
 
 local peek = require "../use/peek"
 
-local checkArity = require "../memory/checkArity"
 local deriveScope = require "../memory/deriveScope"
 local destructor = require "../memory/destructor"
 local doCleanup = require "../memory/doCleanup"
@@ -165,8 +164,6 @@ local function Eventual<T, S>(
 	processor: processor<S, T>,
 	pendingValue: T
 ): async.Eventual<T>
-	checkArity(processor) -- this seems kinda redundant, who's going to use a Eventual without the `become` parameter???
-
 	local newEventual: Self<T, S> = setmetatable({
 		scope = scope,
 		createdAt = os.clock(),
