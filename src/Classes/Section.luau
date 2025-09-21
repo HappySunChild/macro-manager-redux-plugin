@@ -10,7 +10,7 @@ local RoundBorder = require "@components/RoundBorder"
 
 local Children = ConFusion.Children
 
-local default = t.default(1, t.number)
+local DepthContext = ConFusion.Contextual(0)
 
 type SectionMacroItem = Types.MacroItem & {
 	Name: string?,
@@ -70,39 +70,27 @@ local function TitleLabel(
 	}
 end
 
-local function SectionMacroItem(
+local function Section(
 	scope: ConFusion.Scope,
-	macroItem: SectionMacroItem
+	props: {
+		displayText: ConFusion.UsedAs<string>,
+		items: { Types.MacroItem },
+	}
 )
-	local currentDepth = default(macroItem.SectionDepth)
-
 	local inner = scope:innerScope {
 		ItemsContainer = ItemsContainer,
 		RoundBorder = RoundBorder,
 		TitleLabel = TitleLabel,
 	}
-	local displayText =
-		inner:Value(macroItem.Name or macroItem.Text or "Section")
 	local hasTitle = inner:Computed(function(use: ConFusion.Use)
-		if use(displayText) == "" then
+		if use(props.displayText) == "" then
 			return false
 		end
 
 		return true
 	end)
 
-	function macroItem:UpdateText(newText: string)
-		assert(t.string(newText))
-
-		macroItem.Text = newText
-
-		displayText:set(newText)
-	end
-
-	macroItem.InSection = nil -- this may seem a little unintuitive, but it's just so they don't get indented
-	macroItem.SectionDepth = currentDepth
-
-	local background = if currentDepth % 2 == 0
+	local background = if DepthContext:now() % 2 == 0
 		then Theme.Color.Section.BackgroundAlt
 		else Theme.Color.Section.Background
 
@@ -123,7 +111,7 @@ local function SectionMacroItem(
 
 					return UDim.new(0, 0)
 				end),
-				PaddingBottom = UDim.new(0, 6),
+				PaddingBottom = UDim.new(0, 4),
 			},
 
 			container = inner:New "Frame" {
@@ -145,7 +133,7 @@ local function SectionMacroItem(
 						function(use: ConFusion.Use, scope: typeof(inner))
 							if use(hasTitle) then
 								return scope:TitleLabel {
-									text = displayText,
+									text = props.displayText,
 									backgroundColor = background,
 								}
 							end
@@ -154,11 +142,7 @@ local function SectionMacroItem(
 						end
 					),
 					items = inner:ItemsContainer {
-						items = macroItem.Items,
-						itemProperties = {
-							InSection = true,
-							SectionDepth = currentDepth + 1,
-						},
+						items = props.items,
 
 						position = inner:Computed(function(use: ConFusion.Use)
 							if use(hasTitle) then
@@ -173,6 +157,32 @@ local function SectionMacroItem(
 			},
 		},
 	}
+end
+
+local function SectionMacroItem(
+	scope: ConFusion.Scope,
+	macroItem: SectionMacroItem
+)
+	local currentDepth = DepthContext:now()
+
+	local inner = scope:innerScope()
+	local displayText =
+		inner:Value(macroItem.Name or macroItem.Text or "Section")
+
+	function macroItem:UpdateText(newText: string)
+		assert(t.string(newText))
+
+		macroItem.Text = newText
+
+		displayText:set(newText)
+	end
+
+	return DepthContext:executeWith(
+		currentDepth + 1,
+		Section,
+		scope,
+		{ displayText = displayText, items = macroItem.Items }
+	)
 end
 
 return SectionMacroItem
