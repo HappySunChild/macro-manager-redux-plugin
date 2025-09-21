@@ -1,4 +1,7 @@
 {
+	"lint": {
+		"LocalShadow": false
+	},
 	"aliases": {
 		"plugin": ".",
 		"components": "Components",
