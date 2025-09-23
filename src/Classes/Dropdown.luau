@@ -158,7 +158,7 @@ local function Dropdown(
 					:resolve(),
 			},
 			items = inner:ScrollingFrame {
-				position = UDim2.new(0, 0, 1, 3),
+				position = UDim2.new(0, -2, 1, 3),
 				size = inner:Computed(function(use: ConFusion.Use)
 					if not use(open) then
 						return UDim2.fromScale(1, 0)
@@ -166,7 +166,7 @@ local function Dropdown(
 
 					return UDim2.new(
 						1,
-						0,
+						4,
 						0,
 						math.min(#use(props.items), 8) * 18 + 8
 					)
