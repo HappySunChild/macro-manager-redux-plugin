@@ -66,7 +66,12 @@ export type ButtonStyle = {
 	HoverBorder: ConFusion.UsedAs<Color3>?,
 }
 
-local BORDER_COLOR = StudioColor(Enum.StudioStyleGuideColor.Border)
+local GLOBAL_BORDER_COLOR = scope
+	:Pipe(StudioColor(Enum.StudioStyleGuideColor.Border))
+	:map(function(color: Color3)
+		return Color3.new(color.R * 0.8, color.G * 0.8, color.B * 0.8)
+	end)
+	:resolve()
 local DEFAULT_BUTTON_STYLE: ButtonStyle = {
 	Text = StudioColor(Enum.StudioStyleGuideColor.ButtonText),
 	Background = StudioColor(Enum.StudioStyleGuideColor.Button),
@@ -78,7 +83,7 @@ local DEFAULT_BUTTON_STYLE: ButtonStyle = {
 		Enum.StudioStyleGuideColor.Button,
 		Enum.StudioStyleGuideModifier.Pressed
 	),
-	Border = BORDER_COLOR,
+	Border = GLOBAL_BORDER_COLOR,
 }
 
 return table.freeze {
@@ -111,7 +116,7 @@ return table.freeze {
 			),
 		},
 
-		Border = BORDER_COLOR,
+		Border = GLOBAL_BORDER_COLOR,
 		AccentBorder = ColorSet {
 			Light = Color3.fromRGB(108, 130, 255),
 			Dark = Color3.fromRGB(247, 152, 58),
@@ -140,7 +145,7 @@ return table.freeze {
 			-- 	Light = Color3.fromRGB(255, 255, 255),
 			-- 	Dark = Color3.fromRGB(50, 50, 50),
 			-- },
-			Border = BORDER_COLOR,
+			Border = GLOBAL_BORDER_COLOR,
 		},
 
 		InputField = {
@@ -158,10 +163,7 @@ return table.freeze {
 				Light = Color3.fromRGB(232, 232, 232),
 				Dark = Color3.fromRGB(200, 200, 200),
 			},
-			Border = StudioColor(
-				Enum.StudioStyleGuideColor.Dark,
-				Enum.StudioStyleGuideModifier.Selected
-			),
+			Border = GLOBAL_BORDER_COLOR,
 		},
 
 		DropdownItem = {
