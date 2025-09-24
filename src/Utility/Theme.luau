@@ -85,6 +85,9 @@ return table.freeze {
 	setTheme = function(newTheme: StudioTheme)
 		currentTheme:set(newTheme)
 	end,
+	getThemeValue = function(): ConFusion.Value<StudioTheme>
+		return currentTheme
+	end,
 
 	Font = {
 		Regular = Font.fromName "SourceSansPro",

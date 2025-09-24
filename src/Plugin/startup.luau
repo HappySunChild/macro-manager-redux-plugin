@@ -5,10 +5,13 @@ local ContainerManager = require "@utility/ContainerManager"
 local MacroManager = require "@utility/MacroManager"
 local Theme = require "@utility/Theme"
 
+local ConFusion = require "@packages/ConFusion"
+
 local Assets = require "@plugin/Assets"
 local PluginShared = require "@plugin/Shared"
 
 local App = require "./App"
+local ToolbarButton = require "./ToolbarButton"
 
 local PLUGIN_VERSION = require "@plugin/Version"
 
@@ -16,7 +19,6 @@ local _firstActivation = true
 local isActive = false
 
 local buttonWidget = nil :: PluginToolbarButton
-local buttonRefresh = nil :: PluginToolbarButton
 local widget = nil :: DockWidgetPluginGui
 
 local function activate()
@@ -54,39 +56,52 @@ local function deactivate()
 end
 
 local function setupToolbar(plugin: Plugin)
+	local scope =
+		PluginShared.Scope:innerScope { ToolbarButton = ToolbarButton }
 	local toolbar = plugin:CreateToolbar(`Macro Manager {PLUGIN_VERSION}`)
 
-	buttonWidget = toolbar:CreateButton(
-		"MacroWidget",
-		"Show/hide the macros widget",
-		Assets.Images.WidgetButton,
-		"Macros Widget"
-	)
-	buttonWidget:SetActive(false)
-	buttonWidget.ClickableWhenViewportHidden = true
-	buttonWidget.Click:Connect(function()
-		if isActive then
-			deactivate()
-		else
-			activate()
-		end
+	local isDark = scope:Computed(function(use: ConFusion.Use)
+		local currentTheme = use(Theme.getThemeValue()) :: StudioTheme
+
+		return currentTheme.Name == "Dark"
 	end)
 
-	buttonRefresh = toolbar:CreateButton(
-		"RefreshMacros",
-		`Refresh macros in '{ContainerManager.ContainerName}.Macros' folder`,
-		Assets.Images.RefreshButtonDark,
-		"Refresh Macros"
-	)
-	buttonRefresh:SetActive(false)
-	buttonRefresh.Enabled = true
-	buttonRefresh.ClickableWhenViewportHidden = true
-	buttonRefresh.Click:Connect(function()
-		buttonRefresh:SetActive(true)
-		buttonRefresh:SetActive(false)
+	buttonWidget = scope:ToolbarButton {
+		toolbar = toolbar,
+		id = "MacroWidget",
+		name = "Macros",
+		description = "Show/hide the macros widget",
+		icon = scope:Computed(function(use: ConFusion.Use)
+			return if use(isDark)
+				then Assets.Images.WidgetButtonDark
+				else Assets.Images.WidgetButtonLight
+		end),
 
-		MacroManager.refreshMacros()
-	end)
+		clickableWhenViewportHidden = true,
+		clickCallback = function()
+			if isActive then
+				deactivate()
+			else
+				activate()
+			end
+		end,
+	}
+
+	scope:ToolbarButton {
+		toolbar = toolbar,
+		id = "RefreshMacros",
+		name = "Refresh",
+		description = `Refresh macros in '{ContainerManager.ContainerName}.Macros' folder`,
+		icon = scope:Computed(function(use: ConFusion.Use)
+			return if use(isDark)
+				then Assets.Images.RefreshButtonDark
+				else Assets.Images.RefreshButtonLight
+		end),
+
+		clickableWhenViewportHidden = true,
+		noToggle = true,
+		clickCallback = MacroManager.refreshMacros,
+	}
 end
 
 local function setupWidget(plugin: Plugin)
@@ -101,21 +116,13 @@ local function setupWidget(plugin: Plugin)
 	widget = newWidget
 end
 
-local function _onClose()
+local function onClose()
 	deactivate()
 
 	PluginShared.Scope:doCleanup()
 end
 
-local function _onThemeChange(newTheme: StudioTheme)
-	if buttonRefresh ~= nil then
-		local isDark = newTheme.Name == "Dark"
-
-		buttonRefresh.Icon = if isDark
-			then Assets.Images.RefreshButtonDark
-			else Assets.Images.RefreshButtonLight
-	end
-
+local function onThemeChange(newTheme: StudioTheme)
 	Theme.setTheme(newTheme)
 end
 
@@ -125,12 +132,13 @@ return function(plugin: Plugin)
 	setupWidget(plugin)
 	setupToolbar(plugin)
 
-	plugin.Unloading:Connect(_onClose)
+	plugin.Unloading:Connect(onClose)
+
 	Studio.ThemeChanged:Connect(function()
-		_onThemeChange(Studio.Theme)
+		onThemeChange(Studio.Theme)
 	end)
 
-	_onThemeChange(Studio.Theme)
+	onThemeChange(Studio.Theme)
 
 	ColorPicker.initialize(plugin)
 end

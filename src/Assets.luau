@@ -1,8 +1,10 @@
 local Assets = {
 	Images = {
-		WidgetButton = "rbxassetid://95866080",
-		RefreshButtonDark = "rbxassetid://17210895174",
-		RefreshButtonLight = "rbxassetid://17210880996",
+		WidgetButtonDark = "rbxassetid://113567972662602",
+		WidgetButtonLight = "rbxassetid://120966452330458",
+
+		RefreshButtonDark = "rbxassetid://108378407847862",
+		RefreshButtonLight = "rbxassetid://89128376547206",
 
 		DefaultMacroIcon = "rbxassetid://95866080",
 		MacroLoadingThrobber = "rbxassetid://2459243309",
