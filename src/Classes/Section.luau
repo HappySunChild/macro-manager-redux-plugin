@@ -40,7 +40,7 @@ local function TitleLabel(
 		[Children] = {
 			border = inner:RoundBorder {
 				color = Theme.Color.Section.Border,
-				thickness = 2,
+				thickness = 1,
 			},
 			padding = inner:New "UIPadding" {
 				PaddingLeft = UDim.new(0, 6),
@@ -102,8 +102,8 @@ local function Section(
 
 		[Children] = {
 			padding = inner:New "UIPadding" {
-				PaddingLeft = UDim.new(0, 4),
-				PaddingRight = UDim.new(0, 4),
+				PaddingLeft = UDim.new(0, 3),
+				PaddingRight = UDim.new(0, 3),
 				PaddingTop = inner:Computed(function(use: ConFusion.Use)
 					if use(hasTitle) then
 						return UDim.new(0, 10)
@@ -111,7 +111,7 @@ local function Section(
 
 					return UDim.new(0, 0)
 				end),
-				PaddingBottom = UDim.new(0, 4),
+				PaddingBottom = UDim.new(0, 2),
 			},
 
 			container = inner:New "Frame" {
@@ -126,7 +126,7 @@ local function Section(
 				[Children] = {
 					border = inner:RoundBorder {
 						color = Theme.Color.Section.Border,
-						thickness = 2,
+						thickness = 1,
 					},
 
 					title = inner:Computed(
