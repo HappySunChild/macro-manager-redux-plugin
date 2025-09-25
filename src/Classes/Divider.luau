@@ -1,4 +1,4 @@
-local Types = require "@plugin/Types"
+local types = require "@plugin/types"
 
 local Theme = require "@utility/Theme"
 
@@ -11,7 +11,7 @@ local default = t.default("", t.string)
 
 local function DividerMacroItem(
 	scope: ConFusion.Scope,
-	macroItem: Types.MacroItem
+	macroItem: types.MacroItem
 )
 	macroItem.Text = default(macroItem.Text)
 

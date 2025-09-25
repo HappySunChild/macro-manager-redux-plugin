@@ -1,15 +1,16 @@
-local Theme = require "@utility/Theme"
-local Types = require "@plugin/Types"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
+
+local Theme = require "@utility/Theme"
 
 local Children = ConFusion.Children
 
 local defaultText = t.default("Label", t.string)
 local defaultSelectable = t.default(nil, t.literal(true)) -- either true or nil
 
-type LabelMacroItem = Types.MacroItem & {
+type LabelMacroItem = types.MacroItem & {
 	Selectable: boolean?,
 	RichText: boolean?,
 	TextXAlignment: Enum.TextXAlignment?,

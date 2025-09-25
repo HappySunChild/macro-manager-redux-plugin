@@ -1,4 +1,4 @@
-local Types = require "@plugin/Types"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
@@ -10,7 +10,7 @@ local Children, Ref = ConFusion.Children, ConFusion.Ref
 
 local function ContainerMacroItem(
 	scope: ConFusion.Scope,
-	macroItem: Types.MacroItem
+	macroItem: types.MacroItem
 )
 	local inner = scope:innerScope { Label = Label }
 	local displayText = inner:Value(macroItem.Text or "Container")

@@ -2,10 +2,10 @@
 -- bump this post RIGHT NOW!
 -- https://devforum.roblox.com/t/allow-plugins-to-use-color-picker/63257/
 
+local PluginShared = require "@plugin/Shared"
+
 local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
-
-local PluginShared = require "@plugin/Shared"
 
 local Widget = require "@self/Widget"
 

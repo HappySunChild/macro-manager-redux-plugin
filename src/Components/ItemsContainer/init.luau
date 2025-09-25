@@ -1,8 +1,8 @@
-local Types = require "@plugin/Types"
-
-local Theme = require "@utility/Theme"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
+
+local Theme = require "@utility/Theme"
 
 local Item = require "@self/Item"
 local RoundBorder = require "@components/RoundBorder"
@@ -12,8 +12,8 @@ local Children = ConFusion.Children
 local function ItemsContainer(
 	scope: ConFusion.Scope,
 	props: {
-		items: { Types.MacroItem },
-		
+		items: { types.MacroItem },
+
 		position: ConFusion.UsedAs<UDim2>?,
 		size: ConFusion.UsedAs<UDim2>?,
 		backgroundColor: ConFusion.UsedAs<Color3>?,

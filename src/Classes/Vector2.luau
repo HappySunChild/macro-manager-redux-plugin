@@ -1,9 +1,9 @@
-local Types = require "@plugin/Types"
-
-local updateItemValue = require "@utility/updateItemValue"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
+
+local updateItemValue = require "@utility/updateItemValue"
 
 local ElementGroup = require "@components/ElementGroup"
 local Label = require "@components/Label"
@@ -16,7 +16,7 @@ local default = t.default(Vector2.zero, t.Vector2)
 
 local function Vector2ItemClass(
 	scope: ConFusion.Scope,
-	macroItem: Types.ValueMacroItem<Vector2>
+	macroItem: types.ValueMacroItem<Vector2>
 )
 	macroItem.Value = default(macroItem.Value)
 

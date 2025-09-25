@@ -1,4 +1,4 @@
-local Types = require "@plugin/Types"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
@@ -11,7 +11,7 @@ local styleType = t.union(t.string, t.table)
 local default = t.default("Button", t.string)
 local defaultStyle = t.default(nil, styleType)
 
-type ButtonMacroItem = Types.MacroItem & {
+type ButtonMacroItem = types.MacroItem & {
 	Style: string,
 	Activate: (ButtonMacroItem) -> (),
 	Activated: (ButtonMacroItem) -> (),

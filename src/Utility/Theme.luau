@@ -1,8 +1,9 @@
 --!nocheck
 local Studio = settings():GetService "Studio"
 
-local ConFusion = require "@packages/ConFusion"
 local PluginShared = require "@plugin/Shared"
+
+local ConFusion = require "@packages/ConFusion"
 
 local scope = PluginShared.Scope
 local currentTheme = scope:Value(Studio.Theme)

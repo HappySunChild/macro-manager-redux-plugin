@@ -1,57 +1,54 @@
 local Studio = settings():GetService "Studio"
 
+local Assets = require "@plugin/Assets"
+local PLUGIN_VERSION = require "@plugin/Version"
+local PluginShared = require "@plugin/Shared"
+
+local ConFusion = require "@packages/ConFusion"
+
 local ColorPicker = require "@utility/ColorPicker"
 local ContainerManager = require "@utility/ContainerManager"
 local MacroManager = require "@utility/MacroManager"
 local Theme = require "@utility/Theme"
 
-local ConFusion = require "@packages/ConFusion"
-
-local Assets = require "@plugin/Assets"
-local PluginShared = require "@plugin/Shared"
-
 local App = require "./App"
 local ToolbarButton = require "./ToolbarButton"
 
-local PLUGIN_VERSION = require "@plugin/Version"
+local first_activation = true
+local is_active = false
 
-local _firstActivation = true
-local isActive = false
-
-local buttonWidget = nil :: PluginToolbarButton
+local toolbar_button_widget = nil :: PluginToolbarButton
 local widget = nil :: DockWidgetPluginGui
 
 local function activate()
-	if isActive then
+	if is_active or toolbar_button_widget == nil or widget == nil then
 		return
 	end
 
-	if buttonWidget == nil or widget == nil then
-		return
-	end
+	is_active = true
+	toolbar_button_widget:SetActive(true)
 
-	isActive = true
-	buttonWidget:SetActive(true)
 	widget.Enabled = true
 
-	if _firstActivation then
-		_firstActivation = false
+	if first_activation then
+		first_activation = false
 
 		MacroManager.refreshMacros()
 	end
 end
 
 local function deactivate()
-	if not isActive then
+	if not is_active then
 		return
 	end
 
-	if buttonWidget == nil or widget == nil then
+	if toolbar_button_widget == nil or widget == nil then
 		return
 	end
 
-	isActive = false
-	buttonWidget:SetActive(false)
+	is_active = false
+	toolbar_button_widget:SetActive(false)
+
 	widget.Enabled = false
 end
 
@@ -60,26 +57,26 @@ local function setupToolbar(plugin: Plugin)
 		PluginShared.Scope:innerScope { ToolbarButton = ToolbarButton }
 	local toolbar = plugin:CreateToolbar(`Macro Manager {PLUGIN_VERSION}`)
 
-	local isDark = scope:Computed(function(use: ConFusion.Use)
+	local is_dark = scope:Computed(function(use: ConFusion.Use)
 		local currentTheme = use(Theme.getThemeValue()) :: StudioTheme
 
 		return currentTheme.Name == "Dark"
 	end)
 
-	buttonWidget = scope:ToolbarButton {
+	toolbar_button_widget = scope:ToolbarButton {
 		toolbar = toolbar,
 		id = "MacroWidget",
 		name = "Macros",
 		description = "Show/hide the macros widget",
 		icon = scope:Computed(function(use: ConFusion.Use)
-			return if use(isDark)
+			return if use(is_dark)
 				then Assets.Images.WidgetButtonDark
 				else Assets.Images.WidgetButtonLight
 		end),
 
 		clickableWhenViewportHidden = true,
 		clickCallback = function()
-			if isActive then
+			if is_active then
 				deactivate()
 			else
 				activate()
@@ -93,7 +90,7 @@ local function setupToolbar(plugin: Plugin)
 		name = "Refresh",
 		description = `Refresh macros in '{ContainerManager.ContainerName}.Macros' folder`,
 		icon = scope:Computed(function(use: ConFusion.Use)
-			return if use(isDark)
+			return if use(is_dark)
 				then Assets.Images.RefreshButtonDark
 				else Assets.Images.RefreshButtonLight
 		end),
@@ -122,12 +119,10 @@ local function onClose()
 	PluginShared.Scope:doCleanup()
 end
 
-local function onThemeChange(newTheme: StudioTheme)
-	Theme.setTheme(newTheme)
-end
-
 return function(plugin: Plugin)
 	PluginShared.Plugin = plugin
+
+	ColorPicker.initialize(plugin)
 
 	setupWidget(plugin)
 	setupToolbar(plugin)
@@ -135,10 +130,8 @@ return function(plugin: Plugin)
 	plugin.Unloading:Connect(onClose)
 
 	Studio.ThemeChanged:Connect(function()
-		onThemeChange(Studio.Theme)
+		Theme.setTheme(Studio.Theme)
 	end)
 
-	onThemeChange(Studio.Theme)
-
-	ColorPicker.initialize(plugin)
+	Theme.setTheme(Studio.Theme)
 end

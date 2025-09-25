@@ -1,10 +1,10 @@
-local Types = require "@plugin/Types"
-
-local Theme = require "@utility/Theme"
-local updateItemValue = require "@utility/updateItemValue"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
+
+local Theme = require "@utility/Theme"
+local updateItemValue = require "@utility/updateItemValue"
 
 local Label = require "@components/Label"
 local TextButton = require "@components/TextButton"
@@ -16,7 +16,7 @@ local default = t.default(false, t.boolean)
 
 local function BooleanMacroItem(
 	scope: ConFusion.Scope,
-	macroItem: Types.ValueMacroItem<boolean>
+	macroItem: types.ValueMacroItem<boolean>
 )
 	macroItem.Value = default(macroItem.Value)
 

@@ -1,91 +1,88 @@
-local Types = require "@plugin/Types"
+local PluginShared = require "@plugin/Shared"
+local types = require "@plugin/types"
+
+local t = require "@packages/t"
 
 local ContainerManager = require "./ContainerManager"
 local Logging = require "./Logging"
 
-local PluginShared = require "@plugin/Shared"
+local LOADED_MACROS = {}
+local LOADED_CUSTOM_CLASSES = {}
 
-local t = require "@packages/t"
-
-local loadedMacros = {}
-local customItemClasses = {}
+local _ACTIVE_MACROS = PluginShared.Scope:Value(LOADED_MACROS)
 
 local function loadMacro(macroModule: ModuleScript, reference: Instance?)
-	local macroReference: Types.MacroReference =
+	local macroReference: types.MacroReference =
 		{ Module = macroModule, Document = reference }
 
-	table.insert(loadedMacros, macroReference)
+	table.insert(LOADED_MACROS, macroReference)
 end
 
 local function loadCurrentContainer()
-	local tempContainer = ContainerManager.createTemporaryContainer()
+	local temp_container = ContainerManager.createTemporaryContainer()
 
-	-- load custom classes
-	local classesFolder = tempContainer:FindFirstChild "MacroItemClasses"
+	-- load classes
+	local classes_folder = temp_container:FindFirstChild "MacroItemClasses"
 
-	for _, classModule in classesFolder:GetChildren() do
-		if not classModule:IsA "ModuleScript" then
+	for _, class_module in classes_folder:GetChildren() do
+		if not class_module:IsA "ModuleScript" then
 			continue
 		end
 
-		local index = classModule.Name
+		local index = class_module.Name
 
 		local constructor
-		local success, err = pcall(function()
-			constructor = require(classModule) :: any
+		local ok, err = pcall(function()
+			constructor = require(class_module) :: any
 		end)
-
-		if not success then
+		if not ok then
 			Logging.warn("classRequireError", err, index)
 
 			continue
 		end
 
-		local typeOk = t.callback(constructor)
-
-		if not typeOk then
+		local ok = t.callback(constructor)
+		if not ok then
 			Logging.warn("classInvalidType", nil, index, type(constructor))
 
 			continue
 		end
 
-		customItemClasses[index] = constructor
+		LOADED_CUSTOM_CLASSES[index] = constructor
 	end
 
 	-- load macros
 	local container = ContainerManager.getCurrentContainer()
-	local macrosFolder = tempContainer:FindFirstChild "Macros"
+	local macros_folder = temp_container:FindFirstChild "Macros"
 
-	for _, macroModule in macrosFolder:GetChildren() do
-		if not macroModule:IsA "ModuleScript" then
+	for _, macro_module in macros_folder:GetChildren() do
+		if not macro_module:IsA "ModuleScript" then
 			continue
 		end
 
 		loadMacro(
-			macroModule,
-			container.Macros:FindFirstChild(macroModule.Name)
+			macro_module,
+			container.Macros:FindFirstChild(macro_module.Name)
 		)
 	end
 
-	tempContainer.Parent = nil
+	temp_container.Parent = nil
 end
 
-local _activeMacros = PluginShared.Scope:Value(loadedMacros)
-
 local function _updateMacros()
-	_activeMacros:set(loadedMacros)
+	_ACTIVE_MACROS:set(LOADED_MACROS)
 end
 
 local function _refreshMacros()
-	table.clear(loadedMacros)
+	table.clear(LOADED_MACROS)
 
 	loadCurrentContainer()
 	_updateMacros()
 end
 
 return table.freeze {
-	CustomItemClasses = customItemClasses,
-	ActiveMacros = _activeMacros,
+	LoadedCustomClasses = LOADED_CUSTOM_CLASSES,
+	LoadedMacros = _ACTIVE_MACROS,
 
 	loadMacro = loadMacro,
 	loadCurrentContainer = loadCurrentContainer,

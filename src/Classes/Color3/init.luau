@@ -1,19 +1,20 @@
-local Types = require "@plugin/Types"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
-local RenderStyles = require "@self/Styles"
 local t = require "@packages/t"
-
-local Label = require "@components/Label"
 
 local logging = require "@utility/Logging"
 local updateItemValue = require "@utility/updateItemValue"
+
+local Label = require "@components/Label"
+
+local RenderStyles = require "@self/Styles"
 
 local Children = ConFusion.Children
 
 local default = t.default(Color3.new(0, 0, 0), t.Color3)
 
-type Color3MacroItem = Types.ValueMacroItem<Color3> & {
+type Color3MacroItem = types.ValueMacroItem<Color3> & {
 	Style: string,
 }
 

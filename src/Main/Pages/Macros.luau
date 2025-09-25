@@ -1,4 +1,4 @@
-local Types = require "@plugin/Types"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 
@@ -18,7 +18,7 @@ local TOPBAR_HEIGHT = 24
 local function MacrosPage(
 	scope: ConFusion.Scope,
 	props: {
-		macros: ConFusion.UsedAs<{ Types.MacroReference }>,
+		macros: ConFusion.UsedAs<{ types.MacroReference }>,
 	}
 )
 	local inner = scope:innerScope {
@@ -29,7 +29,7 @@ local function MacrosPage(
 		RoundBorder = RoundBorder,
 	}
 
-	local filterAgainst = inner:Value ""
+	local macro_filter_against = inner:Value ""
 
 	return {
 		padding = inner:New "UIPadding" {
@@ -65,7 +65,7 @@ local function MacrosPage(
 							placeholderText = "Filter...",
 
 							typingCallback = function(text: string)
-								filterAgainst:set(text:lower())
+								macro_filter_against:set(text:lower())
 							end,
 
 							layoutOrder = 1,
@@ -76,9 +76,7 @@ local function MacrosPage(
 							text = "Refresh",
 							textSize = 16,
 
-							callback = function()
-								MacroManager.refreshMacros()
-							end,
+							callback = MacroManager.refreshMacros,
 
 							layoutOrder = 2,
 						},
@@ -93,7 +91,7 @@ local function MacrosPage(
 			BackgroundTransparency = 1,
 
 			[Children] = inner:MacroContainer {
-				filter = filterAgainst,
+				filter = macro_filter_against,
 				macros = props.macros,
 			},
 		},

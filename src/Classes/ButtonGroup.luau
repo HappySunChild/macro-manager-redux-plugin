@@ -1,4 +1,4 @@
-local Types = require "@plugin/Types"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
@@ -10,7 +10,7 @@ local Children = ConFusion.Children
 
 local default = t.default({ "Button" }, t.table)
 
-type ButtonGroupMacroItem = Types.MacroItem & {
+type ButtonGroupMacroItem = types.MacroItem & {
 	Buttons: { string },
 
 	Activate: (ButtonGroupMacroItem, index: number) -> (),

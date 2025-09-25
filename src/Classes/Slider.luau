@@ -1,10 +1,10 @@
-local Types = require "@plugin/Types"
-
-local Theme = require "@utility/Theme"
-local updateItemValue = require "@utility/updateItemValue"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
+
+local Theme = require "@utility/Theme"
+local updateItemValue = require "@utility/updateItemValue"
 
 local Label = require "@components/Label"
 local RoundBorder = require "@components/RoundBorder"
@@ -17,7 +17,7 @@ local snapValidate = t.union(t.integer, t.number_min(0))
 local snapDefault = t.default(0, snapValidate)
 local default = t.default(0, t.number)
 
-type SliderMacroItem = Types.ValueMacroItem<number> & {
+type SliderMacroItem = types.ValueMacroItem<number> & {
 	Minimum: number,
 	Maximum: number,
 	Snapping: number,

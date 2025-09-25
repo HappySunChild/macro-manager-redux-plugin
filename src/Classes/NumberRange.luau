@@ -1,9 +1,9 @@
-local Types = require "@plugin/Types"
-
-local updateItemValue = require "@utility/updateItemValue"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
+
+local updateItemValue = require "@utility/updateItemValue"
 
 local ElementGroup = require "@components/ElementGroup"
 local Label = require "@components/Label"
@@ -16,7 +16,7 @@ local default = t.default(NumberRange.new(0, 1), t.NumberRange)
 
 local function NumberRangeMacroItem(
 	scope: ConFusion.Scope,
-	macroItem: Types.ValueMacroItem<NumberRange>
+	macroItem: types.ValueMacroItem<NumberRange>
 )
 	macroItem.Value = default(macroItem.Value)
 

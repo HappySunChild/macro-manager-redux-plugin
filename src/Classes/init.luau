@@ -1,38 +1,32 @@
--- return table.freeze {
--- 	Color3 = require "@self/Color3",
--- 	Boolean = require "@self/Boolean",
--- 	Button = require "@self/Button",
--- 	ButtonGroup = require "@self/ButtonGroup",
--- 	Container = require "@self/Container",
--- 	Divider = require "@self/Divider",
--- 	Dropdown = require "@self/Dropdown",
--- 	Label = require "@self/Label",
--- 	Number = require "@self/Number",
--- 	NumberRange = require "@self/NumberRange",
--- 	Section = require "@self/Section",
--- 	Slider = require "@self/Slider",
--- 	String = require "@self/String",
--- 	Title = require "@self/Title",
--- 	Vector2 = require "@self/Vector2",
--- 	Vector3 = require "@self/Vector3",
--- }
+local types = require "@plugin/types"
 
-local ItemClasses = {}
+local ConFusion = require "@packages/ConFusion"
 
-local loaded = false
+local MacroManager = require "@utility/MacroManager"
 
-function ItemClasses.load()
-	if loaded then
+local LOADED_BUILTIN_CLASSES = {}
+
+local did_load = false
+
+local function load()
+	if did_load then
 		return
 	end
 
-	loaded = true
+	did_load = true
 
-	for _, class in script:GetChildren() do
-		local index = class.Name
-
-		ItemClasses[index] = require(class) :: any
+	for _, module in script:GetChildren() do
+		LOADED_BUILTIN_CLASSES[module.Name] = require(module)
 	end
 end
 
-return ItemClasses :: { [string]: (...any) -> ...any }
+return table.freeze {
+	getClass = function(
+		name: string
+	): ((ConFusion.Scope, types.MacroItem) -> GuiBase2d)?
+		load()
+
+		return MacroManager.LoadedCustomClasses[name]
+			or LOADED_BUILTIN_CLASSES[name]
+	end,
+}

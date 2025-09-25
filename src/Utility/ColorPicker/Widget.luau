@@ -1,9 +1,9 @@
 local ConFusion = require "@packages/ConFusion"
+
 local Theme = require "@utility/Theme"
 
-local ElementGroup = require "@components/ElementGroup"
-
 local Button = require "./Button"
+local ElementGroup = require "@components/ElementGroup"
 local Entry = require "./Entry"
 local HueSaturationPicker = require "./HueSaturationPicker"
 local ValuePicker = require "./ValuePicker"

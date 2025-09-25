@@ -1,4 +1,5 @@
 local ConFusion = require "@packages/ConFusion"
+
 local Theme = require "@utility/Theme"
 
 local Children = ConFusion.Children

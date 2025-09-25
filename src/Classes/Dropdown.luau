@@ -1,12 +1,12 @@
-local Types = require "@plugin/Types"
-
-local Theme = require "@utility/Theme"
-local updateItemValue = require "@utility/updateItemValue"
+local types = require "@plugin/types"
 
 local Assets = require "@plugin/Assets"
 
 local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
+
+local Theme = require "@utility/Theme"
+local updateItemValue = require "@utility/updateItemValue"
 
 local Button = require "@components/Button"
 local Label = require "@components/Label"
@@ -29,7 +29,7 @@ local tostring = function(value: any)
 	return tostring(value)
 end
 
-type DropdownMacroItem = Types.ValueMacroItem<any> & {
+type DropdownMacroItem = types.ValueMacroItem<any> & {
 	Items: { any },
 }
 

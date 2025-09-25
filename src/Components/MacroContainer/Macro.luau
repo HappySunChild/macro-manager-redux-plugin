@@ -3,14 +3,13 @@ local Selection = game:GetService "Selection"
 
 local Assets = require "@plugin/Assets"
 local PluginShared = require "@plugin/Shared"
-
-local Logging = require "@utility/Logging"
-local Theme = require "@utility/Theme"
-
-local Types = require "@plugin/Types"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
+
+local Logging = require "@utility/Logging"
+local Theme = require "@utility/Theme"
 
 local ItemsContainer = require "@components/ItemsContainer"
 local RoundBorder = require "@components/RoundBorder"
@@ -19,7 +18,7 @@ local TextButton = require "@components/TextButton"
 local Children, OnEvent = ConFusion.Children, ConFusion.OnEvent
 local peek, doCleanup = ConFusion.peek, ConFusion.doCleanup
 
-local function callMacroMethod(macro: Types.Macro, method: string, ...: any)
+local function callMacroMethod(macro: types.Macro, method: string, ...: any)
 	local func = macro[method]
 
 	if not func then
@@ -36,8 +35,8 @@ end
 local function LoadingPlaceholder(
 	scope: ConFusion.Scope,
 	props: {
-		reference: Types.MacroReference,
-		shouldShow: (macro: Types.Macro, use: ConFusion.Use) -> boolean,
+		reference: types.MacroReference,
+		shouldShow: (macro: types.Macro, use: ConFusion.Use) -> boolean,
 	}
 )
 	local inner = scope:innerScope { RoundBorder = RoundBorder }
@@ -200,8 +199,8 @@ end
 local function Macro(
 	scope: ConFusion.Scope,
 	props: {
-		reference: Types.MacroReference,
-		shouldShow: (macro: Types.Macro, use: ConFusion.Use) -> boolean,
+		reference: types.MacroReference,
+		shouldShow: (macro: types.Macro, use: ConFusion.Use) -> boolean,
 	}
 )
 	local inner = scope:innerScope {
@@ -220,7 +219,7 @@ local function Macro(
 		local name = props.reference.Module.Name
 		local displayName = name:gsub("(%l)([%u%d])", "%1 %2")
 
-		local macro: Types.Macro?
+		local macro: types.Macro?
 		local reqOk, reqErr = pcall(function()
 			macro = require(props.reference.Module) :: any
 		end)

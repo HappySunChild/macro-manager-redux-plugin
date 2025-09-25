@@ -1,9 +1,9 @@
-local Types = require "@plugin/Types"
-
-local Theme = require "@utility/Theme"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
+
+local Theme = require "@utility/Theme"
 
 local ItemsContainer = require "@components/ItemsContainer"
 local RoundBorder = require "@components/RoundBorder"
@@ -12,10 +12,10 @@ local Children = ConFusion.Children
 
 local DepthContext = ConFusion.Contextual(0)
 
-type SectionMacroItem = Types.MacroItem & {
+type SectionMacroItem = types.MacroItem & {
 	Name: string?,
 	Text: string?,
-	Items: { Types.MacroItem },
+	Items: { types.MacroItem },
 }
 
 local function TitleLabel(
@@ -74,7 +74,7 @@ local function Section(
 	scope: ConFusion.Scope,
 	props: {
 		displayText: ConFusion.UsedAs<string>,
-		items: { Types.MacroItem },
+		items: { types.MacroItem },
 	}
 )
 	local inner = scope:innerScope {

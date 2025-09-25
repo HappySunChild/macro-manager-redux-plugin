@@ -1,9 +1,9 @@
-local Types = require "@plugin/Types"
-
-local updateItemValue = require "@utility/updateItemValue"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
+
+local updateItemValue = require "@utility/updateItemValue"
 
 local Label = require "@components/Label"
 local TextEntry = require "@components/TextEntry"
@@ -14,7 +14,7 @@ local default = t.default(0, t.number)
 
 local function NumberMacroItem(
 	scope: ConFusion.Scope,
-	macroItem: Types.ValueMacroItem<number>
+	macroItem: types.ValueMacroItem<number>
 )
 	macroItem.Value = default(macroItem.Value)
 

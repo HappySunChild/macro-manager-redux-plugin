@@ -1,15 +1,15 @@
-local Types = require "@plugin/Types"
-
-local Theme = require "@utility/Theme"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
+
+local Theme = require "@utility/Theme"
 
 local Children = ConFusion.Children
 
 local default = t.default("Title", t.string)
 
-local function Title(scope: ConFusion.Scope, macroItem: Types.MacroItem)
+local function Title(scope: ConFusion.Scope, macroItem: types.MacroItem)
 	macroItem.Text = default(macroItem.Text)
 
 	local inner = scope:innerScope()

@@ -1,39 +1,25 @@
 local Classes = require "@plugin/Classes"
-local Types = require "@plugin/Types"
-
-local Logging = require "@utility/Logging"
-local MacroManager = require "@utility/MacroManager"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 local t = require "@packages/t"
+
+local Logging = require "@utility/Logging"
 
 local Children = ConFusion.Children
 
 local validate = t.InstanceIsA "GuiBase2d"
 
-local function getMacroItemClass(name: string)
-	local customClass = MacroManager.CustomItemClasses[name]
-
-	if customClass then
-		return customClass
-	end
-
-	-- fixes the linting issue, but is still very much a hack
-	Classes.load()
-
-	return Classes[name]
-end
-
-local function Item(scope: ConFusion.Scope, macroItem: Types.MacroItem)
-	if table.isfrozen(macroItem) then
+local function Item(scope: ConFusion.Scope, macro_item: types.MacroItem)
+	if table.isfrozen(macro_item) then
 		return Logging.warn "itemFrozen"
 	end
 
-	local targetType = macroItem.Type
-	local constructor = getMacroItemClass(targetType)
+	local target_type = macro_item.Type
+	local constructor = Classes.getClass(target_type)
 
 	if not constructor then
-		return Logging.warn("classCannotFind", nil, targetType)
+		return Logging.warn("classCannotFind", nil, target_type)
 	end
 
 	-- added this to prevent weird duplicate rerenders
@@ -41,27 +27,26 @@ local function Item(scope: ConFusion.Scope, macroItem: Types.MacroItem)
 	-- an items array. but i mainly added this so that you couldn't
 	-- as easily crash studio by putting a section inside of its own items array
 	-- which would recursively create itself until the script or studio crashed.
-	if macroItem._was_rendered == true then
-		return Logging.warn("itemAlreadyRendered", nil, targetType)
+	if macro_item._was_rendered == true then
+		return Logging.warn("itemAlreadyRendered", nil, target_type)
 	end
 
 	local inner = scope:innerScope()
-	local itemContents: Frame
 
-	local ok, err = xpcall(function()
-		itemContents = constructor(inner, macroItem)
+	local ok, contents = xpcall(function()
+		return constructor(inner, macro_item)
 	end, Logging.parse)
 	if not ok then
-		Logging.errorNonFatal("itemConstructorError", err, targetType)
+		Logging.errorNonFatal("itemConstructorError", contents, target_type)
 
 		inner:doCleanup()
 
 		return
 	end
 
-	local ok, err = validate(itemContents)
+	local ok, err = validate(contents)
 	if not ok then
-		Logging.errorNonFatal("itemInvalidContainer", nil, targetType, err)
+		Logging.errorNonFatal("itemInvalidContainer", nil, target_type, err)
 
 		inner:doCleanup()
 
@@ -70,37 +55,26 @@ local function Item(scope: ConFusion.Scope, macroItem: Types.MacroItem)
 
 	local visible = inner:Value(true)
 
-	function macroItem:SetVisible(isVisible: boolean)
+	function macro_item:SetVisible(isVisible: boolean)
 		visible:set(isVisible)
 	end
 
-	macroItem._was_rendered = true
+	macro_item._was_rendered = true
 
-	local size = inner:PropertyOf(itemContents, "AbsoluteSize")
+	local size = inner:PropertyOf(contents, "AbsoluteSize")
 
 	return inner:New "Frame" {
-		Name = `{macroItem.Order}_{targetType}_MacroItem`,
-		LayoutOrder = macroItem.Order,
+		Name = `{macro_item.Order}_{target_type}_MacroItem`,
+		LayoutOrder = macro_item.Order,
 
-		-- this doesn't work for some reason?
-		-- doing it this way causes there to be extra padding which i suspect is because of the
-		-- ui padding descendants, which is weird. i thought it would only account for them
-		-- if they were direct children of the frame, but i guess not.
-		-- maybe i should report this as a bug?
-		-- ehhh, i'm too lazy...
-
-		-- Size = UDim2.new(1, 0, 0, 0),
-		-- AutomaticSize = Enum.AutomaticSize.Y,
-
-		Size = inner:Computed(function(use: ConFusion.Use, _)
+		Size = inner:Computed(function(use: ConFusion.Use)
 			return UDim2.new(1, 0, 0, use(size).Y)
 		end),
 
 		BackgroundTransparency = 1,
-
 		Visible = visible,
 
-		[Children] = itemContents,
+		[Children] = contents,
 	}
 end
 

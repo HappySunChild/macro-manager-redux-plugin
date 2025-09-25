@@ -1,4 +1,4 @@
-local Types = require "@plugin/Types"
+local types = require "@plugin/types"
 
 local Logging = require "@utility/Logging"
 
@@ -6,7 +6,7 @@ local MAX_RECURSION_DEPTH = 8
 local _RECURSION_DEPTH = {}
 
 local function updateItemValue(
-	macroItem: Types.ValueMacroItem<any>,
+	macroItem: types.ValueMacroItem<any>,
 	newValue: any
 )
 	local oldValue = macroItem.Value

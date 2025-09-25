@@ -1,5 +1,7 @@
 local Assets = require "@plugin/Assets"
+
 local ConFusion = require "@packages/ConFusion"
+
 local Theme = require "@utility/Theme"
 
 local OnEvent, Out = ConFusion.OnEvent, ConFusion.Out

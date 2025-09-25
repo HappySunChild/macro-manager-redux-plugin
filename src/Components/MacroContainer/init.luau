@@ -1,9 +1,9 @@
-local Theme = require "@utility/Theme"
-local Types = require "@plugin/Types"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 
 local ContainerManager = require "@utility/ContainerManager"
+local Theme = require "@utility/Theme"
 
 local Macro = require "@self/Macro"
 local RoundBorder = require "@components/RoundBorder"
@@ -32,7 +32,7 @@ local function MacroContainer(
 	scope: ConFusion.Scope,
 	props: {
 		filter: ConFusion.UsedAs<string>,
-		macros: ConFusion.UsedAs<{ Types.MacroReference }>,
+		macros: ConFusion.UsedAs<{ types.MacroReference }>,
 	}
 )
 	local inner = scope:innerScope {
@@ -41,7 +41,7 @@ local function MacroContainer(
 		ScrollingFrame = ScrollingFrame,
 	}
 
-	local function shouldShowMacro(macro: Types.Macro, use: ConFusion.Use)
+	local function shouldShowMacro(macro: types.Macro, use: ConFusion.Use)
 		local filter = use(props.filter)
 
 		return macro.Name:lower():match(filter) ~= nil

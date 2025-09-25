@@ -1,8 +1,8 @@
+local Assets = require "@plugin/Assets"
+
 local ConFusion = require "@packages/ConFusion"
 
 local Theme = require "@utility/Theme"
-
-local Assets = require "@plugin/Assets"
 
 local Children, Out = ConFusion.Children, ConFusion.Out
 

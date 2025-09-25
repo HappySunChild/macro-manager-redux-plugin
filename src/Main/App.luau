@@ -1,7 +1,7 @@
+local ConFusion = require "@packages/ConFusion"
+
 local MacroManager = require "@utility/MacroManager"
 local merge = require "@utility/merge"
-
-local ConFusion = require "@packages/ConFusion"
 
 local Page = require "@components/Page"
 
@@ -56,7 +56,7 @@ local function App(
 	return inner:Hydrate(widget) {
 		[Children] = {
 			MacrosPage = createPage("Macros", {
-				macros = MacroManager.ActiveMacros,
+				macros = MacroManager.LoadedMacros,
 			}),
 			TheRockWithPancakesPage = createPage(
 				"TheRockWithPancakes",
