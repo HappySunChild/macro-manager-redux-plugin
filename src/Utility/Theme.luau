@@ -5,7 +5,7 @@ local PluginShared = require "@plugin/Shared"
 
 local ConFusion = require "@packages/ConFusion"
 
-local scope = PluginShared.Scope
+local scope = PluginShared.scope
 local currentTheme = scope:Value(Studio.Theme)
 
 local MISSING_COLOR = Color3.new(1, 0, 1)

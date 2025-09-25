@@ -9,6 +9,7 @@ local ConFusion = require "@packages/ConFusion"
 local ColorPicker = require "@utility/ColorPicker"
 local ContainerManager = require "@utility/ContainerManager"
 local MacroManager = require "@utility/MacroManager"
+local PluginSettings = require "@utility/Settings"
 local Theme = require "@utility/Theme"
 
 local App = require "./App"
@@ -54,7 +55,7 @@ end
 
 local function setupToolbar(plugin: Plugin)
 	local scope =
-		PluginShared.Scope:innerScope { ToolbarButton = ToolbarButton }
+		PluginShared.scope:innerScope { ToolbarButton = ToolbarButton }
 	local toolbar = plugin:CreateToolbar(`Macro Manager {PLUGIN_VERSION}`)
 
 	local is_dark = scope:Computed(function(use: ConFusion.Use)
@@ -102,7 +103,7 @@ local function setupToolbar(plugin: Plugin)
 end
 
 local function setupWidget(plugin: Plugin)
-	local scope = PluginShared.Scope:innerScope { PluginWidget = App }
+	local scope = PluginShared.scope:innerScope { PluginWidget = App }
 	local newWidget = scope:PluginWidget {
 		plugin = plugin,
 		title = `Macros {PLUGIN_VERSION}`,
@@ -116,11 +117,13 @@ end
 local function onClose()
 	deactivate()
 
-	PluginShared.Scope:doCleanup()
+	PluginSettings.save()
+	PluginShared.scope:doCleanup()
 end
 
 return function(plugin: Plugin)
-	PluginShared.Plugin = plugin
+	PluginShared.plugin = plugin
+	PluginSettings.load()
 
 	ColorPicker.initialize(plugin)
 

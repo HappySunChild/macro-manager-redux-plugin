@@ -1,6 +1,9 @@
+local types = require "@plugin/types"
+
 local ConFusion = require "@packages/ConFusion"
 
 return {
-	Scope = ConFusion:scoped(),
-	Plugin = nil :: Plugin?,
+	settings = nil :: types.PluginSettingsObject?,
+	scope = ConFusion:scoped(),
+	plugin = nil :: Plugin?,
 }

@@ -9,7 +9,7 @@ local Logging = require "./Logging"
 local LOADED_MACROS = {}
 local LOADED_CUSTOM_CLASSES = {}
 
-local _ACTIVE_MACROS = PluginShared.Scope:Value(LOADED_MACROS)
+local _ACTIVE_MACROS = PluginShared.scope:Value(LOADED_MACROS)
 
 local function loadMacro(macroModule: ModuleScript, reference: Instance?)
 	local macroReference: types.MacroReference =

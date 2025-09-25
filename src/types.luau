@@ -1,3 +1,8 @@
+export type PluginSettingsObject = {
+	macro_settings: { [string]: MacroSettingsObject },
+}
+export type MacroSettingsObject = { [string]: any }
+
 export type MacroReference = {
 	Module: ModuleScript,
 	Document: LuaSourceContainer?,
@@ -8,6 +13,9 @@ export type Macro = {
 	Order: number?,
 	Icon: string?,
 	Items: { MacroItem }?,
+
+	Visible: boolean,
+	Minimized: boolean,
 
 	Setup: (Macro, Plugin) -> (),
 	Init: (Macro, Plugin) -> (),

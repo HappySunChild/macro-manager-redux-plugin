@@ -13,7 +13,7 @@ local peek = ConFusion.peek
 
 local validate = t.strict(t.optional(t.Color3))
 
-local pickerScope = PluginShared.Scope:innerScope {
+local pickerScope = PluginShared.scope:innerScope {
 	Widget = Widget,
 }
 
