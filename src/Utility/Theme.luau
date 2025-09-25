@@ -119,8 +119,8 @@ return table.freeze {
 
 		Border = GLOBAL_BORDER_COLOR,
 		AccentBorder = ColorSet {
-			Light = Color3.fromRGB(108, 130, 255),
-			Dark = Color3.fromRGB(247, 152, 58),
+			Light = Color3.fromRGB(87, 110, 241),
+			Dark = Color3.fromRGB(255, 189, 56),
 		},
 
 		Macro = {
