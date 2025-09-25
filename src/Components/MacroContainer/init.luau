@@ -12,8 +12,11 @@ local ScrollingFrame = require "@components/ScrollingFrame"
 local Children = ConFusion.Children
 
 local function NoMacrosLabel(scope: ConFusion.Scope)
-	return scope:New "TextLabel" {
+	local inner = scope:innerScope { RoundBorder = RoundBorder }
+
+	return inner:New "TextLabel" {
 		Size = UDim2.new(1, 0, 0, 80),
+		AutomaticSize = Enum.AutomaticSize.Y,
 
 		BackgroundColor3 = Theme.Color.Macro.Background,
 
@@ -21,10 +24,11 @@ local function NoMacrosLabel(scope: ConFusion.Scope)
 		Text = `No macros detected :(<br/><br/>Add ModuleScripts into {ContainerManager.ContainerName}.Macros<br/>for them to appear here!`,
 		TextSize = 18,
 		TextColor3 = Theme.Color.DimmedText,
+		TextWrapped = true,
 
-		[Children] = RoundBorder(scope, {
+		[Children] = inner:RoundBorder {
 			thickness = 0,
-		}),
+		},
 	}
 end
 
