@@ -4,7 +4,7 @@ local Theme = require "@utility/Theme"
 
 local OnEvent, Out = ConFusion.OnEvent, ConFusion.Out
 
-local BUTTON_STYLE = Theme.ButtonStyles.Default
+local BUTTON_STYLE = Theme.ButtonStyle.Default
 
 local function Button(
 	scope: ConFusion.Scope,

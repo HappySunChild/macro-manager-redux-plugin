@@ -69,7 +69,7 @@ local function BooleanMacroItem(
 				size = UDim2.fromScale(1, 1),
 				sizeConstraint = Enum.SizeConstraint.RelativeYY,
 
-				style = Theme.ButtonStyles.Input,
+				style = Theme.ButtonStyle.Input,
 
 				text = inner:Computed(function(use: ConFusion.Use)
 					return if use(value) then "✓" else ""

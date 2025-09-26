@@ -95,11 +95,21 @@ return table.freeze {
 		return currentTheme
 	end,
 
+	Roundness = UDim.new(0, 4),
+
+	TweenInfo = {
+		Highlight = TweenInfo.new(0.1),
+		Page = TweenInfo.new(
+			0.2,
+			Enum.EasingStyle.Cubic,
+			Enum.EasingDirection.Out
+		),
+		DropdownRotation = TweenInfo.new(0.2),
+	},
 	Font = {
 		Regular = Font.fromName "SourceSansPro",
 		Bold = Font.fromName("SourceSansPro", Enum.FontWeight.Bold),
 	},
-
 	Color = {
 		Text = StudioColor(Enum.StudioStyleGuideColor.MainText),
 		BrightText = StudioColor(Enum.StudioStyleGuideColor.BrightText),
@@ -180,18 +190,7 @@ return table.freeze {
 			),
 		},
 	},
-
-	TweenInfo = {
-		Highlight = TweenInfo.new(0.1),
-		Page = TweenInfo.new(
-			0.2,
-			Enum.EasingStyle.Cubic,
-			Enum.EasingDirection.Out
-		),
-		DropdownRotation = TweenInfo.new(0.2),
-	},
-
-	ButtonStyles = {
+	ButtonStyle = {
 		Default = DEFAULT_BUTTON_STYLE,
 		Input = {
 			Background = StudioColor(
@@ -220,6 +219,4 @@ return table.freeze {
 			HasBorder = false,
 		},
 	},
-
-	Roundness = UDim.new(0, 4),
 }

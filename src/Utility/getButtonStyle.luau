@@ -1,6 +1,6 @@
 local Theme = require "./Theme"
 
-local DEFAULT_STYLE = Theme.ButtonStyles.Default
+local DEFAULT_STYLE = Theme.ButtonStyle.Default
 
 local function getButtonStyle(
 	style: Theme.ButtonStyle | string,
@@ -8,7 +8,7 @@ local function getButtonStyle(
 ): any?
 	-- if we receive a string as the style, then use the associated theme with the same name
 	if type(style) == "string" then
-		style = Theme.ButtonStyles[style]
+		style = Theme.ButtonStyle[style]
 	end
 
 	-- default to the default style otherwise

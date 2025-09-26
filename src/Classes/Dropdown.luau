@@ -50,9 +50,9 @@ local function ItemButton(
 		local currentState = use(state)
 
 		if currentState == Enum.GuiState.Hover then
-			return use(Theme.ButtonStyles.Default.HoverBackground)
+			return use(Theme.ButtonStyle.Default.HoverBackground)
 		elseif currentState == Enum.GuiState.Press then
-			return use(Theme.ButtonStyles.Default.PressedBackground)
+			return use(Theme.ButtonStyle.Default.PressedBackground)
 		end
 
 		return use(baseColor)
@@ -134,7 +134,7 @@ local function Dropdown(
 					return tostring(use(props.value))
 				end),
 				TextSize = 16,
-				TextColor3 = Theme.ButtonStyles.Default.Text,
+				TextColor3 = Theme.ButtonStyle.Default.Text,
 				FontFace = Theme.Font.Regular,
 				TextXAlignment = Enum.TextXAlignment.Left,
 				TextTruncate = Enum.TextTruncate.AtEnd,
@@ -190,7 +190,7 @@ local function Dropdown(
 						PaddingBottom = UDim.new(0, 3),
 					},
 					border = inner:RoundBorder {
-						color = Theme.ButtonStyles.Default.Border,
+						color = Theme.ButtonStyle.Default.Border,
 					},
 
 					items = items,
