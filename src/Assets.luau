@@ -9,6 +9,8 @@ local Assets = {
 		DefaultMacroIcon = "rbxassetid://95866080",
 		MacroLoadingThrobber = "rbxassetid://2459243309",
 
+		ColorizeIcon = "rbxassetid://121343357506377",
+
 		ColorPicker = {
 			HueSat = "rbxassetid://117908944470249",
 			Crosshair = "rbxassetid://75007077378600",

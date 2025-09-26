@@ -123,6 +123,11 @@ return table.freeze {
 			Dark = Color3.fromRGB(255, 201, 64),
 		},
 
+		ColorPickerIcon = {
+			AboveThreshold = Color3.fromRGB(0, 0, 0),
+			BelowThreshold = Color3.fromRGB(226, 226, 226),
+		},
+
 		Macro = {
 			Title = {
 				Text = StudioColor(Enum.StudioStyleGuideColor.InfoText),
