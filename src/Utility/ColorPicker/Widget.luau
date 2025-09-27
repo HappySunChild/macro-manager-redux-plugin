@@ -1,3 +1,5 @@
+local types = require "@plugin/types"
+
 local ConFusion = require "@packages/ConFusion"
 
 local Theme = require "@utility/Theme"
@@ -226,6 +228,23 @@ local function ColorPickerWidget(
 
 	widget:BindToClose(props.cancel)
 
+	local _hue, _sat, _val = peek(props.output):ToHSV()
+	local sharedPickerColor = inner:Value { hue = _hue, sat = _sat, val = _val }
+
+	inner:observe(sharedPickerColor, function()
+		local mut = peek(sharedPickerColor)
+
+		output:set(Color3.fromHSV(mut.hue, mut.sat, mut.val))
+	end)
+	inner:observe(output, function()
+		local color = peek(output) :: Color3
+
+		local mut = peek(sharedPickerColor) :: types.SharedPickerColor
+		mut.hue, mut.sat, mut.val = color:ToHSV()
+
+		sharedPickerColor:set(mut)
+	end)
+
 	return inner:Hydrate(widget) {
 		Enabled = props.enabled,
 		Title = inner:Computed(function(use: ConFusion.Use)
@@ -255,13 +274,13 @@ local function ColorPickerWidget(
 						position = UDim2.fromOffset(1, 1),
 						size = UDim2.fromOffset(220, 200),
 
-						output = output,
+						target = sharedPickerColor,
 					},
 					value = inner:ValuePicker {
 						position = UDim2.fromOffset(237, 1),
 						size = UDim2.fromOffset(13, 200),
 
-						output = output,
+						target = sharedPickerColor,
 					},
 				},
 			},

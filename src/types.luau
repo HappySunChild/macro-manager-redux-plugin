@@ -1,3 +1,5 @@
+export type SharedPickerColor = { hue: number, sat: number, val: number }
+
 export type PluginSettingsObject = {
 	macro_settings: { [string]: MacroSettingsObject },
 }

@@ -1,4 +1,5 @@
 local Assets = require "@plugin/Assets"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 
@@ -15,14 +16,14 @@ local function ValuePicker(
 		position: UDim2?,
 		size: UDim2?,
 
-		output: ConFusion.UsedAs<Color3>,
+		target: ConFusion.Value<types.SharedPickerColor>,
 	}
 )
 	local inner = scope:innerScope()
 	local absolutePosition = scope:Value(Vector2.zero)
 	local absoluteSize = scope:Value(Vector2.zero)
 
-	local output = props.output
+	local target = props.target
 
 	local mouseDown = false
 
@@ -58,14 +59,15 @@ local function ValuePicker(
 				return
 			end
 
+			local mut = peek(target) :: types.SharedPickerColor
+
 			local mousePosition = input.Position :: Vector3
 			local framePosition = peek(absolutePosition) :: Vector2
 			local frameSize = peek(absoluteSize) :: Vector2
 
-			local val = 1 - (mousePosition.Y - framePosition.Y) / frameSize.Y
-			local hue, sat, _ = peek(output):ToHSV()
+			mut.val = 1 - (mousePosition.Y - framePosition.Y) / frameSize.Y
 
-			output:set(Color3.fromHSV(hue, sat, val))
+			target:set(mut)
 		end,
 
 		[Children] = {
@@ -79,9 +81,9 @@ local function ValuePicker(
 			arrow = inner:New "ImageLabel" {
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				Position = inner:Computed(function(use: ConFusion.Use)
-					local _, _, val = use(output):ToHSV()
+					local mut = use(target) :: types.SharedPickerColor
 
-					return UDim2.new(1, 5, 1 - val, 0)
+					return UDim2.new(1, 5, 1 - mut.val, 0)
 				end),
 				Size = UDim2.fromOffset(16, 16),
 

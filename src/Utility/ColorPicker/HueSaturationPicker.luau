@@ -1,4 +1,5 @@
 local Assets = require "@plugin/Assets"
+local types = require "@plugin/types"
 
 local ConFusion = require "@packages/ConFusion"
 
@@ -25,14 +26,14 @@ local function HueSaturationPicker(
 		position: UDim2?,
 		size: UDim2?,
 
-		output: ConFusion.Value<Color3>,
+		target: ConFusion.Value<types.SharedPickerColor>,
 	}
 )
 	local inner = scope:innerScope()
 	local absolutePosition = scope:Value(Vector2.zero)
 	local absoluteSize = scope:Value(Vector2.zero)
 
-	local output = props.output
+	local target = props.target
 
 	local mouseDown = false
 
@@ -70,15 +71,16 @@ local function HueSaturationPicker(
 				return
 			end
 
+			local mut = peek(props.target) :: types.SharedPickerColor
+
 			local mousePosition = input.Position :: Vector3
 			local framePosition = peek(absolutePosition) :: Vector2
 			local frameSize = peek(absoluteSize) :: Vector2
 
-			local hue = 1 - (mousePosition.X - framePosition.X) / frameSize.X
-			local sat = 1 - (mousePosition.Y - framePosition.Y) / frameSize.Y
-			local _, _, val = peek(output):ToHSV()
+			mut.hue = 1 - (mousePosition.X - framePosition.X) / frameSize.X
+			mut.sat = 1 - (mousePosition.Y - framePosition.Y) / frameSize.Y
 
-			output:set(Color3.fromHSV(hue, sat, val))
+			target:set(mut)
 		end,
 		[Children] = {
 			colorGradient = inner:New "UIGradient" {
@@ -95,9 +97,9 @@ local function HueSaturationPicker(
 			crosshair = inner:New "ImageLabel" {
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				Position = inner:Computed(function(use: ConFusion.Use)
-					local hue, sat, _ = use(output):ToHSV()
+					local mut = use(target) :: types.SharedPickerColor
 
-					return UDim2.fromScale(1 - hue, 1 - sat)
+					return UDim2.fromScale(1 - mut.hue, 1 - mut.sat)
 				end),
 				Size = UDim2.fromOffset(20, 20),
 
