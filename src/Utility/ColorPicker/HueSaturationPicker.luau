@@ -9,6 +9,16 @@ local Children = ConFusion.Children
 
 local peek = ConFusion.peek
 
+local HUE_GRADIENT_SEQUENCE = ColorSequence.new {
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
+	ColorSequenceKeypoint.new(0.167, Color3.fromRGB(255, 0, 255)),
+	ColorSequenceKeypoint.new(0.333, Color3.fromRGB(0, 0, 255)),
+	ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 255)),
+	ColorSequenceKeypoint.new(0.667, Color3.fromRGB(0, 255, 0)),
+	ColorSequenceKeypoint.new(0.833, Color3.fromRGB(255, 255, 0)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 0)),
+}
+
 local function HueSaturationPicker(
 	scope: ConFusion.Scope,
 	props: {
@@ -26,7 +36,7 @@ local function HueSaturationPicker(
 
 	local mouseDown = false
 
-	return inner:New "ImageLabel" {
+	return inner:New "Frame" {
 		Position = props.position,
 		Size = props.size,
 
@@ -34,8 +44,6 @@ local function HueSaturationPicker(
 
 		BorderSizePixel = 1,
 		BorderColor3 = Theme.Color.Border,
-
-		Image = Assets.Images.ColorPicker.HueSat,
 
 		[Out "AbsoluteSize"] = absoluteSize,
 		[Out "AbsolutePosition"] = absolutePosition,
@@ -73,6 +81,17 @@ local function HueSaturationPicker(
 			output:set(Color3.fromHSV(hue, sat, val))
 		end,
 		[Children] = {
+			colorGradient = inner:New "UIGradient" {
+				Color = HUE_GRADIENT_SEQUENCE,
+			},
+			saturationOverlay = inner:New "Frame" {
+				Size = UDim2.fromScale(1, 1),
+
+				[Children] = inner:New "UIGradient" {
+					Rotation = 90,
+					Transparency = NumberSequence.new(1, 0),
+				},
+			},
 			crosshair = inner:New "ImageLabel" {
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				Position = inner:Computed(function(use: ConFusion.Use)

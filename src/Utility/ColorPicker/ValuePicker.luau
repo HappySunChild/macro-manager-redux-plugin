@@ -26,14 +26,12 @@ local function ValuePicker(
 
 	local mouseDown = false
 
-	return inner:New "ImageLabel" {
+	return inner:New "Frame" {
 		Position = props.position,
 		Size = props.size,
 
 		BorderSizePixel = 1,
 		BorderColor3 = Theme.Color.Border,
-
-		Image = Assets.Images.ColorPicker.Val,
 
 		[Out "AbsoluteSize"] = absoluteSize,
 		[Out "AbsolutePosition"] = absolutePosition,
@@ -71,6 +69,13 @@ local function ValuePicker(
 		end,
 
 		[Children] = {
+			gradient = inner:New "UIGradient" {
+				Rotation = 90,
+				Color = ColorSequence.new(
+					Color3.new(1, 1, 1),
+					Color3.new(0, 0, 0)
+				),
+			},
 			arrow = inner:New "ImageLabel" {
 				AnchorPoint = Vector2.new(0.5, 0.5),
 				Position = inner:Computed(function(use: ConFusion.Use)
