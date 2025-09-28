@@ -73,10 +73,14 @@ local function ValuePicker(
 		[Children] = {
 			gradient = inner:New "UIGradient" {
 				Rotation = 90,
-				Color = ColorSequence.new(
-					Color3.new(1, 1, 1),
-					Color3.new(0, 0, 0)
-				),
+				Color = inner:Computed(function(use: ConFusion.Use)
+					local mut = use(target) :: types.SharedPickerColor
+
+					return ColorSequence.new(
+						Color3.fromHSV(mut.hue, mut.sat, 1),
+						Color3.new(0, 0, 0)
+					)
+				end),
 			},
 			arrow = inner:New "ImageLabel" {
 				AnchorPoint = Vector2.new(0.5, 0.5),
