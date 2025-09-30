@@ -13,9 +13,11 @@ local Children, OnEvent, Ref =
 	ConFusion.Children, ConFusion.OnEvent, ConFusion.Ref
 local peek = ConFusion.peek
 
-local snapValidate = t.union(t.integer, t.number_min(0))
-local snapDefault = t.default(0, snapValidate)
-local default = t.default(0, t.number)
+local validateSnap = t.union(t.integer, t.number_min(0))
+local defaultSnap = t.default(0, validateSnap)
+
+local defaultMin = t.default(0, t.number)
+local defaultMax = t.default(1, t.number)
 
 type SliderMacroItem = types.ValueMacroItem<number> & {
 	Minimum: number,
@@ -50,11 +52,11 @@ local function SliderMacroItem(
 	scope: ConFusion.Scope,
 	macroItem: SliderMacroItem
 )
-	macroItem.Minimum = default(macroItem.Minimum)
-	macroItem.Maximum = default(macroItem.Maximum)
-	macroItem.Snapping = snapDefault(macroItem.Snapping)
+	macroItem.Minimum = defaultMin(macroItem.Minimum)
+	macroItem.Maximum = defaultMax(macroItem.Maximum)
+	macroItem.Snapping = defaultSnap(macroItem.Snapping)
 	macroItem.Value = math.clamp(
-		default(macroItem.Value),
+		defaultMin(macroItem.Value),
 		macroItem.Minimum,
 		macroItem.Maximum
 	)
@@ -125,7 +127,7 @@ local function SliderMacroItem(
 	end
 
 	function macroItem:SetSnapping(newSnap: number)
-		assert(snapValidate(newSnap))
+		assert(validateSnap(newSnap))
 
 		macroItem.Snapping = newSnap
 

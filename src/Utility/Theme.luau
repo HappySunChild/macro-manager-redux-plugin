@@ -171,14 +171,17 @@ return table.freeze {
 		},
 
 		Slider = {
-			Background = ColorSet {
-				Light = Color3.fromRGB(208, 208, 208),
-				Dark = Color3.fromRGB(74, 74, 74),
-			},
-			Handle = ColorSet {
-				Light = Color3.fromRGB(232, 232, 232),
-				Dark = Color3.fromRGB(200, 200, 200),
-			},
+			Background = StudioColor(Enum.StudioStyleGuideColor.Light),
+			Handle = StudioColor(Enum.StudioStyleGuideColor.Light), -- preferably something brighter, but roblox doesn't supply a brighter one that isn't for text :/
+
+			-- Background = ColorSet {
+			-- 	Light = Color3.fromRGB(208, 208, 208),
+			-- 	Dark = Color3.fromRGB(74, 74, 74),
+			-- },
+			-- Handle = ColorSet {
+			-- 	Light = Color3.fromRGB(232, 232, 232),
+			-- 	Dark = Color3.fromRGB(200, 200, 200),
+			-- },
 			Border = GLOBAL_BORDER_COLOR,
 		},
 
